@@ -37,8 +37,6 @@ downloadurl:
 
 aliyun:
   api:
-    accessKey: LTAI5tBDwYcXRACEzdXfvyMi
-    secret: wTJRuVbKPFPwnEwhH2BvvNCtLGvSzV
     url: https://vision.console.aliyun.com/cn-shanghai/detail/imageprocess
     roleArn: acs:ram::1306143105217098:role/ramosstest
     policy: |

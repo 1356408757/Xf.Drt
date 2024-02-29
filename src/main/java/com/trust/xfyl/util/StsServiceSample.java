@@ -50,10 +50,8 @@ public class StsServiceSample {
     private static String ossAccessKeyId;
     private static String ossAccessKeySecret;
     private static String ossSecurityToken;
-    @Value("${aliyun.api.accessKey}")
-    private String accessKeyId;
-    @Value("${aliyun.api.secret}")
-    private String accessKeySecret;
+    String accessKeyId = System.getenv("ALIBABA_CLOUD_ACCESS_KEY_ID");
+    String keySecret = System.getenv("ALIBABA_CLOUD_ACCESS_KEY_SECRET");
     @Value("${aliyun.api.roleArn}")
     private String roleArn;
     @Value("${aliyun.api.policy}")
@@ -228,7 +226,7 @@ public class StsServiceSample {
 
     private Client createClient() throws Exception {
         String endpoint = "sts.cn-shanghai.aliyuncs.com";
-        Config config = new Config().setAccessKeyId(accessKeyId).setAccessKeySecret(accessKeySecret).setEndpoint(endpoint);
+        Config config = new Config().setAccessKeyId(accessKeyId).setAccessKeySecret(keySecret).setEndpoint(endpoint);
         return new Client(config);
     }
 
