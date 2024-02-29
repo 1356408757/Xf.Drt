@@ -108,8 +108,8 @@ public class StsServiceSampleTest {
 
   /*  @Test
     void getFileUrl() throws Throwable {
-        String accessKeyId = "LTAI5tBDwYcXRACEzdXfvyMi";
-        String accessSecret = "wTJRuVbKPFPwnEwhH2BvvNCtLGvSzV";
+        String accessKeyId = System.getenv("ALIBABA_CLOUD_ACCESS_KEY_ID");
+        String keySecret = System.getenv("ALIBABA_CLOUD_ACCESS_KEY_SECRET");
         String url = "https://drt-oss-disk.oss-cn-shanghai.aliyuncs.com/src/image/202402271205-40589-d1f905a37fe14322a695e0210811fbdf.jpg?Expires=1709086278&OSSAccessKeyId=STS.NT6pPWgUYc61TRvA9ZyChKCbX&Signature=Qe14m7T2YOIR2RU%2FqjzigWOfM8I%3D&security-token=CAISzwJ1q6Ft5B2yfSjIr5eDO%2Brjiop41PTaVnTHpTkPdcxEpIbJujz2IHhMeHZtCO4ct%2Fk%2FnWxY6foTlqJIRoReREvCUcZr8szFZYAi1dOT1fau5Jko1bdpcAr6UmwNta2%2FSuH9S8ynJJXJQlvYlyh17KLnfDG5JTKMOoGIjpgVGLZyWRKjPwJbGPBcJAZptK1%2FMmDKZ9mgLjnggGfbEDBd2GxGhHh49L60z%2BCF9xPalyea8OIOoJnrKZXWRqsaNZxkAdCux740JOiT3DRMrh9R7%2BJ6jbdHvizdtZbfYS5Y6A7UNPHPoJ89bl11fLR%2FHLVf6fT9jv4%2FtuHIi8O16W4UZrkLCniEHdj9mpKbQLL5DLtjK%2BanYUaq%2B8uUK5z4vzkjZX8mLw5Qc7IjUCQoUUBzF2CEcPb6qAmWMlj%2FGrLnyqgz1oFu01jz4cooq495ySBZuxqAAQeogjEAPF26XoOmOKGuFOznr4b%2BRF7vaqFnlEuIU63e2HIe590kY2mR8u%2BTFMnQH0jMs43iqyYUDhz7fZfIBwxjQcOtjK2%2F8fLE5BcZL4q7iFm2DpOATCJM2KVdybwa6xu5UMbp3WA3CEbgbFA98qm8g2ZCouwR635pC3lHkN9nIAA%3D";
         DF.setTimeZone(new java.util.SimpleTimeZone(0, "GMT"));
         // 业务参数名字是大驼峰

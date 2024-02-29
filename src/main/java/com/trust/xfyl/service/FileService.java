@@ -25,8 +25,6 @@ import static com.trust.xfyl.util.AliSkinUtils.DF;
  */
 @Service
 public class FileService {
-    private static String accessKey;
-    private static String secret;
     private static String uploadImgUrl;
     private final TrustFileMapper trustFileMapper;
     private final TrustRelationFileMapper trustRelationFileMapper;
@@ -41,15 +39,8 @@ public class FileService {
         FileService.uploadImgUrl = uploadImgUrl;
     }
 
-    @Value("${aliyun.api.accessKey}")
-    public void setAccessKey(String accessKey) {
-        FileService.accessKey = accessKey;
-    }
-
-    @Value("${aliyun.api.secret}")
-    public void setSecret(String secret) {
-        FileService.secret = secret;
-    }
+    String accessKeyId = System.getenv("ALIBABA_CLOUD_ACCESS_KEY_ID");
+    String keySecret = System.getenv("ALIBABA_CLOUD_ACCESS_KEY_SECRET");
 
     /**
      * @return void
@@ -119,7 +110,7 @@ public class FileService {
             DF.setTimeZone(new java.util.SimpleTimeZone(0, "GMT"));
             for (TrustFile trustFile : afterInsertFile) {
                 String fileUrl = trustFile.getFileUrl();
-                JSONObject skinDetectionResult = AliSkinUtils.execute("DetectSkinDisease", accessKey, secret, Collections.singletonMap("Url", fileUrl)).getJSONObject("Data");
+                JSONObject skinDetectionResult = AliSkinUtils.execute("DetectSkinDisease", accessKeyId, keySecret, Collections.singletonMap("Url", fileUrl)).getJSONObject("Data");
                 JSONObject resultsObject = skinDetectionResult.getJSONObject("Results");
                 String imageType = skinDetectionResult.getString("ImageType");
                 String bodyPart = skinDetectionResult.getString("BodyPart");
