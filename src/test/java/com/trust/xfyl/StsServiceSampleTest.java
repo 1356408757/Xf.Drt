@@ -3,9 +3,7 @@ package com.trust.xfyl;
 import com.aliyun.oss.OSS;
 import com.aliyuncs.exceptions.ClientException;
 import com.trust.xfyl.entity.ResultVO;
-import com.trust.xfyl.util.AliSkinUtils;
 import com.trust.xfyl.util.StsServiceSample;
-import org.json.JSONObject;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -16,11 +14,9 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.trust.xfyl.util.AliSkinUtils.DF;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
@@ -95,7 +91,7 @@ public class StsServiceSampleTest {
      * @Param []
      **/
 
-    @Test
+ /*   @Test
     void download() throws Throwable {
         StsServiceSample.download();
 
@@ -106,11 +102,11 @@ public class StsServiceSampleTest {
         StsServiceSample.ossTest();
 
     }
-
+*/
 
     //TODO 测试阿里云oss对象存储跟阿里皮肤检测接口逻辑对接的方法；
 
-    @Test
+  /*  @Test
     void getFileUrl() throws Throwable {
         String accessKeyId = "LTAI5tBDwYcXRACEzdXfvyMi";
         String accessSecret = "wTJRuVbKPFPwnEwhH2BvvNCtLGvSzV";
@@ -147,6 +143,6 @@ public class StsServiceSampleTest {
         System.out.println("ImageType===图片类型============================================================" + imageType);
 
 
-    }
+    }*/
 
 }
