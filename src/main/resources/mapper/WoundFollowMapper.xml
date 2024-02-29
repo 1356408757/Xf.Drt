@@ -1,0 +1,419 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.trust.xfyl.dao.WoundFollowMapper">
+    <resultMap id="BaseResultMap" type="com.trust.xfyl.entity.WoundFollow">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="tracking_personnel_id" property="trackingPersonnelId" jdbcType="BIGINT"/>
+        <result column="medical_number" property="medicalNumber" jdbcType="VARCHAR"/>
+        <result column="doctor_id" property="doctorId" jdbcType="INTEGER"/>
+        <result column="doctor_name" property="doctorName" jdbcType="VARCHAR"/>
+        <result column="postoperative_stage" property="postoperativeStage" jdbcType="VARCHAR"/>
+        <result column="wound_shooting_date" property="woundShootingDate" jdbcType="TIMESTAMP"/>
+        <result column="taking_lens" property="takingLens" jdbcType="VARCHAR"/>
+        <result column="wound_photo" property="woundPhoto" jdbcType="VARCHAR"/>
+        <result column="wound_condition" property="woundCondition" jdbcType="VARCHAR"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="creator" property="creator" jdbcType="VARCHAR"/>
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
+        <result column="update_name" property="updateName" jdbcType="VARCHAR"/>
+        <result column="is_delete" property="isDelete" jdbcType="INTEGER"/>
+        <result column="is_confirm" property="isConfirm" jdbcType="VARCHAR"/>
+    </resultMap>
+    <sql id="Example_Where_Clause">
+        <where>
+            <foreach collection="oredCriteria" item="criteria" separator="or">
+                <if test="criteria.valid">
+                    <trim prefix="(" suffix=")" prefixOverrides="and">
+                        <foreach collection="criteria.criteria" item="criterion">
+                            <choose>
+                                <when test="criterion.noValue">
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue">
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue">
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue">
+                                    and ${criterion.condition}
+                                    <foreach collection="criterion.value" item="listItem" open="(" close=")"
+                                             separator=",">
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
+            </foreach>
+        </where>
+    </sql>
+    <sql id="Update_By_Example_Where_Clause">
+        <where>
+            <foreach collection="example.oredCriteria" item="criteria" separator="or">
+                <if test="criteria.valid">
+                    <trim prefix="(" suffix=")" prefixOverrides="and">
+                        <foreach collection="criteria.criteria" item="criterion">
+                            <choose>
+                                <when test="criterion.noValue">
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue">
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue">
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue">
+                                    and ${criterion.condition}
+                                    <foreach collection="criterion.value" item="listItem" open="(" close=")"
+                                             separator=",">
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
+            </foreach>
+        </where>
+    </sql>
+    <sql id="Base_Column_List">
+        id, tracking_personnel_id, medical_number, doctor_id, doctor_name, postoperative_stage,
+    wound_shooting_date, taking_lens, wound_photo, wound_condition, create_time, creator,
+    update_time, update_name, is_delete, is_confirm
+    </sql>
+    <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.trust.xfyl.entity.WoundFollowExample">
+        select
+        <if test="distinct">
+            distinct
+        </if>
+        'true' as QUERYID,
+        <include refid="Base_Column_List"/>
+        from wound_follow
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+        <if test="orderByClause != null">
+            order by ${orderByClause}
+        </if>
+        <if test="start != null and end != null">
+            limit #{start,jdbcType=INTEGER},#{end,jdbcType=INTEGER}
+        </if>
+    </select>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long">
+        select
+        <include refid="Base_Column_List"/>
+        from wound_follow
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+        delete
+        from wound_follow
+        where id = #{id,jdbcType=BIGINT}
+    </delete>
+    <delete id="deleteByExample" parameterType="com.trust.xfyl.entity.WoundFollowExample">
+        delete from wound_follow
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+    </delete>
+    <insert id="insert" parameterType="com.trust.xfyl.entity.WoundFollow">
+        insert into wound_follow (id, tracking_personnel_id, medical_number,
+                                  doctor_id, doctor_name, postoperative_stage,
+                                  wound_shooting_date, taking_lens, wound_photo,
+                                  wound_condition, create_time, creator,
+                                  update_time, update_name, is_delete,
+                                  is_confirm)
+        values (#{id,jdbcType=BIGINT}, #{trackingPersonnelId,jdbcType=BIGINT}, #{medicalNumber,jdbcType=VARCHAR},
+                #{doctorId,jdbcType=INTEGER}, #{doctorName,jdbcType=VARCHAR}, #{postoperativeStage,jdbcType=VARCHAR},
+                #{woundShootingDate,jdbcType=TIMESTAMP}, #{takingLens,jdbcType=VARCHAR}, #{woundPhoto,jdbcType=VARCHAR},
+                #{woundCondition,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{creator,jdbcType=VARCHAR},
+                #{updateTime,jdbcType=TIMESTAMP}, #{updateName,jdbcType=VARCHAR}, #{isDelete,jdbcType=INTEGER},
+                #{isConfirm,jdbcType=VARCHAR})
+    </insert>
+    <insert id="insertSelective" parameterType="com.trust.xfyl.entity.WoundFollow" useGeneratedKeys="true"
+            keyProperty="id">
+        insert into wound_follow
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="trackingPersonnelId != null">
+                tracking_personnel_id,
+            </if>
+            <if test="medicalNumber != null">
+                medical_number,
+            </if>
+            <if test="doctorId != null">
+                doctor_id,
+            </if>
+            <if test="doctorName != null">
+                doctor_name,
+            </if>
+            <if test="postoperativeStage != null">
+                postoperative_stage,
+            </if>
+            <if test="woundShootingDate != null">
+                wound_shooting_date,
+            </if>
+            <if test="takingLens != null">
+                taking_lens,
+            </if>
+            <if test="woundPhoto != null">
+                wound_photo,
+            </if>
+            <if test="woundCondition != null">
+                wound_condition,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="creator != null">
+                creator,
+            </if>
+            <if test="updateTime != null">
+                update_time,
+            </if>
+            <if test="updateName != null">
+                update_name,
+            </if>
+            <if test="isDelete != null">
+                is_delete,
+            </if>
+            <if test="isConfirm != null">
+                is_confirm,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=BIGINT},
+            </if>
+            <if test="trackingPersonnelId != null">
+                #{trackingPersonnelId,jdbcType=BIGINT},
+            </if>
+            <if test="medicalNumber != null">
+                #{medicalNumber,jdbcType=VARCHAR},
+            </if>
+            <if test="doctorId != null">
+                #{doctorId,jdbcType=INTEGER},
+            </if>
+            <if test="doctorName != null">
+                #{doctorName,jdbcType=VARCHAR},
+            </if>
+            <if test="postoperativeStage != null">
+                #{postoperativeStage,jdbcType=VARCHAR},
+            </if>
+            <if test="woundShootingDate != null">
+                #{woundShootingDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="takingLens != null">
+                #{takingLens,jdbcType=VARCHAR},
+            </if>
+            <if test="woundPhoto != null">
+                #{woundPhoto,jdbcType=VARCHAR},
+            </if>
+            <if test="woundCondition != null">
+                #{woundCondition,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="creator != null">
+                #{creator,jdbcType=VARCHAR},
+            </if>
+            <if test="updateTime != null">
+                #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateName != null">
+                #{updateName,jdbcType=VARCHAR},
+            </if>
+            <if test="isDelete != null">
+                #{isDelete,jdbcType=INTEGER},
+            </if>
+            <if test="isConfirm != null">
+                #{isConfirm,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <select id="countByExample" parameterType="com.trust.xfyl.entity.WoundFollowExample" resultType="java.lang.Integer">
+        select count(*) from wound_follow
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+    </select>
+    <update id="updateByExampleSelective" parameterType="map">
+        update wound_follow
+        <set>
+            <if test="record.id != null">
+                id = #{record.id,jdbcType=BIGINT},
+            </if>
+            <if test="record.trackingPersonnelId != null">
+                tracking_personnel_id = #{record.trackingPersonnelId,jdbcType=BIGINT},
+            </if>
+            <if test="record.medicalNumber != null">
+                medical_number = #{record.medicalNumber,jdbcType=VARCHAR},
+            </if>
+            <if test="record.doctorId != null">
+                doctor_id = #{record.doctorId,jdbcType=INTEGER},
+            </if>
+            <if test="record.doctorName != null">
+                doctor_name = #{record.doctorName,jdbcType=VARCHAR},
+            </if>
+            <if test="record.postoperativeStage != null">
+                postoperative_stage = #{record.postoperativeStage,jdbcType=VARCHAR},
+            </if>
+            <if test="record.woundShootingDate != null">
+                wound_shooting_date = #{record.woundShootingDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="record.takingLens != null">
+                taking_lens = #{record.takingLens,jdbcType=VARCHAR},
+            </if>
+            <if test="record.woundPhoto != null">
+                wound_photo = #{record.woundPhoto,jdbcType=VARCHAR},
+            </if>
+            <if test="record.woundCondition != null">
+                wound_condition = #{record.woundCondition,jdbcType=VARCHAR},
+            </if>
+            <if test="record.createTime != null">
+                create_time = #{record.createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="record.creator != null">
+                creator = #{record.creator,jdbcType=VARCHAR},
+            </if>
+            <if test="record.updateTime != null">
+                update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="record.updateName != null">
+                update_name = #{record.updateName,jdbcType=VARCHAR},
+            </if>
+            <if test="record.isDelete != null">
+                is_delete = #{record.isDelete,jdbcType=INTEGER},
+            </if>
+            <if test="record.isConfirm != null">
+                is_confirm = #{record.isConfirm,jdbcType=VARCHAR},
+            </if>
+        </set>
+        <if test="_parameter != null">
+            <include refid="Update_By_Example_Where_Clause"/>
+        </if>
+    </update>
+    <update id="updateByExample" parameterType="map">
+        update wound_follow
+        set id = #{record.id,jdbcType=BIGINT},
+        tracking_personnel_id = #{record.trackingPersonnelId,jdbcType=BIGINT},
+        medical_number = #{record.medicalNumber,jdbcType=VARCHAR},
+        doctor_id = #{record.doctorId,jdbcType=INTEGER},
+        doctor_name = #{record.doctorName,jdbcType=VARCHAR},
+        postoperative_stage = #{record.postoperativeStage,jdbcType=VARCHAR},
+        wound_shooting_date = #{record.woundShootingDate,jdbcType=TIMESTAMP},
+        taking_lens = #{record.takingLens,jdbcType=VARCHAR},
+        wound_photo = #{record.woundPhoto,jdbcType=VARCHAR},
+        wound_condition = #{record.woundCondition,jdbcType=VARCHAR},
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+        creator = #{record.creator,jdbcType=VARCHAR},
+        update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+        update_name = #{record.updateName,jdbcType=VARCHAR},
+        is_delete = #{record.isDelete,jdbcType=INTEGER},
+        is_confirm = #{record.isConfirm,jdbcType=VARCHAR}
+        <if test="_parameter != null">
+            <include refid="Update_By_Example_Where_Clause"/>
+        </if>
+    </update>
+    <update id="updateByPrimaryKeySelective" parameterType="com.trust.xfyl.entity.WoundFollow" useGeneratedKeys="true"
+            keyProperty="id">
+        update wound_follow
+        <set>
+            <if test="trackingPersonnelId != null">
+                tracking_personnel_id = #{trackingPersonnelId,jdbcType=BIGINT},
+            </if>
+            <if test="medicalNumber != null">
+                medical_number = #{medicalNumber,jdbcType=VARCHAR},
+            </if>
+            <if test="doctorId != null">
+                doctor_id = #{doctorId,jdbcType=INTEGER},
+            </if>
+            <if test="doctorName != null">
+                doctor_name = #{doctorName,jdbcType=VARCHAR},
+            </if>
+            <if test="postoperativeStage != null">
+                postoperative_stage = #{postoperativeStage,jdbcType=VARCHAR},
+            </if>
+            <if test="woundShootingDate != null">
+                wound_shooting_date = #{woundShootingDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="takingLens != null">
+                taking_lens = #{takingLens,jdbcType=VARCHAR},
+            </if>
+            <if test="woundPhoto != null">
+                wound_photo = #{woundPhoto,jdbcType=VARCHAR},
+            </if>
+            <if test="woundCondition != null">
+                wound_condition = #{woundCondition,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="creator != null">
+                creator = #{creator,jdbcType=VARCHAR},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateName != null">
+                update_name = #{updateName,jdbcType=VARCHAR},
+            </if>
+            <if test="isDelete != null">
+                is_delete = #{isDelete,jdbcType=INTEGER},
+            </if>
+            <if test="isConfirm != null">
+                is_confirm = #{isConfirm,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.trust.xfyl.entity.WoundFollow">
+        update wound_follow
+        set tracking_personnel_id = #{trackingPersonnelId,jdbcType=BIGINT},
+            medical_number        = #{medicalNumber,jdbcType=VARCHAR},
+            doctor_id             = #{doctorId,jdbcType=INTEGER},
+            doctor_name           = #{doctorName,jdbcType=VARCHAR},
+            postoperative_stage   = #{postoperativeStage,jdbcType=VARCHAR},
+            wound_shooting_date   = #{woundShootingDate,jdbcType=TIMESTAMP},
+            taking_lens           = #{takingLens,jdbcType=VARCHAR},
+            wound_photo           = #{woundPhoto,jdbcType=VARCHAR},
+            wound_condition       = #{woundCondition,jdbcType=VARCHAR},
+            create_time           = #{createTime,jdbcType=TIMESTAMP},
+            creator               = #{creator,jdbcType=VARCHAR},
+            update_time           = #{updateTime,jdbcType=TIMESTAMP},
+            update_name           = #{updateName,jdbcType=VARCHAR},
+            is_delete             = #{isDelete,jdbcType=INTEGER},
+            is_confirm            = #{isConfirm,jdbcType=VARCHAR}
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <select id="count" resultType="java.lang.Long" parameterType="com.trust.xfyl.entity.WoundFollowExample">
+        select
+        count(1)
+        from(
+        select
+        <if test="distinct">
+            distinct
+        </if>
+        'true' as QUERYID,
+        <include refid="Base_Column_List"/>
+        from wound_follow
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+        <if test="orderByClause != null">
+            order by ${orderByClause}
+        </if>
+        <if test="start != null and end != null">
+            limit #{start,jdbcType=INTEGER},#{end,jdbcType=INTEGER}
+        </if>
+        )count
+    </select>
+
+</mapper>

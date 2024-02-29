@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>Image Upload</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(to right, #74ebd5, #acb6e5);
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    #uploadForm {
+      background-color: #ffffff;
+      border-radius: 10px;
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+      padding: 25px;
+      width: 400px;
+      text-align: center;
+      transition: transform 0.3s ease;
+    }
+
+    #uploadForm:hover {
+      transform: translateY(-5px);
+    }
+
+    h2 {
+      margin-top: 0;
+      color: #333;
+      font-weight: 600;
+    }
+
+    input[type="file"] {
+      display: none;
+    }
+
+    label.upload-btn {
+      background: linear-gradient(to right, #74ebd5, #acb6e5);
+      border: none;
+      color: white;
+      padding: 12px 28px;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 16px;
+      margin-bottom: 20px;
+      cursor: pointer;
+      border-radius: 8px;
+      transition: background-color 0.3s ease;
+    }
+
+    label.upload-btn:hover {
+      background: linear-gradient(to right, #005f73, #008CBA);
+    }
+
+    button.upload-btn {
+      background: linear-gradient(to right, #74ebd5, #acb6e5);
+      border: none;
+      color: white;
+      padding: 12px 28px;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 16px;
+      margin-bottom: 20px;
+      cursor: pointer;
+      border-radius: 8px;
+      transition: background-color 0.3s ease;
+    }
+
+    button.upload-btn:hover {
+      background: linear-gradient(to right, #005f73, #008CBA);
+    }
+
+    #imagePreview {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-top: 20px;
+    }
+
+    #imagePreview img {
+      width: 100px;
+      height: 100px;
+      object-fit: cover;
+      margin: 10px;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      transition: transform 0.3s ease;
+    }
+
+    #imagePreview img:hover {
+      transform: scale(1.15);
+    }
+
+    .result-container {
+      background-color: #f0f0f0;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      padding: 15px;
+      margin-top: 10px;
+      text-align: left;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+<form enctype="multipart/form-data" id="uploadForm">
+  <h2>Upload Img</h2>
+  <label class="upload-btn" for="fileInput">Select Image</label>
+  <input accept="image/*" id="fileInput" multiple name="files" onchange="previewImages()" type="file">
+  <br>
+  <button class="upload-btn" onclick="uploadFiles()" type="button">Upload</button>
+</form>
+<div id="imagePreview"></div>
+<div class="enlarged-image" onclick="hideEnlargedImage()">
+  <img id="enlargedImg">
+</div>
+<script>
+  const form = document.getElementById('uploadForm');
+  const fileInput = document.getElementById('fileInput');
+  const imagePreviewContainer = document.getElementById('imagePreview');
+
+  function previewImages() {
+    imagePreviewContainer.innerHTML = '';
+
+    for (let file of fileInput.files) {
+      if (!file.type.match('image.*')) {
+        continue;
+      }
+      let reader = new FileReader();
+
+      reader.onload = function (e) {
+        let img = `<img src="${e.target.result}" alt="Preview Image" onclick="showEnlargedImage('${e.target.result}')">`;
+
+        let resultContainer = '<div class="result-container"></div>';
+
+        let imageContainer = `<div class="image-container">${img}${resultContainer}</div>`;
+        imagePreviewContainer.innerHTML += imageContainer;
+      };
+
+      reader.readAsDataURL(file);
+    }
+  }
+
+  function uploadFiles() {
+    if (!fileInput.value) {
+      alert('Please choose at least one image to upload.');
+      return;
+    }
+    let formData = new FormData(form);
+    fetch('http://localhost:8089//uploaFile/getWoundInformation', {
+      method: 'POST',
+      body: formData
+    }).then(response => {
+      if (!response.ok) {
+        throw new Error('Network response was not ok.');
+      }
+      return response.json();
+    }).then(data => {
+      console.log(data);
+      let woundInformationList = data.data.woundInformationList;
+      if (woundInformationList) {
+        woundInformationList.forEach((item, index) => {
+          let imageIndex = Math.floor(index / 3);
+          let resultContainer = document.getElementsByClassName('result-container')[imageIndex];
+          if (resultContainer) {
+            let itemString = JSON.stringify(item, null, 2);
+            itemString = itemString.replace(/[{}"]/g, '');
+            itemString = itemString.replace(/\\/g, '');
+            resultContainer.innerHTML += `<pre>${itemString}</pre>`;
+          }
+        });
+      }
+    }).catch(error => {
+      document.getElementById('result').textContent = 'Error: ' + error.message;
+    });
+  }
+
+  function showEnlargedImage(src) {
+    let enlargedImage = document.querySelector('.enlarged-image');
+    let enlargedImg = document.getElementById('enlargedImg');
+    enlargedImg.src = src;
+    enlargedImage.style.display = 'block';
+  }
+
+  function hideEnlargedImage() {
+    let enlargedImage = document.querySelector('.enlarged-image');
+    enlargedImage.style.display = 'none';
+  }
+</script>
+</body>
+</html>

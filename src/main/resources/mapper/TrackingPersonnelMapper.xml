@@ -1,0 +1,373 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.trust.xfyl.dao.TrackingPersonnelMapper">
+    <resultMap id="BaseResultMap" type="com.trust.xfyl.entity.TrackingPersonnel">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="barcode_photo" property="barcodePhoto" jdbcType="VARCHAR"/>
+        <result column="medical_number" property="medicalNumber" jdbcType="VARCHAR"/>
+        <result column="phone" property="phone" jdbcType="VARCHAR"/>
+        <result column="operation_name" property="operationName" jdbcType="VARCHAR"/>
+        <result column="operation_date" property="operationDate" jdbcType="TIMESTAMP"/>
+        <result column="surgeon_name" property="surgeonName" jdbcType="VARCHAR"/>
+        <result column="attending_doctor_name" property="attendingDoctorName" jdbcType="VARCHAR"/>
+        <result column="creat_time" property="creatTime" jdbcType="TIMESTAMP"/>
+        <result column="creat_name" property="creatName" jdbcType="VARCHAR"/>
+        <result column="surgeon_id" property="surgeonId" jdbcType="BIGINT"/>
+        <result column="attending_doctor" property="attendingDoctor" jdbcType="BIGINT"/>
+    </resultMap>
+    <sql id="Example_Where_Clause">
+        <where>
+            <foreach collection="oredCriteria" item="criteria" separator="or">
+                <if test="criteria.valid">
+                    <trim prefix="(" suffix=")" prefixOverrides="and">
+                        <foreach collection="criteria.criteria" item="criterion">
+                            <choose>
+                                <when test="criterion.noValue">
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue">
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue">
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue">
+                                    and ${criterion.condition}
+                                    <foreach collection="criterion.value" item="listItem" open="(" close=")"
+                                             separator=",">
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
+            </foreach>
+        </where>
+    </sql>
+    <sql id="Update_By_Example_Where_Clause">
+        <where>
+            <foreach collection="example.oredCriteria" item="criteria" separator="or">
+                <if test="criteria.valid">
+                    <trim prefix="(" suffix=")" prefixOverrides="and">
+                        <foreach collection="criteria.criteria" item="criterion">
+                            <choose>
+                                <when test="criterion.noValue">
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue">
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue">
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue">
+                                    and ${criterion.condition}
+                                    <foreach collection="criterion.value" item="listItem" open="(" close=")"
+                                             separator=",">
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
+            </foreach>
+        </where>
+    </sql>
+    <sql id="Base_Column_List">
+        id, `name`, barcode_photo, medical_number, phone, operation_name, operation_date,
+    surgeon_name, attending_doctor_name, creat_time, creat_name, surgeon_id, attending_doctor
+    </sql>
+    <select id="selectByExample" resultMap="BaseResultMap"
+            parameterType="com.trust.xfyl.entity.TrackingPersonnelExample">
+        select
+        <if test="distinct">
+            distinct
+        </if>
+        'true' as QUERYID,
+        <include refid="Base_Column_List"/>
+        from tracking_personnel
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+        <if test="orderByClause != null">
+            order by ${orderByClause}
+        </if>
+        <if test="start != null and end != null">
+            limit #{start,jdbcType=INTEGER},#{end,jdbcType=INTEGER}
+        </if>
+    </select>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long">
+        select
+        <include refid="Base_Column_List"/>
+        from tracking_personnel
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+        delete
+        from tracking_personnel
+        where id = #{id,jdbcType=BIGINT}
+    </delete>
+    <delete id="deleteByExample" parameterType="com.trust.xfyl.entity.TrackingPersonnelExample">
+        delete from tracking_personnel
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+    </delete>
+    <insert id="insert" parameterType="com.trust.xfyl.entity.TrackingPersonnel">
+        insert into tracking_personnel (id, `name`, barcode_photo,
+                                        medical_number, phone, operation_name,
+                                        operation_date, surgeon_name, attending_doctor_name,
+                                        creat_time, creat_name, surgeon_id,
+                                        attending_doctor)
+        values (#{id,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, #{barcodePhoto,jdbcType=VARCHAR},
+                #{medicalNumber,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, #{operationName,jdbcType=VARCHAR},
+                #{operationDate,jdbcType=TIMESTAMP}, #{surgeonName,jdbcType=VARCHAR},
+                #{attendingDoctorName,jdbcType=VARCHAR},
+                #{creatTime,jdbcType=TIMESTAMP}, #{creatName,jdbcType=VARCHAR}, #{surgeonId,jdbcType=BIGINT},
+                #{attendingDoctor,jdbcType=BIGINT})
+    </insert>
+    <insert id="insertSelective" parameterType="com.trust.xfyl.entity.TrackingPersonnel" useGeneratedKeys="true"
+            keyProperty="id">
+        insert into tracking_personnel
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="name != null">
+                `name`,
+            </if>
+            <if test="barcodePhoto != null">
+                barcode_photo,
+            </if>
+            <if test="medicalNumber != null">
+                medical_number,
+            </if>
+            <if test="phone != null">
+                phone,
+            </if>
+            <if test="operationName != null">
+                operation_name,
+            </if>
+            <if test="operationDate != null">
+                operation_date,
+            </if>
+            <if test="surgeonName != null">
+                surgeon_name,
+            </if>
+            <if test="attendingDoctorName != null">
+                attending_doctor_name,
+            </if>
+            <if test="creatTime != null">
+                creat_time,
+            </if>
+            <if test="creatName != null">
+                creat_name,
+            </if>
+            <if test="surgeonId != null">
+                surgeon_id,
+            </if>
+            <if test="attendingDoctor != null">
+                attending_doctor,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=BIGINT},
+            </if>
+            <if test="name != null">
+                #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="barcodePhoto != null">
+                #{barcodePhoto,jdbcType=VARCHAR},
+            </if>
+            <if test="medicalNumber != null">
+                #{medicalNumber,jdbcType=VARCHAR},
+            </if>
+            <if test="phone != null">
+                #{phone,jdbcType=VARCHAR},
+            </if>
+            <if test="operationName != null">
+                #{operationName,jdbcType=VARCHAR},
+            </if>
+            <if test="operationDate != null">
+                #{operationDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="surgeonName != null">
+                #{surgeonName,jdbcType=VARCHAR},
+            </if>
+            <if test="attendingDoctorName != null">
+                #{attendingDoctorName,jdbcType=VARCHAR},
+            </if>
+            <if test="creatTime != null">
+                #{creatTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="creatName != null">
+                #{creatName,jdbcType=VARCHAR},
+            </if>
+            <if test="surgeonId != null">
+                #{surgeonId,jdbcType=BIGINT},
+            </if>
+            <if test="attendingDoctor != null">
+                #{attendingDoctor,jdbcType=BIGINT},
+            </if>
+        </trim>
+    </insert>
+    <select id="countByExample" parameterType="com.trust.xfyl.entity.TrackingPersonnelExample"
+            resultType="java.lang.Integer">
+        select count(*) from tracking_personnel
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+    </select>
+    <update id="updateByExampleSelective" parameterType="map">
+        update tracking_personnel
+        <set>
+            <if test="record.id != null">
+                id = #{record.id,jdbcType=BIGINT},
+            </if>
+            <if test="record.name != null">
+                `name` = #{record.name,jdbcType=VARCHAR},
+            </if>
+            <if test="record.barcodePhoto != null">
+                barcode_photo = #{record.barcodePhoto,jdbcType=VARCHAR},
+            </if>
+            <if test="record.medicalNumber != null">
+                medical_number = #{record.medicalNumber,jdbcType=VARCHAR},
+            </if>
+            <if test="record.phone != null">
+                phone = #{record.phone,jdbcType=VARCHAR},
+            </if>
+            <if test="record.operationName != null">
+                operation_name = #{record.operationName,jdbcType=VARCHAR},
+            </if>
+            <if test="record.operationDate != null">
+                operation_date = #{record.operationDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="record.surgeonName != null">
+                surgeon_name = #{record.surgeonName,jdbcType=VARCHAR},
+            </if>
+            <if test="record.attendingDoctorName != null">
+                attending_doctor_name = #{record.attendingDoctorName,jdbcType=VARCHAR},
+            </if>
+            <if test="record.creatTime != null">
+                creat_time = #{record.creatTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="record.creatName != null">
+                creat_name = #{record.creatName,jdbcType=VARCHAR},
+            </if>
+            <if test="record.surgeonId != null">
+                surgeon_id = #{record.surgeonId,jdbcType=BIGINT},
+            </if>
+            <if test="record.attendingDoctor != null">
+                attending_doctor = #{record.attendingDoctor,jdbcType=BIGINT},
+            </if>
+        </set>
+        <if test="_parameter != null">
+            <include refid="Update_By_Example_Where_Clause"/>
+        </if>
+    </update>
+    <update id="updateByExample" parameterType="map">
+        update tracking_personnel
+        set id = #{record.id,jdbcType=BIGINT},
+        `name` = #{record.name,jdbcType=VARCHAR},
+        barcode_photo = #{record.barcodePhoto,jdbcType=VARCHAR},
+        medical_number = #{record.medicalNumber,jdbcType=VARCHAR},
+        phone = #{record.phone,jdbcType=VARCHAR},
+        operation_name = #{record.operationName,jdbcType=VARCHAR},
+        operation_date = #{record.operationDate,jdbcType=TIMESTAMP},
+        surgeon_name = #{record.surgeonName,jdbcType=VARCHAR},
+        attending_doctor_name = #{record.attendingDoctorName,jdbcType=VARCHAR},
+        creat_time = #{record.creatTime,jdbcType=TIMESTAMP},
+        creat_name = #{record.creatName,jdbcType=VARCHAR},
+        surgeon_id = #{record.surgeonId,jdbcType=BIGINT},
+        attending_doctor = #{record.attendingDoctor,jdbcType=BIGINT}
+        <if test="_parameter != null">
+            <include refid="Update_By_Example_Where_Clause"/>
+        </if>
+    </update>
+    <update id="updateByPrimaryKeySelective" parameterType="com.trust.xfyl.entity.TrackingPersonnel"
+            useGeneratedKeys="true"
+            keyProperty="id">
+        update tracking_personnel
+        <set>
+            <if test="name != null">
+                `name` = #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="barcodePhoto != null">
+                barcode_photo = #{barcodePhoto,jdbcType=VARCHAR},
+            </if>
+            <if test="medicalNumber != null">
+                medical_number = #{medicalNumber,jdbcType=VARCHAR},
+            </if>
+            <if test="phone != null">
+                phone = #{phone,jdbcType=VARCHAR},
+            </if>
+            <if test="operationName != null">
+                operation_name = #{operationName,jdbcType=VARCHAR},
+            </if>
+            <if test="operationDate != null">
+                operation_date = #{operationDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="surgeonName != null">
+                surgeon_name = #{surgeonName,jdbcType=VARCHAR},
+            </if>
+            <if test="attendingDoctorName != null">
+                attending_doctor_name = #{attendingDoctorName,jdbcType=VARCHAR},
+            </if>
+            <if test="creatTime != null">
+                creat_time = #{creatTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="creatName != null">
+                creat_name = #{creatName,jdbcType=VARCHAR},
+            </if>
+            <if test="surgeonId != null">
+                surgeon_id = #{surgeonId,jdbcType=BIGINT},
+            </if>
+            <if test="attendingDoctor != null">
+                attending_doctor = #{attendingDoctor,jdbcType=BIGINT},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.trust.xfyl.entity.TrackingPersonnel">
+        update tracking_personnel
+        set `name`                = #{name,jdbcType=VARCHAR},
+            barcode_photo         = #{barcodePhoto,jdbcType=VARCHAR},
+            medical_number        = #{medicalNumber,jdbcType=VARCHAR},
+            phone                 = #{phone,jdbcType=VARCHAR},
+            operation_name        = #{operationName,jdbcType=VARCHAR},
+            operation_date        = #{operationDate,jdbcType=TIMESTAMP},
+            surgeon_name          = #{surgeonName,jdbcType=VARCHAR},
+            attending_doctor_name = #{attendingDoctorName,jdbcType=VARCHAR},
+            creat_time            = #{creatTime,jdbcType=TIMESTAMP},
+            creat_name            = #{creatName,jdbcType=VARCHAR},
+            surgeon_id            = #{surgeonId,jdbcType=BIGINT},
+            attending_doctor      = #{attendingDoctor,jdbcType=BIGINT}
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+    <select id="count" resultType="java.lang.Long" parameterType="com.trust.xfyl.entity.SurgeryExample">
+        select
+        count(1)
+        from(
+        select
+        <if test="distinct">
+            distinct
+        </if>
+        'true' as QUERYID,
+        <include refid="Base_Column_List"/>
+        from tracking_personnel
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+        <if test="orderByClause != null">
+            order by ${orderByClause}
+        </if>
+        <if test="start != null and end != null">
+            limit #{start,jdbcType=INTEGER},#{end,jdbcType=INTEGER}
+        </if>
+        )count
+    </select>
+</mapper>

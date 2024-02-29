@@ -1,0 +1,798 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.trust.xfyl.dao.WoundOrdersMapper">
+    <resultMap id="BaseResultMap" type="com.trust.xfyl.entity.WoundOrders">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="order_number" property="orderNumber" jdbcType="VARCHAR"/>
+        <result column="task_id" property="taskId" jdbcType="BIGINT"/>
+        <result column="doctor_id" property="doctorId" jdbcType="BIGINT"/>
+        <result column="ord_type" property="ordType" jdbcType="VARCHAR"/>
+        <result column="order_price" property="orderPrice" jdbcType="DECIMAL"/>
+        <result column="business" property="business" jdbcType="VARCHAR"/>
+        <result column="medical_number" property="medicalNumber" jdbcType="VARCHAR"/>
+        <result column="appointment_type" property="appointmentType" jdbcType="VARCHAR"/>
+        <result column="order_type" property="orderType" jdbcType="VARCHAR"/>
+        <result column="surgery_name" property="surgeryName" jdbcType="VARCHAR"/>
+        <result column="perioperative_surgery" property="perioperativeSurgery" jdbcType="VARCHAR"/>
+        <result column="surgery_time" property="surgeryTime" jdbcType="TIMESTAMP"/>
+        <result column="wound_photo_ids" property="woundPhotoIds" jdbcType="VARCHAR"/>
+        <result column="wound_photography_time" property="woundPhotographyTime" jdbcType="TIMESTAMP"/>
+        <result column="taking_lens" property="takingLens" jdbcType="VARCHAR"/>
+        <result column="wound_condition" property="woundCondition" jdbcType="VARCHAR"/>
+        <result column="is_confirm" property="isConfirm" jdbcType="VARCHAR"/>
+        <result column="is_reservation" property="isReservation" jdbcType="VARCHAR"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="creator" property="creator" jdbcType="VARCHAR"/>
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
+        <result column="updator" property="updator" jdbcType="VARCHAR"/>
+        <result column="is_delete" property="isDelete" jdbcType="INTEGER"/>
+        <result column="association_id" property="associationId" jdbcType="BIGINT"/>
+    </resultMap>
+    <sql id="Example_Where_Clause">
+        <where>
+            <foreach collection="oredCriteria" item="criteria" separator="or">
+                <if test="criteria.valid">
+                    <trim prefix="(" suffix=")" prefixOverrides="and">
+                        <foreach collection="criteria.criteria" item="criterion">
+                            <choose>
+                                <when test="criterion.noValue">
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue">
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue">
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue">
+                                    and ${criterion.condition}
+                                    <foreach collection="criterion.value" item="listItem" open="(" close=")"
+                                             separator=",">
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
+            </foreach>
+        </where>
+    </sql>
+    <sql id="Update_By_Example_Where_Clause">
+        <where>
+            <foreach collection="example.oredCriteria" item="criteria" separator="or">
+                <if test="criteria.valid">
+                    <trim prefix="(" suffix=")" prefixOverrides="and">
+                        <foreach collection="criteria.criteria" item="criterion">
+                            <choose>
+                                <when test="criterion.noValue">
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue">
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue">
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue">
+                                    and ${criterion.condition}
+                                    <foreach collection="criterion.value" item="listItem" open="(" close=")"
+                                             separator=",">
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
+            </foreach>
+        </where>
+    </sql>
+    <sql id="Base_Column_List">
+        id, order_number, task_id, doctor_id, ord_type, order_price, business, medical_number,
+    appointment_type, order_type, surgery_name, perioperative_surgery, surgery_time, 
+    wound_photo_ids, wound_photography_time, taking_lens, wound_condition, is_confirm, 
+    is_reservation, create_time, creator, update_time, updator, is_delete, association_id
+    </sql>
+    <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.trust.xfyl.entity.WoundOrdersExample">
+        select
+        <if test="distinct">
+            distinct
+        </if>
+        'true' as QUERYID,
+        <include refid="Base_Column_List"/>
+        from wound_orders
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+        <if test="orderByClause != null">
+            order by ${orderByClause}
+        </if>
+    </select>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long">
+        select
+        <include refid="Base_Column_List"/>
+        from wound_orders
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+        delete
+        from wound_orders
+        where id = #{id,jdbcType=BIGINT}
+    </delete>
+    <delete id="deleteByExample" parameterType="com.trust.xfyl.entity.WoundOrdersExample">
+        delete from wound_orders
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+    </delete>
+    <insert id="insert" parameterType="com.trust.xfyl.entity.WoundOrders">
+        insert into wound_orders (id, order_number, task_id,
+                                  doctor_id, ord_type, order_price,
+                                  business, medical_number, appointment_type,
+                                  order_type, surgery_name, perioperative_surgery,
+                                  surgery_time, wound_photo_ids, wound_photography_time,
+                                  taking_lens, wound_condition, is_confirm,
+                                  is_reservation, create_time, creator,
+                                  update_time, updator, is_delete,
+                                  association_id)
+        values (#{id,jdbcType=BIGINT}, #{orderNumber,jdbcType=VARCHAR}, #{taskId,jdbcType=BIGINT},
+                #{doctorId,jdbcType=BIGINT}, #{ordType,jdbcType=VARCHAR}, #{orderPrice,jdbcType=DECIMAL},
+                #{business,jdbcType=VARCHAR}, #{medicalNumber,jdbcType=VARCHAR}, #{appointmentType,jdbcType=VARCHAR},
+                #{orderType,jdbcType=VARCHAR}, #{surgeryName,jdbcType=VARCHAR},
+                #{perioperativeSurgery,jdbcType=VARCHAR},
+                #{surgeryTime,jdbcType=TIMESTAMP}, #{woundPhotoIds,jdbcType=VARCHAR},
+                #{woundPhotographyTime,jdbcType=TIMESTAMP},
+                #{takingLens,jdbcType=VARCHAR}, #{woundCondition,jdbcType=VARCHAR}, #{isConfirm,jdbcType=VARCHAR},
+                #{isReservation,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{creator,jdbcType=VARCHAR},
+                #{updateTime,jdbcType=TIMESTAMP}, #{updator,jdbcType=VARCHAR}, #{isDelete,jdbcType=INTEGER},
+                #{associationId,jdbcType=BIGINT})
+    </insert>
+    <insert id="insertSelective" parameterType="com.trust.xfyl.entity.WoundOrders" useGeneratedKeys="true"
+            keyProperty="id">
+        insert into wound_orders
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="orderNumber != null">
+                order_number,
+            </if>
+            <if test="taskId != null">
+                task_id,
+            </if>
+            <if test="doctorId != null">
+                doctor_id,
+            </if>
+            <if test="ordType != null">
+                ord_type,
+            </if>
+            <if test="orderPrice != null">
+                order_price,
+            </if>
+            <if test="business != null">
+                business,
+            </if>
+            <if test="medicalNumber != null">
+                medical_number,
+            </if>
+            <if test="appointmentType != null">
+                appointment_type,
+            </if>
+            <if test="orderType != null">
+                order_type,
+            </if>
+            <if test="surgeryName != null">
+                surgery_name,
+            </if>
+            <if test="perioperativeSurgery != null">
+                perioperative_surgery,
+            </if>
+            <if test="surgeryTime != null">
+                surgery_time,
+            </if>
+            <if test="woundPhotoIds != null">
+                wound_photo_ids,
+            </if>
+            <if test="woundPhotographyTime != null">
+                wound_photography_time,
+            </if>
+            <if test="takingLens != null">
+                taking_lens,
+            </if>
+            <if test="woundCondition != null">
+                wound_condition,
+            </if>
+            <if test="isConfirm != null">
+                is_confirm,
+            </if>
+            <if test="isReservation != null">
+                is_reservation,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="creator != null">
+                creator,
+            </if>
+            <if test="updateTime != null">
+                update_time,
+            </if>
+            <if test="updator != null">
+                updator,
+            </if>
+            <if test="isDelete != null">
+                is_delete,
+            </if>
+            <if test="associationId != null">
+                association_id,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=BIGINT},
+            </if>
+            <if test="orderNumber != null">
+                #{orderNumber,jdbcType=VARCHAR},
+            </if>
+            <if test="taskId != null">
+                #{taskId,jdbcType=BIGINT},
+            </if>
+            <if test="doctorId != null">
+                #{doctorId,jdbcType=BIGINT},
+            </if>
+            <if test="ordType != null">
+                #{ordType,jdbcType=VARCHAR},
+            </if>
+            <if test="orderPrice != null">
+                #{orderPrice,jdbcType=DECIMAL},
+            </if>
+            <if test="business != null">
+                #{business,jdbcType=VARCHAR},
+            </if>
+            <if test="medicalNumber != null">
+                #{medicalNumber,jdbcType=VARCHAR},
+            </if>
+            <if test="appointmentType != null">
+                #{appointmentType,jdbcType=VARCHAR},
+            </if>
+            <if test="orderType != null">
+                #{orderType,jdbcType=VARCHAR},
+            </if>
+            <if test="surgeryName != null">
+                #{surgeryName,jdbcType=VARCHAR},
+            </if>
+            <if test="perioperativeSurgery != null">
+                #{perioperativeSurgery,jdbcType=VARCHAR},
+            </if>
+            <if test="surgeryTime != null">
+                #{surgeryTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="woundPhotoIds != null">
+                #{woundPhotoIds,jdbcType=VARCHAR},
+            </if>
+            <if test="woundPhotographyTime != null">
+                #{woundPhotographyTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="takingLens != null">
+                #{takingLens,jdbcType=VARCHAR},
+            </if>
+            <if test="woundCondition != null">
+                #{woundCondition,jdbcType=VARCHAR},
+            </if>
+            <if test="isConfirm != null">
+                #{isConfirm,jdbcType=VARCHAR},
+            </if>
+            <if test="isReservation != null">
+                #{isReservation,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="creator != null">
+                #{creator,jdbcType=VARCHAR},
+            </if>
+            <if test="updateTime != null">
+                #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updator != null">
+                #{updator,jdbcType=VARCHAR},
+            </if>
+            <if test="isDelete != null">
+                #{isDelete,jdbcType=INTEGER},
+            </if>
+            <if test="associationId != null">
+                #{associationId,jdbcType=BIGINT},
+            </if>
+        </trim>
+    </insert>
+    <select id="countByExample" parameterType="com.trust.xfyl.entity.WoundOrdersExample" resultType="java.lang.Integer">
+        select count(*) from wound_orders
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+    </select>
+    <update id="updateByExampleSelective" parameterType="map">
+        update wound_orders
+        <set>
+            <if test="record.id != null">
+                id = #{record.id,jdbcType=BIGINT},
+            </if>
+            <if test="record.orderNumber != null">
+                order_number = #{record.orderNumber,jdbcType=VARCHAR},
+            </if>
+            <if test="record.taskId != null">
+                task_id = #{record.taskId,jdbcType=BIGINT},
+            </if>
+            <if test="record.doctorId != null">
+                doctor_id = #{record.doctorId,jdbcType=BIGINT},
+            </if>
+            <if test="record.ordType != null">
+                ord_type = #{record.ordType,jdbcType=VARCHAR},
+            </if>
+            <if test="record.orderPrice != null">
+                order_price = #{record.orderPrice,jdbcType=DECIMAL},
+            </if>
+            <if test="record.business != null">
+                business = #{record.business,jdbcType=VARCHAR},
+            </if>
+            <if test="record.medicalNumber != null">
+                medical_number = #{record.medicalNumber,jdbcType=VARCHAR},
+            </if>
+            <if test="record.appointmentType != null">
+                appointment_type = #{record.appointmentType,jdbcType=VARCHAR},
+            </if>
+            <if test="record.orderType != null">
+                order_type = #{record.orderType,jdbcType=VARCHAR},
+            </if>
+            <if test="record.surgeryName != null">
+                surgery_name = #{record.surgeryName,jdbcType=VARCHAR},
+            </if>
+            <if test="record.perioperativeSurgery != null">
+                perioperative_surgery = #{record.perioperativeSurgery,jdbcType=VARCHAR},
+            </if>
+            <if test="record.surgeryTime != null">
+                surgery_time = #{record.surgeryTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="record.woundPhotoIds != null">
+                wound_photo_ids = #{record.woundPhotoIds,jdbcType=VARCHAR},
+            </if>
+            <if test="record.woundPhotographyTime != null">
+                wound_photography_time = #{record.woundPhotographyTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="record.takingLens != null">
+                taking_lens = #{record.takingLens,jdbcType=VARCHAR},
+            </if>
+            <if test="record.woundCondition != null">
+                wound_condition = #{record.woundCondition,jdbcType=VARCHAR},
+            </if>
+            <if test="record.isConfirm != null">
+                is_confirm = #{record.isConfirm,jdbcType=VARCHAR},
+            </if>
+            <if test="record.isReservation != null">
+                is_reservation = #{record.isReservation,jdbcType=VARCHAR},
+            </if>
+            <if test="record.createTime != null">
+                create_time = #{record.createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="record.creator != null">
+                creator = #{record.creator,jdbcType=VARCHAR},
+            </if>
+            <if test="record.updateTime != null">
+                update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="record.updator != null">
+                updator = #{record.updator,jdbcType=VARCHAR},
+            </if>
+            <if test="record.isDelete != null">
+                is_delete = #{record.isDelete,jdbcType=INTEGER},
+            </if>
+            <if test="record.associationId != null">
+                association_id = #{record.associationId,jdbcType=BIGINT},
+            </if>
+        </set>
+        <if test="_parameter != null">
+            <include refid="Update_By_Example_Where_Clause"/>
+        </if>
+    </update>
+    <update id="updateByExample" parameterType="map">
+        update wound_orders
+        set id = #{record.id,jdbcType=BIGINT},
+        order_number = #{record.orderNumber,jdbcType=VARCHAR},
+        task_id = #{record.taskId,jdbcType=BIGINT},
+        doctor_id = #{record.doctorId,jdbcType=BIGINT},
+        ord_type = #{record.ordType,jdbcType=VARCHAR},
+        order_price = #{record.orderPrice,jdbcType=DECIMAL},
+        business = #{record.business,jdbcType=VARCHAR},
+        medical_number = #{record.medicalNumber,jdbcType=VARCHAR},
+        appointment_type = #{record.appointmentType,jdbcType=VARCHAR},
+        order_type = #{record.orderType,jdbcType=VARCHAR},
+        surgery_name = #{record.surgeryName,jdbcType=VARCHAR},
+        perioperative_surgery = #{record.perioperativeSurgery,jdbcType=VARCHAR},
+        surgery_time = #{record.surgeryTime,jdbcType=TIMESTAMP},
+        wound_photo_ids = #{record.woundPhotoIds,jdbcType=VARCHAR},
+        wound_photography_time = #{record.woundPhotographyTime,jdbcType=TIMESTAMP},
+        taking_lens = #{record.takingLens,jdbcType=VARCHAR},
+        wound_condition = #{record.woundCondition,jdbcType=VARCHAR},
+        is_confirm = #{record.isConfirm,jdbcType=VARCHAR},
+        is_reservation = #{record.isReservation,jdbcType=VARCHAR},
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+        creator = #{record.creator,jdbcType=VARCHAR},
+        update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+        updator = #{record.updator,jdbcType=VARCHAR},
+        is_delete = #{record.isDelete,jdbcType=INTEGER},
+        association_id = #{record.associationId,jdbcType=BIGINT}
+        <if test="_parameter != null">
+            <include refid="Update_By_Example_Where_Clause"/>
+        </if>
+    </update>
+
+    <update id="updateByPrimaryKeySelective" parameterType="com.trust.xfyl.entity.WoundOrders" useGeneratedKeys="true"
+            keyProperty="id">
+        update wound_orders
+        <set>
+            <if test="orderNumber != null">
+                order_number = #{orderNumber,jdbcType=VARCHAR},
+            </if>
+            <if test="taskId != null">
+                task_id = #{taskId,jdbcType=BIGINT},
+            </if>
+            <if test="doctorId != null">
+                doctor_id = #{doctorId,jdbcType=BIGINT},
+            </if>
+            <if test="ordType != null">
+                ord_type = #{ordType,jdbcType=VARCHAR},
+            </if>
+            <if test="orderPrice != null">
+                order_price = #{orderPrice,jdbcType=DECIMAL},
+            </if>
+            <if test="business != null">
+                business = #{business,jdbcType=VARCHAR},
+            </if>
+            <if test="medicalNumber != null">
+                medical_number = #{medicalNumber,jdbcType=VARCHAR},
+            </if>
+            <if test="appointmentType != null">
+                appointment_type = #{appointmentType,jdbcType=VARCHAR},
+            </if>
+            <if test="orderType != null">
+                order_type = #{orderType,jdbcType=VARCHAR},
+            </if>
+            <if test="surgeryName != null">
+                surgery_name = #{surgeryName,jdbcType=VARCHAR},
+            </if>
+            <if test="perioperativeSurgery != null">
+                perioperative_surgery = #{perioperativeSurgery,jdbcType=VARCHAR},
+            </if>
+            <if test="surgeryTime != null">
+                surgery_time = #{surgeryTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="woundPhotoIds != null">
+                wound_photo_ids = #{woundPhotoIds,jdbcType=VARCHAR},
+            </if>
+            <if test="woundPhotographyTime != null">
+                wound_photography_time = #{woundPhotographyTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="takingLens != null">
+                taking_lens = #{takingLens,jdbcType=VARCHAR},
+            </if>
+            <if test="woundCondition != null">
+                wound_condition = #{woundCondition,jdbcType=VARCHAR},
+            </if>
+            <if test="isConfirm != null">
+                is_confirm = #{isConfirm,jdbcType=VARCHAR},
+            </if>
+            <if test="isReservation != null">
+                is_reservation = #{isReservation,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="creator != null">
+                creator = #{creator,jdbcType=VARCHAR},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updator != null">
+                updator = #{updator,jdbcType=VARCHAR},
+            </if>
+            <if test="isDelete != null">
+                is_delete = #{isDelete,jdbcType=INTEGER},
+            </if>
+            <if test="associationId != null">
+                association_id = #{associationId,jdbcType=BIGINT},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.trust.xfyl.entity.WoundOrders">
+        update wound_orders
+        set order_number           = #{orderNumber,jdbcType=VARCHAR},
+            task_id                = #{taskId,jdbcType=BIGINT},
+            doctor_id              = #{doctorId,jdbcType=BIGINT},
+            ord_type               = #{ordType,jdbcType=VARCHAR},
+            order_price            = #{orderPrice,jdbcType=DECIMAL},
+            business               = #{business,jdbcType=VARCHAR},
+            medical_number         = #{medicalNumber,jdbcType=VARCHAR},
+            appointment_type       = #{appointmentType,jdbcType=VARCHAR},
+            order_type             = #{orderType,jdbcType=VARCHAR},
+            surgery_name           = #{surgeryName,jdbcType=VARCHAR},
+            perioperative_surgery  = #{perioperativeSurgery,jdbcType=VARCHAR},
+            surgery_time           = #{surgeryTime,jdbcType=TIMESTAMP},
+            wound_photo_ids        = #{woundPhotoIds,jdbcType=VARCHAR},
+            wound_photography_time = #{woundPhotographyTime,jdbcType=TIMESTAMP},
+            taking_lens            = #{takingLens,jdbcType=VARCHAR},
+            wound_condition        = #{woundCondition,jdbcType=VARCHAR},
+            is_confirm             = #{isConfirm,jdbcType=VARCHAR},
+            is_reservation         = #{isReservation,jdbcType=VARCHAR},
+            create_time            = #{createTime,jdbcType=TIMESTAMP},
+            creator                = #{creator,jdbcType=VARCHAR},
+            update_time            = #{updateTime,jdbcType=TIMESTAMP},
+            updator                = #{updator,jdbcType=VARCHAR},
+            is_delete              = #{isDelete,jdbcType=INTEGER},
+            association_id         = #{associationId,jdbcType=BIGINT}
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+    <select id="selectAll" resultType="com.trust.xfyl.entity.vo.WoundOrderVo"
+            parameterType="com.trust.xfyl.entity.WoundOrders">
+        SELECT
+        wo.id,
+        wo.appointment_type,
+        wo.association_id,
+        wo.business,
+        wo.create_time,
+        wo.doctor_id,
+        wo.is_confirm,
+        wo.is_delete,
+        wo.is_reservation,
+        wo.medical_number,
+        wo.ord_type,
+        wo.order_number,
+        wo.order_price,
+        wo.order_type,
+        wo.perioperative_surgery,
+        wo.surgery_name,
+        wo.surgery_time,
+        wo.taking_lens,
+        wo.task_id,
+        wo.update_time,
+        wo.wound_condition,
+        wo.wound_photo_ids,
+        wo.wound_photography_time,
+        tp.`name`,
+        tp.barcode_photo,
+        tp.phone,
+        doctor.doctor_name,
+        doctor.doctor_introduce,
+        doctor.doctor_photo,
+        doctor.doctor_services,
+        doctor.doctor_type,
+        group_concat( trust_file.file_url ORDER BY trust_file.file_name DESC SEPARATOR '|' ) AS url,
+        group_concat( trust_file.file_id ORDER BY trust_file.file_id DESC SEPARATOR '|' ) AS fileId,
+        (
+        SELECT
+        group_concat( trust_file.file_url ORDER BY trust_file.file_name DESC SEPARATOR '|' ) AS url
+        FROM
+        doctor
+        LEFT JOIN trust_relation_file ON doctor.id = trust_relation_file.busi_id
+        AND trust_relation_file.busi_type = 'doctor'
+        LEFT JOIN trust_file ON trust_relation_file.file_id = trust_file.file_id
+        ) doctorUrl,
+        (
+        SELECT
+        group_concat( trust_file.file_id ORDER BY trust_file.file_id DESC SEPARATOR '|' ) AS fileId
+        FROM
+        doctor
+        LEFT JOIN trust_relation_file ON doctor.id = trust_relation_file.busi_id
+        AND trust_relation_file.busi_type = 'doctor'
+        LEFT JOIN trust_file ON trust_relation_file.file_id = trust_file.file_id
+        ) doctorFileId,
+        (
+        SELECT
+        group_concat( trust_file.file_url ORDER BY trust_file.file_name DESC SEPARATOR '|' ) AS url
+        FROM
+        tracking_personnel
+        LEFT JOIN trust_relation_file ON tracking_personnel.id = trust_relation_file.busi_id
+        AND trust_relation_file.busi_type = 'trackingPersonne'
+        LEFT JOIN trust_file ON trust_relation_file.file_id = trust_file.file_id
+        ) tarkUrl,
+        (
+        SELECT
+        group_concat( trust_file.file_id ORDER BY trust_file.file_id DESC SEPARATOR '|' ) AS fileId
+        FROM
+        tracking_personnel
+        LEFT JOIN trust_relation_file ON doctor.id = trust_relation_file.busi_id
+        AND trust_relation_file.busi_type = 'trackingPersonne'
+        LEFT JOIN trust_file ON trust_relation_file.file_id = trust_file.file_id
+        ) tarkFileId
+        FROM
+        wound_orders AS wo
+        LEFT JOIN tracking_personnel AS tp ON wo.task_id = tp.id
+        LEFT JOIN doctor ON doctor.id = wo.doctor_id
+        LEFT JOIN trust_relation_file ON wo.id = trust_relation_file.busi_id
+        AND trust_relation_file.busi_type = 'woundOrders'
+        LEFT JOIN trust_file ON trust_relation_file.file_id = trust_file.file_id
+        <where>
+            <if test="orderNumber != null">
+                wo.order_number like concat('%',#{orderNumber,jdbcType=VARCHAR},'%')
+            </if>
+        </where>
+        and wo.is_delete = 0
+        GROUP BY
+        wo.order_number
+        ORDER BY
+        wo.create_time DESC
+        LIMIT #{start,jdbcType=INTEGER},#{end,jdbcType=INTEGER}
+    </select>
+    <select id="count" resultType="java.lang.Long" parameterType="com.trust.xfyl.entity.WoundFollowExample">
+        select
+        count(1)
+        from(
+        SELECT
+        wo.id,
+        wo.appointment_type,
+        wo.association_id,
+        wo.business,
+        wo.create_time,
+        wo.doctor_id,
+        wo.is_confirm,
+        wo.is_delete,
+        wo.is_reservation,
+        wo.medical_number,
+        wo.ord_type,
+        wo.order_number,
+        wo.order_price,
+        wo.order_type,
+        wo.perioperative_surgery,
+        wo.surgery_name,
+        wo.surgery_time,
+        wo.taking_lens,
+        wo.task_id,
+        wo.update_time,
+        wo.wound_condition,
+        wo.wound_photo_ids,
+        wo.wound_photography_time,
+        tp.`name`,
+        tp.barcode_photo,
+        tp.phone,
+        doctor.doctor_name,
+        doctor.doctor_introduce,
+        doctor.doctor_photo,
+        doctor.doctor_services,
+        doctor.doctor_type,
+        group_concat( trust_file.file_url ORDER BY trust_file.file_name DESC SEPARATOR '|' ) AS url,
+        group_concat( trust_file.file_id ORDER BY trust_file.file_id DESC SEPARATOR '|' ) AS fileId,
+        (
+        SELECT
+        group_concat( trust_file.file_url ORDER BY trust_file.file_name DESC SEPARATOR '|' ) AS url
+        FROM
+        doctor
+        LEFT JOIN trust_relation_file ON doctor.id = trust_relation_file.busi_id
+        AND trust_relation_file.busi_type = 'doctor'
+        LEFT JOIN trust_file ON trust_relation_file.file_id = trust_file.file_id
+        ) doctorUrl,
+        (
+        SELECT
+        group_concat( trust_file.file_id ORDER BY trust_file.file_id DESC SEPARATOR '|' ) AS fileId
+        FROM
+        doctor
+        LEFT JOIN trust_relation_file ON doctor.id = trust_relation_file.busi_id
+        AND trust_relation_file.busi_type = 'doctor'
+        LEFT JOIN trust_file ON trust_relation_file.file_id = trust_file.file_id
+        ) doctorFileId,
+        (
+        SELECT
+        group_concat( trust_file.file_url ORDER BY trust_file.file_name DESC SEPARATOR '|' ) AS url
+        FROM
+        tracking_personnel
+        LEFT JOIN trust_relation_file ON tracking_personnel.id = trust_relation_file.busi_id
+        AND trust_relation_file.busi_type = 'trackingPersonne'
+        LEFT JOIN trust_file ON trust_relation_file.file_id = trust_file.file_id
+        ) tarkUrl,
+        (
+        SELECT
+        group_concat( trust_file.file_id ORDER BY trust_file.file_id DESC SEPARATOR '|' ) AS fileId
+        FROM
+        tracking_personnel
+        LEFT JOIN trust_relation_file ON doctor.id = trust_relation_file.busi_id
+        AND trust_relation_file.busi_type = 'trackingPersonne'
+        LEFT JOIN trust_file ON trust_relation_file.file_id = trust_file.file_id
+        ) tarkFileId
+        FROM
+        wound_orders AS wo
+        LEFT JOIN tracking_personnel AS tp ON wo.task_id = tp.id
+        LEFT JOIN doctor ON doctor.id = wo.doctor_id
+        LEFT JOIN trust_relation_file ON wo.id = trust_relation_file.busi_id
+        AND trust_relation_file.busi_type = 'woundOrders'
+        LEFT JOIN trust_file ON trust_relation_file.file_id = trust_file.file_id
+        <where>
+            <if test="orderNumber != null">
+                wo.order_number like concat('%',#{orderNumber,jdbcType=VARCHAR},'%')
+            </if>
+        </where>
+        and wo.is_delete = 0
+        GROUP BY
+        wo.order_number
+        ORDER BY
+        wo.create_time DESC
+        LIMIT #{start,jdbcType=INTEGER},#{end,jdbcType=INTEGER}
+        )count
+    </select>
+
+    <select id="selectWoundOrdersById" resultType="com.trust.xfyl.entity.vo.WoundOrderVo"
+            parameterType="com.trust.xfyl.entity.WoundOrders">
+        SELECT wo.id,
+               wo.appointment_type,
+               wo.association_id,
+               wo.business,
+               wo.create_time,
+               wo.doctor_id,
+               wo.is_confirm,
+               wo.is_delete,
+               wo.is_reservation,
+               wo.medical_number,
+               wo.ord_type,
+               wo.order_number,
+               wo.order_price,
+               wo.order_type,
+               wo.perioperative_surgery,
+               wo.surgery_name,
+               wo.surgery_time,
+               wo.taking_lens,
+               wo.task_id,
+               wo.update_time,
+               wo.wound_condition,
+               wo.wound_photo_ids,
+               wo.wound_photography_time,
+               tp.`name`,
+               tp.barcode_photo,
+               tp.phone,
+               doctor.doctor_name,
+               doctor.doctor_introduce,
+               doctor.doctor_photo,
+               doctor.doctor_services,
+               doctor.doctor_type,
+               group_concat(trust_file.file_url ORDER BY trust_file.file_name DESC SEPARATOR '|') AS url,
+               group_concat(trust_file.file_id ORDER BY trust_file.file_id DESC SEPARATOR '|')    AS fileId,
+               (
+                   SELECT group_concat(trust_file.file_url ORDER BY trust_file.file_name DESC SEPARATOR '|') AS url
+                   FROM doctor
+                            LEFT JOIN trust_relation_file ON doctor.id = trust_relation_file.busi_id
+                       AND trust_relation_file.busi_type = 'doctor'
+                            LEFT JOIN trust_file ON trust_relation_file.file_id = trust_file.file_id
+               )                                                                                     doctorUrl,
+               (
+                   SELECT group_concat(trust_file.file_id ORDER BY trust_file.file_id DESC SEPARATOR '|') AS fileId
+                   FROM doctor
+                            LEFT JOIN trust_relation_file ON doctor.id = trust_relation_file.busi_id
+                       AND trust_relation_file.busi_type = 'doctor'
+                            LEFT JOIN trust_file ON trust_relation_file.file_id = trust_file.file_id
+               )                                                                                     doctorFileId,
+               (
+                   SELECT group_concat(trust_file.file_url ORDER BY trust_file.file_name DESC SEPARATOR '|') AS url
+                   FROM tracking_personnel
+                            LEFT JOIN trust_relation_file ON tracking_personnel.id = trust_relation_file.busi_id
+                       AND trust_relation_file.busi_type = 'trackingPersonne'
+                            LEFT JOIN trust_file ON trust_relation_file.file_id = trust_file.file_id
+               )                                                                                     tarkUrl,
+               (
+                   SELECT group_concat(trust_file.file_id ORDER BY trust_file.file_id DESC SEPARATOR '|') AS fileId
+                   FROM tracking_personnel
+                            LEFT JOIN trust_relation_file ON doctor.id = trust_relation_file.busi_id
+                       AND trust_relation_file.busi_type = 'trackingPersonne'
+                            LEFT JOIN trust_file ON trust_relation_file.file_id = trust_file.file_id
+               )                                                                                     tarkFileId
+        FROM wound_orders AS wo
+                 LEFT JOIN tracking_personnel AS tp ON wo.task_id = tp.id
+                 LEFT JOIN doctor ON doctor.id = wo.doctor_id
+                 LEFT JOIN trust_relation_file ON wo.id = trust_relation_file.busi_id
+            AND trust_relation_file.busi_type = 'woundOrders'
+                 LEFT JOIN trust_file ON trust_relation_file.file_id = trust_file.file_id
+        where wo.is_delete = 0
+          and wo.id = #{id,jdbcType=BIGINT}
+        GROUP BY wo.order_number
+
+    </select>
+
+</mapper>
