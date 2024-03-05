@@ -2,7 +2,7 @@ server:
   port: 8089
 spring:
   datasource:
-    url: jdbc:mysql://127.0.0.1:3306/xfyl?serverTimezone=GMT%2b8&useSSL=false&characterEncoding=utf8&allowPublicKeyRetrieval=true
+    url: jdbc:mysql://127.0.0.1:3306/xfyl?serverTimezone=GMT%2b8&useSSL=false&characterEncoding=utf8&allowPublicKeyRetrieval=true&autoReconnect=true
     username: root
     password: 616627hj
     type: com.alibaba.druid.pool.DruidDataSource

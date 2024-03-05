@@ -111,6 +111,44 @@
             text-align: left;
             font-size: 14px;
         }
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+        .modal-content {
+            background-color: #f9f9f9;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            width: 80%;
+            max-width: 400px;
+            text-align: center;
+            border-radius: 5px;
+            box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+        }
+        #modalMessage {
+            font-size: 18px;
+            margin-bottom: 20px;
+        }
+        button {
+            padding: 10px 20px;
+            background-color:#357a38;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color:#357a38;
+        }
     </style>
 </head>
 <body>
@@ -125,27 +163,74 @@
 <div class="enlarged-image" onclick="hideEnlargedImage()">
     <img id="enlargedImg">
 </div>
+<div id="customModal" class="modal">
+    <div class="modal-content">
+        <p id="modalMessage"></p>
+        <button onclick="closeModal()">OK</button>
+    </div>
+</div>
 <script>
+
+
+
     const form = document.getElementById('uploadForm');
     const fileInput = document.getElementById('fileInput');
     const imagePreviewContainer = document.getElementById('imagePreview');
+    let skinDetectionAlerted = false;
+    async function skinDetectionAndDisplay(imgElement, skin) {
+        let resultText = document.createElement('p');
+        imgElement.parentNode.appendChild(resultText);
+        if (skin === false && !skinDetectionAlerted) {
+            openModal('您有些图片不符合皮肤检测，请重新上传');
+            skinDetectionAlerted = true;
+        }
+        if (skin === false) {
+            imgElement.parentNode.style.display = 'none';
+        }
+    }
 
-    function previewImages() {
+    async function previewImages() {
         imagePreviewContainer.innerHTML = '';
+        skinDetectionAlerted = false; // 重置提醒标记
 
         for (let file of fileInput.files) {
             if (!file.type.match('image.*')) {
                 continue;
             }
+
             let reader = new FileReader();
 
-            reader.onload = function (e) {
+            reader.onload = async function (e) {
                 let img = `<img src="${e.target.result}" alt="Preview Image" onclick="showEnlargedImage('${e.target.result}')">`;
 
                 let resultContainer = '<div class="result-container"></div>';
 
-                let imageContainer = `<div class="image-container">${img}${resultContainer}</div>`;
-                imagePreviewContainer.innerHTML += imageContainer;
+                let imageContainer = document.createElement('div');
+                imageContainer.classList.add('image-container');
+                imageContainer.innerHTML = img + resultContainer;
+                imagePreviewContainer.appendChild(imageContainer);
+
+                let formData = new FormData(form);
+                formData.set('file', file);
+
+                try {
+                    const response = await fetch('http://localhost:8089/uploaFile/skinDetection', {
+                        method: 'POST',
+                        body: formData
+                    });
+
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok.');
+                    }
+
+                    const skinDetectionData = await response.json();
+                    let skin = skinDetectionData.data.skin;
+
+                    let imgElement = imageContainer.querySelector('img');
+                    await skinDetectionAndDisplay(imgElement, skin);
+                } catch (error) {
+                    console.error('Error calling skinDetection API:', error);
+                }
             };
 
             reader.readAsDataURL(file);
@@ -159,7 +244,7 @@
         }
         let formData = new FormData(form);
 
-        fetch('http://localhost:8089//uploaFile/getWoundInformation', {
+        fetch('http://localhost:8089/uploaFile/getWoundInformation', {
             method: 'POST',
             body: formData
         }).then(response => {
@@ -198,6 +283,15 @@
         let enlargedImage = document.querySelector('.enlarged-image');
         enlargedImage.style.display = 'none';
     }
+    function openModal(message) {
+        document.getElementById('modalMessage').innerText = message;
+        document.getElementById('customModal').style.display = 'block';
+    }
+
+    function closeModal() {
+        document.getElementById('customModal').style.display = 'none';
+    }
+
 </script>
 </body>
 </html>

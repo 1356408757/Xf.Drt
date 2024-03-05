@@ -237,6 +237,11 @@
             <version>5.9.0</version>
         </dependency>
 
+        <dependency>
+            <groupId>com.aliyun</groupId>
+            <artifactId>alibabacloud-bailian20230601</artifactId>
+            <version>1.0.4</version>
+        </dependency>
     </dependencies>
 
     <build>
