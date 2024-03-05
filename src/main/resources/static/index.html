@@ -156,6 +156,7 @@
     <h2>Medical Image Upload</h2>
     <label class="upload-btn" for="fileInput">Select Image</label>
     <input accept="image/*" id="fileInput" multiple name="files" onchange="previewImages()" type="file">
+    <input accept="image/*" capture="camera" id="cameraInput" type="file" onchange="previewImages">
     <br>
     <button class="upload-btn" onclick="uploadFiles()" type="button">Upload</button>
 </form>
@@ -170,9 +171,6 @@
     </div>
 </div>
 <script>
-
-
-
     const form = document.getElementById('uploadForm');
     const fileInput = document.getElementById('fileInput');
     const imagePreviewContainer = document.getElementById('imagePreview');
