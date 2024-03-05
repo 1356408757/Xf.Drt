@@ -179,6 +179,29 @@ public class FileController {
             return ResultVOUtil.error(e.toString());
         }
     }
+    /**
+     * @return java.lang.String
+     * @Author djj
+     * @Description //TODO
+     * @Date 15:57 2024/1/25
+     * @Param [file, request]
+     **/
+    @CrossOrigin(origins = "*")
+    @PostMapping("/skinDetection")
+    @ApiOperation(value = "判断图片信息", nickname = "skinDetection", notes = "判断图片信息")
+    @ResponseBody
+    public ResultVO skinDetection(@RequestParam("file")MultipartFile file) {
+        Map<String, Object> returnMap = new HashMap<>();
+            String fileName = file.getOriginalFilename();
+            try {
+                boolean skinDetected =FileService.processImage(file);
+                returnMap.put("skin",skinDetected);
+            } catch (IOException e) {
+                returnMap.put(fileName, "处理文件异常");
+            }
+        return ResultVOUtil.success(returnMap);
+    }
+
 
 
     /**
@@ -195,7 +218,6 @@ public class FileController {
     @RequestMapping(value = "/getWoundInformation", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
     public ResultVO getWoundInformation(@RequestParam("files") List<MultipartFile> files, HttpServletRequest request) throws IOException, NoSuchFieldException, ClientException {
         Map<String, Object> returnMap = new HashMap<String, Object>();
-        ObjectMapper mapper = new ObjectMapper();
         fileService.getWoundInformation(returnMap, files);
         /*上传图片到文件服务器并返回图片信息*/
         return ResultVOUtil.success(returnMap);

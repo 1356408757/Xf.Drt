@@ -67,7 +67,7 @@ public class StsServiceSample {
     * @return com.trust.xfyl.entity.ResultVO
     **/
 
-    public static ResultVO uploadFiles(List<MultipartFile> files) throws IOException {
+    public static ResultVO uploadFiles(List<MultipartFile> files){
         String endpoint = "https://oss-cn-shanghai.aliyuncs.com";
         if (ossAccessKeyId == null || ossAccessKeySecret == null || ossSecurityToken == null) {
             logger.error("文件上传失败。STS 令牌无效。");
@@ -76,9 +76,11 @@ public class StsServiceSample {
 
         List<Map<String, Object>> resultList;
         OSS ossClient = new OSSClientBuilder().build(endpoint, ossAccessKeyId, ossAccessKeySecret, ossSecurityToken);
-        ExecutorService executorService = new ThreadPoolExecutor(
+        ExecutorService executorService;
+        executorService = new ThreadPoolExecutor(
                 10, 10, 0L, TimeUnit.MILLISECONDS,
-                new LinkedBlockingQueue<>()
+                new LinkedBlockingQueue<>(),
+                new CustomThreadFactory()
         );
 
         try {
@@ -104,15 +106,19 @@ public class StsServiceSample {
 
     private static Map<String, Object> uploadFile(MultipartFile file, OSS ossClient) {
         try {
+
+
             File compressedFile = compressImage(file);
 
-            String uniqueFileName = generateUniqueFileName(file.getOriginalFilename());
+            String uniqueFileName = generateUniqueFileName(Objects.requireNonNull(file.getOriginalFilename()));
 
             URL signedUrl = generateAndUploadObject(ossClient, compressedFile, uniqueFileName);
 
             Map<String, Object> fileMap = new HashMap<>();
             fileMap.put("fileName", file.getOriginalFilename());
-            fileMap.put("fileUrl", signedUrl.toString());
+            if (signedUrl != null) {
+                fileMap.put("fileUrl", signedUrl.toString());
+            }
             fileMap.put("originalFilename", uniqueFileName);
 
             return fileMap;
@@ -121,7 +127,24 @@ public class StsServiceSample {
             return createErrorResultMap(e.getMessage());
         }
     }
+    private static boolean skinDetection(MultipartFile file) {
+        try {
+            // 将 MultipartFile 转换为临时文件
+            File tempFile = convertMultipartFileToFile(file);
+            boolean b = SkinDetection.skinDetection(tempFile.getAbsolutePath());
+            // 调用皮肤检测方法
+           return b;
+        } catch (IOException e) {
+            logger.error("皮肤检测失败。异常信息: {}", e.getMessage());
+            return false;
+        }
+    }
 
+    private static File convertMultipartFileToFile(MultipartFile file) throws IOException {
+        File tempFile = File.createTempFile("temp", null);
+        file.transferTo(tempFile);
+        return tempFile;
+    }
     private static Map<String, Object> createErrorResultMap(String errorMessage) {
         Map<String, Object> errorResult = new HashMap<>();
         errorResult.put("error", errorMessage);
@@ -134,12 +157,12 @@ public class StsServiceSample {
             Date expiration = new Date(System.currentTimeMillis() + 3600 * 1000L);
             request.setExpiration(expiration);
             request.setContentType("multipart/form-data");
-            request.addUserMetadata("author", "xfdrt");
+            request.addUserMetadata("author", "xfdf");
             URL signedUrl = ossClient.generatePresignedUrl(request);
 
             Map<String, String> requestHeaders = new HashMap<>();
             requestHeaders.put(HttpHeaders.CONTENT_TYPE, "multipart/form-data");
-            requestHeaders.put(OSS_USER_METADATA_PREFIX + "author", "xfdrt");
+            requestHeaders.put(OSS_USER_METADATA_PREFIX + "author", "xfdf");
 
             ossClient.putObject(signedUrl, new BufferedInputStream(new FileInputStream(file)), file.length(), requestHeaders, true);
 
@@ -184,7 +207,7 @@ public class StsServiceSample {
 
             return compressedFile;
         } catch (IOException e) {
-            return new File(file.getOriginalFilename());
+            return new File(Objects.requireNonNull(file.getOriginalFilename()));
         }
     }
 
@@ -231,11 +254,13 @@ public class StsServiceSample {
     }
 
     /**
-     * @return void
-     * @Author djj
-     * @Description //TODO 下面的方法为阿里oss对象存储的上传下载针对于测试类里面的方法，我就不删除了
-     * @Date 14:05 2024/2/28
+     * TODO  下面的方法为阿里oss对象存储的上传下载针对于测试类里面的方法，我就不删除了
+     *
+     * @Description
+     * @Author Bay-max
+     * @Date 2024/3/1 12:07
      **/
+
 
     public static void ossTest() throws Throwable {
         // 以华东1（杭州）的外网Endpoint为例，其它Region请按实际情况填写。

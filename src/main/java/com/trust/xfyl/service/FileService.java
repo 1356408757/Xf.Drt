@@ -8,12 +8,14 @@ import com.trust.xfyl.entity.TrustFile;
 import com.trust.xfyl.entity.TrustRelationFile;
 import com.trust.xfyl.util.AliSkinUtils;
 import com.trust.xfyl.util.ResultVOUtil;
+import com.trust.xfyl.util.SkinDetection;
 import com.trust.xfyl.util.StsServiceSample;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -154,5 +156,17 @@ public class FileService {
         return fileids.length == insertResult;
     }
 
-
+    public static boolean processImage(MultipartFile multipartFile) throws IOException {
+        File tempFile = null;
+        try {
+            tempFile = File.createTempFile("temp", null);
+            multipartFile.transferTo(tempFile);
+            String realPath = tempFile.getAbsolutePath();
+            return SkinDetection.skinDetection(realPath);
+        } finally {
+            if (tempFile != null) {
+                tempFile.delete(); // 删除临时文件
+            }
+        }
+    }
 }
