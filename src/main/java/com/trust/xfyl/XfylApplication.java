@@ -13,7 +13,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
  */
 @EnableScheduling
 @EnableSwagger2
-@SpringBootApplication()
+@SpringBootApplication(scanBasePackages = "com.trust.xfyl")
 public class XfylApplication { 
     public static void main(String[] args) {
         SpringApplication.run(XfylApplication.class, args);

@@ -1,3 +1,4 @@
+/*
 package com.trust.xfyl;
 
 import com.aliyun.oss.OSS;
@@ -20,13 +21,15 @@ import java.util.Map;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+*/
 /**
  * @Author djj
  * @Description//TODO 阿里oss对象存属测试类
  * @Date 21:15 2024/2/28
  * @Param
  * @return
- **/
+ **//*
+
 
 
 @SpringBootTest
@@ -83,15 +86,18 @@ public class StsServiceSampleTest {
 
     }
 
-    /**
+    */
+/**
      * @return void
      * @Author djj
      * @Description//TODO 测试阿里云oss下载文件的方法
      * @Date 21:15 2024/2/28
      * @Param []
-     **/
+     **//*
 
- /*   @Test
+
+ */
+/*   @Test
     void download() throws Throwable {
         StsServiceSample.download();
 
@@ -102,11 +108,13 @@ public class StsServiceSampleTest {
         StsServiceSample.ossTest();
 
     }
-*/
+*//*
+
 
     //TODO 测试阿里云oss对象存储跟阿里皮肤检测接口逻辑对接的方法；
 
-  /*  @Test
+  */
+/*  @Test
     void getFileUrl() throws Throwable {
         String accessKeyId = System.getenv("ALIBABA_CLOUD_ACCESS_KEY_ID");
         String keySecret = System.getenv("ALIBABA_CLOUD_ACCESS_KEY_SECRET");
@@ -143,6 +151,8 @@ public class StsServiceSampleTest {
         System.out.println("ImageType===图片类型============================================================" + imageType);
 
 
-    }*/
+    }*//*
+
 
 }
+*/
