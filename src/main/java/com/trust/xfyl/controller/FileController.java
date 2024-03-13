@@ -216,7 +216,7 @@ public class FileController {
     @ApiOperation(value = "获取伤口信息", nickname = "getWoundInformation", notes = "获取伤口信息")
     @ResponseBody
     @RequestMapping(value = "/getWoundInformation", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
-    public ResultVO getWoundInformation(@RequestParam("files") List<MultipartFile> files, HttpServletRequest request) throws IOException, NoSuchFieldException, ClientException {
+    public ResultVO getWoundInformation(@RequestParam("files") List<MultipartFile> files, HttpServletRequest request) throws Exception {
         Map<String, Object> returnMap = new HashMap<String, Object>();
         fileService.getWoundInformation(returnMap, files);
         /*上传图片到文件服务器并返回图片信息*/

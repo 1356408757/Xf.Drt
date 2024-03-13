@@ -17,6 +17,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.RandomAccessFile;
+import java.nio.file.Files;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -30,19 +32,49 @@ public class FileService {
     private static String uploadImgUrl;
     private final TrustFileMapper trustFileMapper;
     private final TrustRelationFileMapper trustRelationFileMapper;
+    String accessKeyId = System.getenv("ALIBABA_CLOUD_ACCESS_KEY_ID");
+    String keySecret = System.getenv("ALIBABA_CLOUD_ACCESS_KEY_SECRET");
 
     public FileService(TrustFileMapper trustFileMapper, TrustRelationFileMapper trustRelationFileMapper) {
         this.trustFileMapper = trustFileMapper;
         this.trustRelationFileMapper = trustRelationFileMapper;
     }
-
     @Value("${imageurl.uploadImgUrl}")
     public void setUploadImgUrl(String uploadImgUrl) {
         FileService.uploadImgUrl = uploadImgUrl;
     }
 
-    String accessKeyId = System.getenv("ALIBABA_CLOUD_ACCESS_KEY_ID");
-    String keySecret = System.getenv("ALIBABA_CLOUD_ACCESS_KEY_SECRET");
+
+    public static boolean processImage(MultipartFile multipartFile) throws IOException {
+        File tempFile = null;
+        try {
+            tempFile = File.createTempFile("temp", null);
+            multipartFile.transferTo(tempFile);
+            String realPath = tempFile.getAbsolutePath();
+
+            // 在尝试删除文件之前检查文件是否被占用
+            if (!isFileInUse(tempFile)) {
+                return SkinDetection.skinDetection(realPath);
+            } else {
+                System.out.println("文件正在被其他进程占用，无法处理。");
+                return false;
+            }
+        } finally {
+            if (tempFile != null) {
+                Files.delete(tempFile.toPath());
+            }
+        }
+    }
+
+    private static boolean isFileInUse(File file) {
+        try {
+            RandomAccessFile randomAccessFile = new RandomAccessFile(file, "rw");
+            randomAccessFile.close();
+            return false;
+        } catch (Exception e) {
+            return true;
+        }
+    }
 
     /**
      * @return void
@@ -83,15 +115,15 @@ public class FileService {
         }
     }
 
-    public ResultVO getWoundInformation(Map<String, Object> returnMap, List<MultipartFile> files) throws IOException {
+    public ResultVO getWoundInformation(Map<String, Object> returnMap, List<MultipartFile> files) throws Exception {
         ResultVO resultVO = StsServiceSample.uploadFiles(files);
-       /* ResultVO resultVO = StsServiceSample.downFiles(files);*/
+        /* ResultVO resultVO = StsServiceSample.downFiles(files);*/
         List<Map<String, Object>> dataList = (List<Map<String, Object>>) resultVO.getData();
         if (dataList.isEmpty()) {
             return ResultVOUtil.error(-1, "文件上传失败");
         }
 
-        List<TrustFile> trustFiles =dataList.stream().map(customClass -> {
+        List<TrustFile> trustFiles = dataList.stream().map(customClass -> {
             TrustFile trustFile = new TrustFile();
             trustFile.setIsDelete(0);
             trustFile.setCreateTime(new Date());
@@ -114,13 +146,23 @@ public class FileService {
                 String fileUrl = trustFile.getFileUrl();
                 JSONObject skinDetectionResult = AliSkinUtils.execute("DetectSkinDisease", accessKeyId, keySecret, Collections.singletonMap("Url", fileUrl)).getJSONObject("Data");
                 JSONObject resultsObject = skinDetectionResult.getJSONObject("Results");
-                String imageType = skinDetectionResult.getString("ImageType");
+                // 初始化最大值和对应的参数名称
+                double maxProbability = 0.0;
+                String maxParameter = "";
+                // 遍历 JSON 对象中的键值对，找到最大值及其对应的参数名称
+                for (String key : resultsObject.keySet()) {
+                    double value = resultsObject.getDouble(key);
+                    if (value > maxProbability) {
+                        maxProbability = value;
+                        maxParameter = key;
+                    }
+                }
+                // 输出最大值及其对应的参数名称
+                System.out.println("最大概率参数为：" + maxParameter + "，概率值为：" + maxProbability);
                 String bodyPart = skinDetectionResult.getString("BodyPart");
-
                 List<String> woundInformationList = new ArrayList<>();
-                woundInformationList.add(resultsObject.toString());
-                woundInformationList.add(imageType);
-                woundInformationList.add(bodyPart);
+                woundInformationList.add("皮肤问题的可能性:" + maxParameter + ": " + maxProbability);
+                woundInformationList.add("皮肤检测部位:" + bodyPart);
                 woundInformationLists.add(woundInformationList);
             }
 
@@ -135,7 +177,6 @@ public class FileService {
             return ResultVOUtil.error(-1, e.getMessage());
         }
     }
-
 
     private List<TrustFile> addImg(List<TrustFile> trustFiles) {
         int i = trustFileMapper.afterInsertFile(trustFiles);
@@ -154,19 +195,5 @@ public class FileService {
             insertResult += trustRelationFileMapper.insertSelective(trustRelationFile1);
         }
         return fileids.length == insertResult;
-    }
-
-    public static boolean processImage(MultipartFile multipartFile) throws IOException {
-        File tempFile = null;
-        try {
-            tempFile = File.createTempFile("temp", null);
-            multipartFile.transferTo(tempFile);
-            String realPath = tempFile.getAbsolutePath();
-            return SkinDetection.skinDetection(realPath);
-        } finally {
-            if (tempFile != null) {
-                tempFile.delete(); // 删除临时文件
-            }
-        }
     }
 }

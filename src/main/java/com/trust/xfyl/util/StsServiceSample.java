@@ -127,7 +127,7 @@ public class StsServiceSample {
             return createErrorResultMap(e.getMessage());
         }
     }
-    private static boolean skinDetection(MultipartFile file) {
+   /* private static boolean skinDetection(MultipartFile file) {
         try {
             // 将 MultipartFile 转换为临时文件
             File tempFile = convertMultipartFileToFile(file);
@@ -138,7 +138,7 @@ public class StsServiceSample {
             logger.error("皮肤检测失败。异常信息: {}", e.getMessage());
             return false;
         }
-    }
+    }*/
 
     private static File convertMultipartFileToFile(MultipartFile file) throws IOException {
         File tempFile = File.createTempFile("temp", null);
