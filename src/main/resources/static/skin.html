@@ -11,7 +11,8 @@
             margin: 0;
             padding: 0;
             display: flex;
-            justify-content: center;
+            flex-direction: column;
+            justify-content: flex-start;
             align-items: center;
             height: 100vh;
         }
@@ -24,6 +25,7 @@
             width: 400px;
             text-align: center;
             transition: transform 0.3s ease;
+            margin-top: 10%;
         }
 
         #uploadForm:hover {
@@ -82,14 +84,19 @@
 
         #imagePreview {
             display: flex;
-            flex-wrap: wrap;
             justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
             margin-top: 20px;
+            width: 100%;
+            margin-left: auto;
+            margin-right: auto;
+            text-align: center;
         }
 
         #imagePreview img {
-            width: 120px;
-            height: 120px;
+            width: 300px;
+            height: 300px;
             object-fit: cover;
             margin: 10px;
             border-radius: 10px;
@@ -103,14 +110,28 @@
         }
 
         .result-container {
-            background-color: #f0f0f0;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            padding: 15px;
-            margin-top: 10px;
-            text-align: left;
-            font-size: 14px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            width: 400px;
+            margin-top: 20px;
         }
+
+        .enlarged-image {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+        }
+
         .modal {
             display: none;
             position: fixed;
@@ -122,6 +143,7 @@
             overflow: auto;
             background-color: rgba(0, 0, 0, 0.5);
         }
+
         .modal-content {
             background-color: #f9f9f9;
             margin: 15% auto;
@@ -133,10 +155,12 @@
             border-radius: 5px;
             box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
         }
+
         #modalMessage {
             font-size: 18px;
             margin-bottom: 20px;
         }
+
         button {
             padding: 10px 20px;
             background-color:#357a38;
@@ -146,6 +170,7 @@
             cursor: pointer;
             transition: background-color 0.3s ease;
         }
+
         button:hover {
             background-color:#357a38;
         }
@@ -153,14 +178,18 @@
 </head>
 <body>
 <form enctype="multipart/form-data" id="uploadForm">
-    <h2>Medical Image Upload</h2>
-    <label class="upload-btn" for="fileInput">Select Image</label>
-    <input accept="image/*" id="fileInput" multiple name="files" onchange="previewImages()" type="file">
+    <h2>Dr.T皮肤图片检测</h2>
+    <label class="upload-btn" for="fileInput">选择图片</label>
+    <br>
+    <div id="imagePreview"></div>
+    <input accept="image/*" id="fileInput"  name="files" onchange="previewImages()" type="file">
     <input accept="image/*" capture="camera" id="cameraInput" type="file" onchange="previewImages">
     <br>
-    <button class="upload-btn" onclick="uploadFiles()" type="button">Upload</button>
+    <button class="upload-btn" onclick="uploadFiles()" type="button">评估</button>
+    <br>
+    <button onclick="openNewPage()">询问Dr.T</button>
 </form>
-<div id="imagePreview"></div>
+
 <div class="enlarged-image" onclick="hideEnlargedImage()">
     <img id="enlargedImg">
 </div>
@@ -170,11 +199,26 @@
         <button onclick="closeModal()">OK</button>
     </div>
 </div>
+
 <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // 获取按钮元素
+        var button = document.getElementById('openNewPageButton');
+
+        // 绑定点击事件处理函数
+        button.addEventListener('click', function(event) {
+            // 阻止按钮默认行为（阻止刷新页面）
+            event.preventDefault();
+
+            // 在这里执行你的 openNewPage() 函数
+            openNewPage();
+        });
+    });
     const form = document.getElementById('uploadForm');
     const fileInput = document.getElementById('fileInput');
     const imagePreviewContainer = document.getElementById('imagePreview');
     let skinDetectionAlerted = false;
+    let evaluationResults = [];
     async function skinDetectionAndDisplay(imgElement, skin) {
         let resultText = document.createElement('p');
         imgElement.parentNode.appendChild(resultText);
@@ -212,7 +256,7 @@
                 formData.set('file', file);
 
                 try {
-                    const response = await fetch('http://localhost:8089/uploaFile/skinDetection', {
+                    const response = await fetch('http://121.43.138.108:8800/uploaFile/skinDetection', {
                         method: 'POST',
                         body: formData
                     });
@@ -240,9 +284,11 @@
             alert('Please choose at least one image to upload.');
             return;
         }
-        let formData = new FormData(form);
+        let formData = new FormData();
+        formData.append('files', fileInput.files[0]);
 
-        fetch('http://localhost:8089/uploaFile/getWoundInformation', {
+
+        fetch('http://121.43.138.108:8800/uploaFile/getWoundInformation', {
             method: 'POST',
             body: formData
         }).then(response => {
@@ -261,7 +307,9 @@
                         let itemString = JSON.stringify(item, null, 2);
                         itemString = itemString.replace(/[{}"]/g, '');
                         itemString = itemString.replace(/\\/g, '');
-                        resultContainer.innerHTML += `<pre>${itemString}</pre>`;
+                        itemString = itemString.replace(/\[|\]/g, '');
+                        evaluationResults.push(`Dr.T评估结果: ${itemString}`);
+                        resultContainer.innerHTML += `<pre>Dr.T评估结果:${itemString}</pre>`;
                     }
                 });
             }
@@ -288,6 +336,19 @@
 
     function closeModal() {
         document.getElementById('customModal').style.display = 'none';
+    }
+    function openNewPage() {
+        let results = evaluationResults.join('\n');
+        let problemIndex = results.indexOf('皮肤问题的可能性:');
+        if (problemIndex !== -1) {
+            let problemText = results.substring(problemIndex); // 提取皮肤问题的可能性部分
+            let problem = problemText.split(':')[1].trim(); // 获取具体的皮肤问题描述
+            let description = `我的身上出现了${problem}应该怎么办？`;
+            let encodedDescription = encodeURIComponent(description); // 对描述性语句进行编码
+            window.open('http://121.43.138.108/index.html?results=' + encodedDescription, '_blank'); // 打开新页面并传递编码后的描述性语句作为查询参数
+        } else {
+            console.log('未能识别出皮肤问题信息');
+        }
     }
 
 </script>
