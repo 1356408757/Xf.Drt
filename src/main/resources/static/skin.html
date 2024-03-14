@@ -256,7 +256,7 @@
                 formData.set('file', file);
 
                 try {
-                    const response = await fetch('http://121.43.138.108:8800/uploaFile/skinDetection', {
+                    const response = await fetch('http://localhost:8089/uploaFile/skinDetection', {
                         method: 'POST',
                         body: formData
                     });
@@ -288,7 +288,7 @@
         formData.append('files', fileInput.files[0]);
 
 
-        fetch('http://121.43.138.108:8800/uploaFile/getWoundInformation', {
+        fetch('http://localhost:8089/uploaFile/getWoundInformation', {
             method: 'POST',
             body: formData
         }).then(response => {
@@ -345,7 +345,7 @@
             let problem = problemText.split(':')[1].trim(); // 获取具体的皮肤问题描述
             let description = `我的身上出现了${problem}应该怎么办？`;
             let encodedDescription = encodeURIComponent(description); // 对描述性语句进行编码
-            window.open('http://121.43.138.108/index.html?results=' + encodedDescription, '_blank'); // 打开新页面并传递编码后的描述性语句作为查询参数
+            window.open('http://localhost:3000/index.html?results=' + encodedDescription, '_blank'); // 打开新页面并传递编码后的描述性语句作为查询参数
         } else {
             console.log('未能识别出皮肤问题信息');
         }
