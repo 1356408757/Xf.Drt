@@ -1,0 +1,120 @@
+.chat-container {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    height: 100vh;
+    overflow-y: scroll;
+}
+
+.message-received-container,
+.message-sent-container {
+    width: calc(50% - 10px); /* 分别占据一半宽度减去间隔 */
+    padding: 0.5rem;
+    border-radius: 10px;
+    /* 根据实际需要添加背景色、阴影等样式 */
+    margin-bottom: 1rem;
+}
+
+.message-received-container {
+    background-color: #f0f0f0; /* 示例背景颜色 */
+    text-align: left;
+}
+
+.message-sent-container {
+    background-color: #008cba; /* 示例背景颜色 */
+    color: white;
+    text-align: right;
+}
+
+.message-bubble {
+    margin-bottom: 1rem;
+    padding: 0.5rem;
+    word-wrap: break-word;
+}
+
+.footer {
+    position: sticky;
+    bottom: 0;
+    width: 100%;
+    background-color: #f8f9fa;
+    padding: 1rem;
+}
+
+.answer-text-input {
+    resize: none;
+    height: 3rem;
+}
+.message-bubble {
+    margin-bottom: 0.5rem; /* 缩小消息气泡之间的间距 */
+    padding: 1rem; /* 增加消息气泡的内边距 */
+    border-radius: 15px; /* 圆角边框 */
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1); /* 添加轻微阴影效果 */
+}
+
+/* 优化输入框样式 */
+.answer-text-input {
+    resize: none;
+    height: 3rem;
+    border-radius: 15px;
+    padding: 1rem;
+    border: 1px solid #ccc; /* 细边框 */
+}
+
+/* 美化发送按钮 */
+.btn-primary {
+    border-radius: 15px;
+    padding: 0.75rem 2rem; /* 调整内边距 */
+}
+
+/* 调整底部栏样式 */
+.footer {
+    background-color: #f8f9fa;
+    padding: 1rem;
+}
+
+/* 动画效果 */
+.message-received-container,
+.message-sent-container {
+    transition: transform 0.3s ease; /* 添加平滑过渡效果 */
+}
+.message-received-container:hover,
+.message-sent-container:hover {
+    transform: scale(1.05); /* 鼠标悬停时略微放大消息气泡 */
+}
+#option-list-container {
+    padding-left: 0;
+}
+
+#option-list-container .option-item {
+    margin-bottom: 0.5rem;
+    font-weight: bold;
+    /* 其他样式... */
+}
+.report-section {
+    margin-top: 1rem;
+    border: 1px solid #ccc;
+    padding: 1rem;
+    background-color: #f5f5f5;
+    border-radius: 5px;
+    overflow-wrap: break-word;
+}
+.custom-option-list {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+/* 美化单个选项 */
+.option-item {
+    list-style-type: none;
+    color: #333;
+    font-size: 14px;
+    line-height: 1.5;
+    transition: background-color 0.2s ease-in-out;
+}
+
+.option-item:hover {
+    background-color: #f0f0f0;
+}

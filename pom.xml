@@ -133,20 +133,11 @@
             <version>${logback.version}</version>
         </dependency>
         <!-- end log -->
-
-
-
         <dependency>
             <groupId>commons-logging</groupId>
             <artifactId>commons-logging</artifactId>
             <version>1.2</version>
         </dependency>
-
-
-
-
-
-
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>druid-spring-boot-starter</artifactId>
@@ -249,14 +240,13 @@
         <dependency>
             <groupId>org.jdom</groupId>
             <artifactId>jdom2</artifactId>
-            <version>2.0.6</version> <!-- 浣跨敤浣犻渶瑕佺殑鐗堟湰 -->
+            <version>2.0.6</version>
         </dependency>
         <dependency>
             <groupId>com.aliyun</groupId>
             <artifactId>imageprocess20200320</artifactId>
             <version>2.1.1</version>
         </dependency>
-
 
         <dependency>
             <groupId>com.aliyun</groupId>

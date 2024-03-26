@@ -2,7 +2,7 @@ server:
   port: 8800
 spring:
   application:
-    name: chat-sample
+    name: xfyl
   freemarker:
     cache: false
     charset: UTF-8

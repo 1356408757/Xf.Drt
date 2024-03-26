@@ -77,94 +77,92 @@ public class OrderController {
 
     }
 
-    /**
-     * @return com.trust.xfyl.entity.ResultVO
-     * @Author djj
-     * @Description //TODO 保存一条订单数据，根据传id来判断新增还是修改此订单的信息，如果wound.getOrdType 如果为surgery。那么就是院内伤口照片上传，
-     * //TODO 或者说 为wound的话 那就是伤口随访，这个直接由前端那边直接传递过来的，包括business也是由前端进行定义，直接传过来就可以。business:院内伤口跟踪||伤口随访
-     * //TODO 现在默认值为 预约类型 ， 订单金额 ，是否删除 默认为0 1为删除，是否取消预约 ：默认0 1为取消，订单状态：待服务，服务中，服务完成。
-     * @Date 14:41 2024/2/18
-     * @Param [woundOrders]
-     **/
     @ApiOperation(value = "保存一条数据", nickname = "saveOrder", notes = "保存一条数据")
     @PostMapping("/saveOrder")
     public ResultVO saveOrder(@ApiParam(value = "订单对象", required = true) @RequestBody WoundOrders woundOrders) {
         try {
+            // 判断是新增还是更新订单
             if (woundOrders.getId() != null) {
-                woundOrders.setUpdateTime(new Date());
-                Long i = orderService.updateByPrimaryKeySelective(woundOrders);
-                if (i > 0 && (woundOrders.getWoundPhotoIds() != null)) {
-                    Long id = woundOrders.getId();
-                    TrustRelationFileExample trustRelationFileExample = new TrustRelationFileExample();
-                    trustRelationFileExample.createCriteria().andBusiTypeEqualTo("woundOrders").andBusiIdEqualTo(String.valueOf(id)).andPhotoTypeEqualTo(woundOrders.getPerioperativeSurgery());
-                    List<TrustRelationFile> trustRelationFiles = trustRelationFileMapper.selectByExample(trustRelationFileExample);
-                    if (trustRelationFiles.size() > 0) {
-                        for (int i1 = 0; i1 < trustRelationFiles.size(); i1++) {
-                            TrustRelationFile trustRelationFile = trustRelationFiles.get(i1);
-                            TrustRelationFileExample trustRelationFileExample1 = new TrustRelationFileExample();
-                            trustRelationFileExample1.createCriteria().andBusiIdEqualTo(trustRelationFile.getBusiId())
-                                    .andBusiTypeEqualTo("woundOrders");
-                            trustRelationFileMapper.deleteByExample(trustRelationFileExample1);
-                        }
-                    }
-                    TrustRelationFile trustRelationFile = new TrustRelationFile();
-                    trustRelationFile.setFileId(woundOrders.getWoundPhotoIds());
-                    trustRelationFile.setBusiType("woundOrders");
-                    trustRelationFile.setBusiId(i + "");
-                    trustRelationFile.setPhotoType(woundOrders.getPerioperativeSurgery());
-                    boolean b = fileService.addFileRela(trustRelationFile);
-                }
-                if (i > 0) {
-                    return ResultVOUtil.success("保存成功");
-                } else {
-                    return ResultVOUtil.error("保存失败");
-                }
+                // 更新订单逻辑
+                return updateOrder(woundOrders);
             } else {
-                WoundOrdersExample woundOrdersExample = new WoundOrdersExample();
-                woundOrdersExample.createCriteria().andPerioperativeSurgeryEqualTo(woundOrders.getPerioperativeSurgery())
-                        .andTaskIdEqualTo(woundOrders.getTaskId());
-                List<WoundOrders> orderList = woundOrdersMapper.selectByExample(woundOrdersExample);
-                if (orderList.size() > 0) {
-                    return ResultVOUtil.error("已经上传过:" + woundOrders.getPerioperativeSurgery() + "请不要重复上传");
-                } else {
-                    woundOrders.setCreateTime(new Date());
-                    woundOrders.setIsDelete(0);
-                    woundOrders.setOrderNumber(UuidUtil.getUUID());
-                    woundOrders.setOrderPrice(BigDecimal.valueOf(0.00));
-                    woundOrders.setOrderType("待服务");
-                    woundOrders.setAppointmentType("直接预约");
-                    woundOrders.setIsReservation("0");
-                    Long integer = orderService.insertSelective(woundOrders);
-                    if (integer > 0 && (woundOrders.getWoundPhotoIds() != null)) {
-                        TrustRelationFile trustRelationFile = new TrustRelationFile();
-                        trustRelationFile.setFileId(woundOrders.getWoundPhotoIds());
-                        trustRelationFile.setBusiType("woundOrders");
-                        trustRelationFile.setBusiId(String.valueOf(integer));
-                        trustRelationFile.setPhotoType(woundOrders.getPerioperativeSurgery());
-                        boolean b = fileService.addFileRela(trustRelationFile);
-                    }
-                    if (integer > 0) {
-                        return ResultVOUtil.success("保存成功");
-                    } else {
-                        return ResultVOUtil.error("保存失败");
-                    }
-                }
-
+                // 新增订单逻辑
+                return insertOrder(woundOrders);
             }
-
         } catch (SCServiceException e) {
             return ResultVOUtil.error(e.getStatus(), e.getMessage());
         } catch (Exception e) {
-            return ResultVOUtil.error(-1, e.getMessage());
+            return ResultVOUtil.error(-1, "系统错误，请联系管理员");
         }
     }
+
+    private ResultVO updateOrder(WoundOrders woundOrders) {
+        woundOrders.setUpdateTime(new Date());
+        Long i = orderService.updateByPrimaryKeySelective(woundOrders);
+        if (i > 0 && woundOrders.getWoundPhotoIds() != null && !woundOrders.getWoundPhotoIds().isEmpty()) {
+            updateWoundPhotos(woundOrders.getId(), woundOrders.getPerioperativeSurgery(), woundOrders.getWoundPhotoIds());
+        }
+        return i > 0 ? ResultVOUtil.success("保存成功") : ResultVOUtil.error("保存失败");
+    }
+
+    private ResultVO insertOrder(WoundOrders woundOrders) {
+        // 校验是否已存在相同数据
+        WoundOrdersExample woundOrdersExample = new WoundOrdersExample();
+        woundOrdersExample.createCriteria().andPerioperativeSurgeryEqualTo(woundOrders.getPerioperativeSurgery())
+                .andTaskIdEqualTo(woundOrders.getTaskId());
+        List<WoundOrders> orderList = woundOrdersMapper.selectByExample(woundOrdersExample);
+        if (orderList.size() > 0) {
+            return ResultVOUtil.error("已经上传过:" + woundOrders.getPerioperativeSurgery() + "请不要重复上传");
+        }
+
+        setupNewOrder(woundOrders);
+        Long integer = orderService.insertSelective(woundOrders);
+        if (integer > 0 && woundOrders.getWoundPhotoIds() != null && !woundOrders.getWoundPhotoIds().isEmpty()) {
+            addWoundPhotos(integer, woundOrders.getPerioperativeSurgery(), woundOrders.getWoundPhotoIds());
+        }
+        return integer > 0 ? ResultVOUtil.success("保存成功") : ResultVOUtil.error("保存失败");
+    }
+
+    private void updateWoundPhotos(Long orderId, String surgeryType, String photoIds) {
+        TrustRelationFileExample trustRelationFileExample = new TrustRelationFileExample();
+        trustRelationFileExample.createCriteria().andBusiTypeEqualTo("woundOrders").andBusiIdEqualTo(String.valueOf(orderId)).andPhotoTypeEqualTo(surgeryType);
+        List<TrustRelationFile> trustRelationFiles = trustRelationFileMapper.selectByExample(trustRelationFileExample);
+        if (!trustRelationFiles.isEmpty()) {
+            trustRelationFiles.forEach(trustRelationFile -> {
+                TrustRelationFileExample example = new TrustRelationFileExample();
+                example.createCriteria().andBusiIdEqualTo(trustRelationFile.getBusiId()).andBusiTypeEqualTo("woundOrders");
+                trustRelationFileMapper.deleteByExample(example);
+            });
+        }
+        addWoundPhotos(orderId, surgeryType, photoIds);
+    }
+
+    private void addWoundPhotos(Long orderId, String surgeryType, String photoIds) {
+        TrustRelationFile trustRelationFile = new TrustRelationFile();
+        trustRelationFile.setFileId(photoIds);
+        trustRelationFile.setBusiType("woundOrders");
+        trustRelationFile.setBusiId(String.valueOf(orderId));
+        trustRelationFile.setPhotoType(surgeryType);
+        fileService.addFileRela(trustRelationFile);
+    }
+
+    private void setupNewOrder(WoundOrders woundOrders) {
+        woundOrders.setCreateTime(new Date());
+        woundOrders.setIsDelete(0);
+        woundOrders.setOrderNumber(UuidUtil.getUUID());
+        woundOrders.setOrderPrice(BigDecimal.valueOf(0.00));
+        woundOrders.setOrderType("待服务");
+        woundOrders.setAppointmentType("直接预约");
+        woundOrders.setIsReservation("0");
+    }
+
     /**
-    * @Author djj
-    * @Description //TODO 获取该订单的信息，以及所关联的医生的信息，患者的信息，伤口照片的信息
-    * @Date 17:55 2024/2/18
-    * @Param [id]
-    * @return com.trust.xfyl.entity.ResultVO
-    **/
+     * @return com.trust.xfyl.entity.ResultVO
+     * @Author djj
+     * @Description //TODO 获取该订单的信息，以及所关联的医生的信息，患者的信息，伤口照片的信息
+     * @Date 17:55 2024/2/18
+     * @Param [id]
+     **/
     @ApiOperation(value = "根据id查询一条数据", nickname = "selectOrderById", notes = "根据id查询一条数据")
     @GetMapping("selectOrderById")
     public ResultVO selectOrderById(@ApiParam(name = "id", value = "主键", required = true) @RequestParam("id") Long id) {
@@ -177,13 +175,14 @@ public class OrderController {
             return ResultVOUtil.error(e.toString());
         }
     }
+
     /**
-    * @Author djj
-    * @Description //TODO 这个方法主要更新的是订单的预约状态，是否同意隐私保护协议，是否删除，以及订单的状态。
-    * @Date  2024/2/18
-    * @Param [woundOrders]
-    * @return com.trust.xfyl.entity.ResultVO
-    **/
+     * @return com.trust.xfyl.entity.ResultVO
+     * @Author djj
+     * @Description //TODO 这个方法主要更新的是订单的预约状态，是否同意隐私保护协议，是否删除，以及订单的状态。
+     * @Date 2024/2/18
+     * @Param [woundOrders]
+     **/
     @ApiOperation(value = "更新订单信息", nickname = "UpdateReservation", notes = "更新订单信息")
     @PostMapping("UpdateReservation")
     public ResultVO UpdateReservation(@ApiParam(value = "订单对象", required = true) @RequestBody WoundOrders woundOrders) {

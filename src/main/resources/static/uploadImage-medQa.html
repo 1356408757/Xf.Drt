@@ -153,7 +153,7 @@
             max-width: 400px;
             text-align: center;
             border-radius: 5px;
-            box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
         }
 
         #modalMessage {
@@ -163,7 +163,7 @@
 
         button {
             padding: 10px 20px;
-            background-color:#357a38;
+            background-color: #357a38;
             color: white;
             border: none;
             border-radius: 5px;
@@ -172,7 +172,7 @@
         }
 
         button:hover {
-            background-color:#357a38;
+            background-color: #357a38;
         }
     </style>
 </head>
@@ -182,18 +182,17 @@
     <label class="upload-btn" for="fileInput">选择图片</label>
     <br>
     <div id="imagePreview"></div>
-    <input accept="image/*" id="fileInput"  name="files" onchange="previewImages()" type="file">
-    <input accept="image/*" capture="camera" id="cameraInput" type="file" onchange="previewImages">
+    <input accept="image/*" id="fileInput" multiple name="answerImageFile" onchange="previewImages()" type="file">
+    <input accept="image/*" capture="camera" id="cameraInput" onchange="previewImages" type="file">
     <br>
     <button class="upload-btn" onclick="uploadFiles()" type="button">评估</button>
-    <br>
-    <button onclick="openNewPage()">询问Dr.T</button>
+    <div id="resultsContainer"></div>
 </form>
-
+<div id="result"></div>
 <div class="enlarged-image" onclick="hideEnlargedImage()">
     <img id="enlargedImg">
 </div>
-<div id="customModal" class="modal">
+<div class="modal" id="customModal">
     <div class="modal-content">
         <p id="modalMessage"></p>
         <button onclick="closeModal()">OK</button>
@@ -201,24 +200,13 @@
 </div>
 
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // 获取按钮元素
-        var button = document.getElementById('openNewPageButton');
 
-        // 绑定点击事件处理函数
-        button.addEventListener('click', function(event) {
-            // 阻止按钮默认行为（阻止刷新页面）
-            event.preventDefault();
-
-            // 在这里执行你的 openNewPage() 函数
-            openNewPage();
-        });
-    });
     const form = document.getElementById('uploadForm');
     const fileInput = document.getElementById('fileInput');
     const imagePreviewContainer = document.getElementById('imagePreview');
     let skinDetectionAlerted = false;
     let evaluationResults = [];
+
     async function skinDetectionAndDisplay(imgElement, skin) {
         let resultText = document.createElement('p');
         imgElement.parentNode.appendChild(resultText);
@@ -256,7 +244,7 @@
                 formData.set('file', file);
 
                 try {
-                    const response = await fetch('http://localhost:8089/uploaFile/skinDetection', {
+                    const response = await fetch('http://121.43.138.108:8800/uploaFile/skinDetection', {
                         method: 'POST',
                         body: formData
                     });
@@ -280,15 +268,15 @@
     }
 
     function uploadFiles() {
-        if (!fileInput.value) {
+        if (!fileInput.files.length) {
             alert('Please choose at least one image to upload.');
             return;
         }
         let formData = new FormData();
-        formData.append('files', fileInput.files[0]);
-
-
-        fetch('http://localhost:8089/uploaFile/getWoundInformation', {
+        for (let i = 0; i < fileInput.files.length; i++) {
+            formData.append('answerImageFile', fileInput.files[i]);
+        }
+        fetch('http://121.43.138.108:8800/medical/up', {
             method: 'POST',
             body: formData
         }).then(response => {
@@ -297,24 +285,35 @@
             }
             return response.json();
         }).then(data => {
-            console.log(data);
-            let woundInformationList = data.data.woundInformationList;
-            if (woundInformationList) {
-                woundInformationList.forEach((item, index) => {
-                    let imageIndex = Math.floor(index / 1);
-                    let resultContainer = document.getElementsByClassName('result-container')[imageIndex];
-                    if (resultContainer) {
-                        let itemString = JSON.stringify(item, null, 2);
-                        itemString = itemString.replace(/[{}"]/g, '');
-                        itemString = itemString.replace(/\\/g, '');
-                        itemString = itemString.replace(/\[|\]/g, '');
-                        evaluationResults.push(`Dr.T评估结果: ${itemString}`);
-                        resultContainer.innerHTML += `<pre>Dr.T评估结果:${itemString}</pre>`;
-                    }
-                });
-            }
+            const question = data.data.question;
+            const sessionId = data.data.sessionId;
+            const questionType = data.data.questionType;
+            const diagProb = JSON.parse(data.data.reports.diagProb);
+            console.log(diagProb);
+            // 获取概率值最大的病症名称
+            const maxEntry = Object.entries(diagProb).reduce((max, current) =>
+                    parseFloat(current[1]) > parseFloat(max[1]) ? current : max
+                , [null, -Infinity]);
+            // 清空结果容器
+            /*document.getElementById('resultsContainer').innerHTML = '';*/
+            // 创建一个新段落元素用于展示结果
+            /*const resultItem = document.createElement('p');*/
+            // 设置段落元素的内容为最大概率对应的病症名称
+           /* resultItem.textContent = `检测结果显示最有可能的病症为：${maxEntry[0]}`;*/
+            // 将结果添加到页面
+          /*  document.getElementById('resultsContainer').appendChild(resultItem);*/
+            // 定义repo变量，存储同样信息以便后续使用
+          /*  const repo = `皮肤检测结果为：${maxEntry[0]}`;*/
+            // 输出或使用repo变量
+          /*  console.log(repo);*/
+            window.location.href = `medQa.html?sessionId=${encodeURIComponent(sessionId)}&questionType=${encodeURIComponent(questionType)}&question=${encodeURIComponent(question)}`;
         }).catch(error => {
-            document.getElementById('result').textContent = 'Error: ' + error.message;
+            const resultElement = document.getElementById('result');
+            if (resultElement) {
+                resultElement.textContent = 'Error: ' + error.message;
+            } else {
+                console.error('Error:', error.message);
+            }
         });
     }
 
@@ -329,6 +328,7 @@
         let enlargedImage = document.querySelector('.enlarged-image');
         enlargedImage.style.display = 'none';
     }
+
     function openModal(message) {
         document.getElementById('modalMessage').innerText = message;
         document.getElementById('customModal').style.display = 'block';
@@ -337,19 +337,7 @@
     function closeModal() {
         document.getElementById('customModal').style.display = 'none';
     }
-    function openNewPage() {
-        let results = evaluationResults.join('\n');
-        let problemIndex = results.indexOf('皮肤问题的可能性:');
-        if (problemIndex !== -1) {
-            let problemText = results.substring(problemIndex); // 提取皮肤问题的可能性部分
-            let problem = problemText.split(':')[1].trim(); // 获取具体的皮肤问题描述
-            let description = `我的身上出现了${problem}应该怎么办？`;
-            let encodedDescription = encodeURIComponent(description); // 对描述性语句进行编码
-            window.open('http://121.43.138.108/index.html?results=' + encodedDescription, '_blank'); // 打开新页面并传递编码后的描述性语句作为查询参数
-        } else {
-            console.log('未能识别出皮肤问题信息');
-        }
-    }
+
 
 </script>
 </body>
