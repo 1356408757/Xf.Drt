@@ -2,7 +2,6 @@ package com.trust.xfyl.util;
 
 import com.alibaba.fastjson.JSON;
 import com.trust.xfyl.config.AppConfig;
-import com.trust.xfyl.exception.BizException;
 import lombok.Data;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -15,7 +14,7 @@ import org.slf4j.LoggerFactory;
  */
 public class LogUtils {
 
-    private final static Logger logger = LoggerFactory.getLogger("application");
+    private final static Logger logger = LoggerFactory.getLogger(LogUtils.class);
 
     private final static Logger monitorLogger = LoggerFactory.getLogger("monitor-log");
 
@@ -91,21 +90,12 @@ public class LogUtils {
         builder.append(SIMPLE_LOG_SPLIT).append(costTime);
 
         LogContent content = build(objects);
-        builder.append(content.getLogData());
-        Throwable throwable = content.getThrowable();
-
-        if (throwable != null) {
-            if (throwable instanceof BizException) {
-                builder.append(SIMPLE_LOG_SPLIT).append(throwable);
-            } else {
-                builder.append(SIMPLE_LOG_SPLIT).append(throwable.getMessage());
-            }
-        }
+        appendLogData(builder, content);
 
         String logStr = builder.toString();
         monitorLogger.error(logStr);
-        if (throwable != null) {
-            logger.error(logStr, throwable);
+        if (content.getThrowable() != null) {
+            logger.error(logStr, content.getThrowable());
         }
     }
 
@@ -143,7 +133,7 @@ public class LogUtils {
         tracer.append(JSON.toJSONString(output)).append(SIMPLE_LOG_SPLIT);
 
         LogContent content = build(objects);
-        tracer.append(content.getLogData());
+        appendLogData(tracer, content);
 
         traceLogger.info(tracer.toString());
     }
@@ -183,6 +173,19 @@ public class LogUtils {
         logContent.setThrowable(throwable);
 
         return logContent;
+    }
+
+    /**
+     * 向StringBuilder追加日志数据
+     *
+     * @param builder StringBuilder实例
+     * @param logContent 日志内容
+     */
+    private static void appendLogData(StringBuilder builder, LogContent logContent) {
+        if (logContent.getThrowable() != null) {
+            builder.append(SIMPLE_LOG_SPLIT).append(logContent.getThrowable().getMessage());
+        }
+        builder.append(logContent.getLogData());
     }
 
     /**

@@ -1,57 +1,61 @@
+# 服务器配置
 server:
   port: 8800
+
+# Spring框架配置
 spring:
   application:
-    name: xfyl
-  freemarker:
-    cache: false
-    charset: UTF-8
-    suffix: .ftl
-    enabled: true
-    content-type: text/html
-    template-loader-path: classpath:/templates/,classpath:/static/
-  datasource:
-    url: jdbc:mysql://121.43.138.108:3306/xfyl?serverTimezone=GMT%2b8&useSSL=false&characterEncoding=utf8&allowPublicKeyRetrieval=true&autoReconnect=true
-    username: root
-    password: Drt@123456
-    type: com.alibaba.druid.pool.DruidDataSource
-    driverClassName: com.mysql.cj.jdbc.Driver
-    hikari:
-      minimum-idle: 10
-      maximum-pool-size: 20
-      connection-test-query: SELECT 1
-      connection-timeout: 30000
-      validation-timeout: 30000
+    name: xfyl # 应用名称
+  freemarker: # FreeMarker模板配置
+    cache: false # 是否缓存
+    charset: UTF-8 # 编码字符集
+    suffix: .ftl # 模板文件后缀
+    enabled: true # 是否启用
+    content-type: text/html # 内容类型
+    template-loader-path: classpath:/templates/,classpath:/static/ # 模板加载路径
+  datasource: # 数据源配置
+    url: jdbc:mysql://121.43.138.108:3306/xfyl?serverTimezone=GMT%2b8&useSSL=false&characterEncoding=utf8&allowPublicKeyRetrieval=true&autoReconnect=true # 数据库连接URL
+    username: root # 数据库用户名
+    password: Drt@123456 # 数据库密码
+    type: com.alibaba.druid.pool.DruidDataSource # 数据源类型
+    driverClassName: com.mysql.cj.jdbc.Driver # 数据库驱动类名
+    hikari: # Hikari连接池配置
+      minimum-idle: 10 # 最小空闲连接数
+      maximum-pool-size: 20 # 最大连接池大小
+      connection-test-query: SELECT 1 # 连接测试查询语句
+      connection-timeout: 30000 # 连接超时时间
+      validation-timeout: 30000 # 验证超时时间
 
-  servlet:
-    multipart:
-      max-file-size: 20MB
-      enabled: true
-      max-request-size: 20MB
+  servlet: # Servlet配置
+    multipart: # 多部分文件上传配置
+      max-file-size: 20MB # 最大文件大小
+      enabled: true # 是否启用
+      max-request-size: 20MB # 最大请求大小
 
-logging:
-  level:
-    com.trust.xfyl.dao: debug
+logging: # 日志配置
+  level: # 日志级别
+    com.trust.xfyl.dao: debug # DAO层日志级别为DEBUG
+log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+mybatis: # MyBatis配置
+  mapper-locations: mapper/*.xml # Mapper文件位置
+  type-aliases-package: com.trust.xfyl.entity # 实体类别名包
+  mybatis-config-file: mybatis-config.xml # MyBatis配置文件位置
+  configuration.map-underscore-to-camel-case: false # 是否将下划线映射到驼峰命名
 
-mybatis:
-  mapper-locations: mapper/*.xml
-  type-aliases-package: com.trust.xfyl.entity
-  mybatis-config-file: mybatis-config.xml
-  configuration.map-underscore-to-camel-case: false
-
-
+# 图片上传URL配置
 imageurl:
   uploadImgUrl: /usr/home/uploadImage/
 
-
+# 图片下载URL配置
 downloadurl:
   downloadImgUrl: /usr/home/downloadImg/
 
+# 阿里云配置
 aliyun:
-  api:
-    url: https://vision.console.aliyun.com/cn-shanghai/detail/imageprocess
-    roleArn: acs:ram::1306143105217098:role/ramosstest
-    policy: |
+  api: # 阿里云API配置
+    url: https://vision.console.aliyun.com/cn-shanghai/detail/imageprocess # API地址
+    roleArn: acs:ram::1306143105217098:role/ramosstest # 角色ARN
+    policy: | # 角色策略
       {
         "Version": "1",
         "Statement": [
@@ -68,25 +72,27 @@ aliyun:
           }
         ]
       }
-    externalId: xfyl
+    externalId: xfyl # 外部ID
 
+# Swagger配置
 swagger:
-  basic:
-    enable: true
-    username: admin
-    password: admin
+  basic: # 基础配置
+    enable: true # 是否启用
+    username: admin # 用户名
+    password: admin # 密码
+
+# 聊天配置
 chat:
-  llm:
-    timeout: 60 #超时时间60秒
-  security:
-    refererWhitelist:
+  llm: # 语言模型配置
+    timeout: 60 # 超时时间60秒
+  security: # 安全配置
+    refererWhitelist: # 引用白名单
       - http://121.43.138.108:8800
       - http://121.43.138.108:80
       - http://121.43.138.108
-  app:
-    openTrace: true
-    sessionMaxMessages: 50 #对话记录, 最多50条
-    sessionTtl: 2          #对话缓存时间, 2小时
-  cache:
-    type: caffeine
-
+  app: # 应用配置
+    openTrace: true # 是否开启追踪
+    sessionMaxMessages: 50 # 对话记录最多50条
+    sessionTtl: 2 # 对话缓存时间2小时
+  cache: # 缓存配置
+    type: caffeine # 缓存类型为Caffeine

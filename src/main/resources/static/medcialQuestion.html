@@ -258,7 +258,7 @@
         formData.append('file', file);
 
         try {
-            const response = await fetch('http://121.43.138.108:8800/uploaFile/skinDetection', {
+            const response = await fetch('http://localhost:8089/uploaFile/skinDetection', {
                 method: 'POST',
                 body: formData,
             });
@@ -362,7 +362,7 @@
         }
 
         $.ajax({
-            url: 'http://121.43.138.108:8800/medical/up',
+            url: 'http://localhost:8089/medical/up',
             method: 'POST',
             data: formData,
             contentType: false,
@@ -392,7 +392,7 @@
             const sampleDtoForAnswer = {sessionId: sessionId, questionType: questionType, answerText: answerText};
 
             $.ajax({
-                url: 'http://121.43.138.108:8800/medical/qa',
+                url: 'http://localhost:8089/medical/qa',
                 method: 'POST',
                 data: JSON.stringify(sampleDtoForAnswer),
                 contentType: 'application/json',

@@ -256,7 +256,7 @@
                 formData.set('file', file);
 
                 try {
-                    const response = await fetch('http://localhost:8089/uploaFile/skinDetection', {
+                    const response = await fetch('http://121.43.138.108:8800/uploaFile/skinDetection', {
                         method: 'POST',
                         body: formData
                     });
@@ -288,7 +288,7 @@
         formData.append('files', fileInput.files[0]);
 
 
-        fetch('http://localhost:8089/uploaFile/getWoundInformation', {
+        fetch('http://121.43.138.108:8800/uploaFile/getWoundInformation', {
             method: 'POST',
             body: formData
         }).then(response => {
@@ -340,12 +340,23 @@
     function openNewPage() {
         let results = evaluationResults.join('\n');
         let problemIndex = results.indexOf('皮肤问题的可能性:');
+
         if (problemIndex !== -1) {
             let problemText = results.substring(problemIndex); // 提取皮肤问题的可能性部分
             let problem = problemText.split(':')[1].trim(); // 获取具体的皮肤问题描述
             let description = `我的身上出现了${problem}应该怎么办？`;
             let encodedDescription = encodeURIComponent(description); // 对描述性语句进行编码
-            window.open('http://121.43.138.108/index.html?results=' + encodedDescription, '_blank'); // 打开新页面并传递编码后的描述性语句作为查询参数
+            // 根据设备类型选择不同的跳转方式
+            if (/iPad|iPhone|iPod/.test(navigator.userAgent)) {
+                // iOS设备
+                window.location.href = 'http://121.43.138.108/index.html?results=' + encodedDescription;
+            } else if (/Android/.test(navigator.userAgent)) {
+                // Android设备
+                window.location.href = 'http://121.43.138.108/index.html?results=' + encodedDescription;
+            } else {
+                // 其他设备
+                console.log('无法识别设备类型');
+            }
         } else {
             console.log('未能识别出皮肤问题信息');
         }
