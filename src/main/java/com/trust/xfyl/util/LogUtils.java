@@ -9,7 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * log utils for app, monitor and trace
+ * 应用日志工具类，用于监控和跟踪
  *
  * @author yuanci
  */
@@ -23,42 +23,61 @@ public class LogUtils {
 
     public static final String SIMPLE_LOG_SPLIT = "@@@";
 
-    public enum ResultStatus {
-        /**
-         * 调用成功
-         */
-        SUCCESS,
-
-        /**
-         * 调用失败
-         */
-        FAIL
-    }
-
+    /**
+     * 输出调试日志
+     *
+     * @param objects 要记录的日志内容
+     */
     public static void debug(Object... objects) {
         LogContent build = build(objects);
         logger.debug(build.logData);
     }
 
+    /**
+     * 输出信息日志
+     *
+     * @param objects 要记录的日志内容
+     */
     public static void info(Object... objects) {
         LogContent build = build(objects);
         logger.info(build.logData);
     }
 
+    /**
+     * 输出警告日志
+     *
+     * @param objects 要记录的日志内容
+     */
     public static void warn(Object... objects) {
         LogContent build = build(objects);
         logger.warn(build.logData);
     }
 
+    /**
+     * 输出错误日志
+     *
+     * @param objects 要记录的日志内容
+     */
     public static void error(Object... objects) {
         LogContent build = build(objects);
         logger.error(build.logData, build.getThrowable());
     }
 
+    /**
+     * 记录监控日志
+     *
+     * @param requestId 请求ID
+     * @param serviceName 服务名称
+     * @param methodName 方法名称
+     * @param errorCode 错误码
+     * @param startTime 开始时间
+     * @param objects 其他日志内容
+     */
     public static void monitor(String requestId, String serviceName, String methodName,
                                String errorCode, Long startTime, Object... objects) {
         ResultStatus status = StringUtils.isNotBlank(errorCode) ? ResultStatus.FAIL : ResultStatus.SUCCESS;
         StringBuilder builder = new StringBuilder();
+        // 构建日志内容
         builder.append(requestId);
         builder.append(SIMPLE_LOG_SPLIT).append(serviceName);
         builder.append(SIMPLE_LOG_SPLIT).append(methodName);
@@ -90,6 +109,17 @@ public class LogUtils {
         }
     }
 
+    /**
+     * 记录跟踪日志
+     *
+     * @param requestId 请求ID
+     * @param action 动作描述
+     * @param resultCode 结果码
+     * @param startTime 开始时间
+     * @param input 输入数据
+     * @param output 输出数据
+     * @param objects 其他日志内容
+     */
     public static void trace(String requestId, String action, String resultCode, Long startTime,
                              Object input, Object output, Object... objects) {
         if (!AppConfig.openTrace) {
@@ -118,6 +148,12 @@ public class LogUtils {
         traceLogger.info(tracer.toString());
     }
 
+    /**
+     * 构建日志内容
+     *
+     * @param objects 要记录的日志对象
+     * @return 构建好的日志内容实例
+     */
     private static LogContent build(Object... objects) {
         LogContent logContent = new LogContent();
         if (null == objects || objects.length == 0) {
@@ -149,12 +185,26 @@ public class LogUtils {
         return logContent;
     }
 
+    /**
+     * 调用结果状态
+     */
+    public enum ResultStatus {
+        /**
+         * 调用成功
+         */
+        SUCCESS,
+
+        /**
+         * 调用失败
+         */
+        FAIL
+    }
+
     @Data
     static class LogContent {
 
-        String logData;
+        String logData; // 日志数据
 
-        Throwable throwable;
-
+        Throwable throwable; // 异常信息
     }
 }

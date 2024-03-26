@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
+    <title>医学智能问答系统</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f0f0;
+            color: #555;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1 {
+            color: #a9b3a4;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .container {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .question-container,
+        .options-container {
+            margin-bottom: 20px;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background-color: #f9f9f9;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .answer-text-input {
+            width: 100%;
+            height: 120px;
+            resize: none;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-sizing: border-box;
+        }
+
+        #response-report {
+            display: none;
+            white-space: pre-wrap;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background-color: #f9f9f9;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+
+        .lightbox-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            display: none;
+        }
+
+        .lightbox-image {
+            max-width: 90%;
+            max-height: 90%;
+            cursor: zoom-out;
+        }
+
+        .close-lightbox {
+            position: absolute;
+            right: 20px;
+            top: 20px;
+            background-color: #fff;
+            color: #000;
+            padding: 5px 10px;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        .fadeIn {
+            animation: fadeIn 0.5s;
+        }
+
+        /* Custom Styling */
+        .btn {
+            background-color: #3c5a2d;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn:hover {
+            background-color: #45702c;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .answer-text-input {
+            width: 100%;
+            height: 120px;
+            resize: none;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-sizing: border-box;
+            transition: all 0.3s;
+        }
+
+        .answer-text-input:focus {
+            transform: scale(1.05);
+            border-color: #4caf50;
+        }
+
+        .fadeIn {
+            animation: fadeIn 0.5s;
+        }
+
+        .custom-file-input {
+            color: transparent;
+            cursor: pointer;
+        }
+
+        .custom-file-input::-webkit-file-upload-button {
+            visibility: hidden;
+        }
+
+        .custom-file-input::before {
+            content: '选择文件';
+            display: inline-block;
+            background: #455c3a;
+            color: #fff;
+            border: 1px solid #46573c;
+            border-radius: 5px;
+            padding: 8px 12px;
+            outline: none;
+            white-space: nowrap;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .custom-file-input:hover::before {
+            background: #005700;
+        }
+
+        .button-refresh {
+            background-color: #3c5a2d;
+            color: #fff;
+            border: none;
+            padding: 8px 14px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .button-jump {
+            background-color: #3c5a2d;
+            color: #fff;
+            border: none;
+            padding: 8px 14px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin: 5px;
+        }
+    </style>
+</head>
+
+<body>
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="d-flex align-items-center mb-4">
+                <!-- 调整logo宽高并使其与字体平齐 -->
+                <img alt="Dr.T智能医疗问答系统"
+                     src="https://drt-oss-disk.oss-cn-shanghai.aliyuncs.com/src/image/9a14588d8a27a482dc6763da5a24b77.png"
+                     style="max-width: 32px; height: auto; margin-right: 8px;">
+                <h1 class="ms-3"><i class="fas fa-stethoscope"></i> Dr.T智能医疗问答系统</h1>
+            </div>
+
+
+            <div class="question-container fadeIn" id="question-container"></div>
+            <div class="options-container fadeIn" id="options-container"></div>
+
+            <label class="btn btn-primary mb-3" for="answerImageFiles" id="label-for-answerImageFiles">
+                <i class="fas fa-images"></i> 上传病灶图片
+            </label>
+            <input accept="image/*" class="custom-file-input d-none" id="answerImageFiles" multiple
+                   onchange="previewImages();" type="file">
+            <button class="btn btn-secondary fadeIn d-none" hidden id="upload-btn">上传图片并开始会话</button>
+            <br>
+            <p class="text-muted">请您认真回答以下问题，这将是我们对您病情诊断的重要依据。</p>
+            <textarea class="answer-text-input form-control fadeIn" id="answerText" placeholder="请输入答案文本..."></textarea>
+            <br><br>
+            <button class="btn btn-primary fadeIn" id="submit-btn">提交并继续会话</button>
+
+            <div class="fadeIn mt-4" id="image-preview" style="display: flex; flex-wrap: wrap;"></div>
+            <div class="lightbox-container" d-none>
+                <img alt="放大图片" class="lightbox-image" src="">
+                <button class="close-lightbox">×</button>
+            </div>
+            <div class="fadeIn mt-3" id="response-report"></div>
+        </div>
+    </div>
+</div>
+<div aria-hidden="true" aria-labelledby="exampleModalLabel" class="modal fade" id="nonSkinImageModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">提示</h5>
+                <button aria-label="Close" class="btn-close" data-bs-dismiss="modal" type="button"></button>
+            </div>
+            <div class="modal-body">
+                您好，Dr.t检测到您有些图片不符合检测要求已经帮您取消，您是否要重新上传？
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" data-bs-dismiss="modal" type="button">取消</button>
+                <button class="btn btn-primary" onclick="reloadPage()" type="button">重新上传</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    window.onload = function () {
+        const urlParams = new URLSearchParams(window.location.search);
+        const sessionId = urlParams.get('sessionId');
+        const questionType = urlParams.get('questionType');
+        const question = urlParams.get('question');
+        console.log("Session ID:", sessionId);
+        console.log("Question Type:", questionType);
+        console.log("Question:", question);
+
+        // 在这里使用 sessionId 和 questionType
+    };
+    async function checkSkin(file) {
+        const formData = new FormData();
+        formData.append('file', file);
+
+        try {
+            const response = await fetch('http://121.43.138.108:8800/uploaFile/skinDetection', {
+                method: 'POST',
+                body: formData,
+            });
+            if (!response.ok) {
+                throw new Error(`服务器返回状态码：${response.status}`);
+            }
+            const data = await response.json();
+            if (data.data.skin === false) {
+                openModal();
+            }
+            if (data && data.hasOwnProperty('status') && data.status === 0 && data.data.hasOwnProperty('skin')) {
+                return data.data.skin;
+            } else {
+                console.error('Invalid response format from skin detection API');
+                return false;
+            }
+        } catch (error) {
+            console.error('Error while checking skin detection:', error);
+            return false; // 出现错误时默认为非皮肤图片
+        }
+    }
+
+    function openModal() {
+        $('#nonSkinImageModal').modal('show');
+    }
+
+    function reloadPage() {
+        window.location.reload();
+    }
+
+    // 添加关闭lightbox的功能
+    document.querySelector('.close-lightbox').addEventListener('click', function () {
+        document.querySelector('.lightbox-container').style.display = 'none';
+    });
+
+    let validFiles = [];
+    let previewFinished = false;
+
+    function previewImages() {
+        const previewDiv = document.getElementById('image-preview');
+        previewDiv.innerHTML = '';
+
+        const files = document.getElementById('answerImageFiles').files;
+        if (!files.length) return;
+
+        for (let i = 0; i < files.length; i++) {
+            const file = files[i];
+            const reader = new FileReader();
+
+            reader.onloadend = async function () {
+                const isSkin = await checkSkin(file);
+                console.log(isSkin)
+                if (isSkin) {
+                    // 如果是皮肤图片，则预览并加入有效文件列表
+                    const img = document.createElement('img');
+                    img.src = reader.result;
+                    img.style.maxWidth = '300px';
+                    img.style.maxHeight = '300px';
+
+                    img.addEventListener('click', function () {
+                        const lightboxImage = document.querySelector('.lightbox-image');
+                        lightboxImage.src = this.src;
+                        document.querySelector('.lightbox-container').style.display = 'block';
+                    });
+
+                    previewDiv.appendChild(img);
+                    validFiles.push(file); // 添加到有效文件列表
+                }
+
+                // 检查是否所有图片都已经完成预览和检测
+                if (++i === files.length) {
+                    previewFinished = true;
+                    maybeUploadValidAnswerImages();
+                }
+                $('#answerImageFiles').hide();
+                $('#label-for-answerImageFiles').hide();
+                $('#upload-btn').removeClass('d-none');
+            };
+
+            reader.readAsDataURL(file);
+        }
+    }
+
+    function maybeUploadValidAnswerImages() {
+        if (previewFinished && validFiles.length > 0) {
+            uploadValidAnswerImages(validFiles);
+        }
+    }
+
+    function uploadValidAnswerImages(files) {
+        if (!files.length) {
+            alert('请选择至少一张皮肤图片');
+            return;
+        }
+
+        $('#upload-btn').prop('disabled', true);
+
+        var formData = new FormData();
+        for (var i = 0; i < files.length; i++) {
+            formData.append('answerImageFile', files[i]);
+        }
+
+        $.ajax({
+            url: 'http://121.43.138.108:8800/medical/up',
+            method: 'POST',
+            data: formData,
+            contentType: false,
+            processData: false,
+            success: function (responseData) {
+                const resultVOData = responseData.data;
+                sessionId = resultVOData.sessionId;
+                questionType = resultVOData.questionType;
+                handleInitializationResponse(resultVOData);
+                $('#upload-btn').prop('disabled', false);
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                console.error(textStatus, errorThrown);
+                alert('提交失败，请重试');
+                $('#upload-btn').prop('disabled', false);
+            }
+        });
+
+        $('#submit-btn').on('click', function () {
+            var answerText = $('#answerText').val();
+
+            if (!sessionId || !answerText) {
+                alert('请确保已输入答案文本');
+                return;
+            }
+
+            const sampleDtoForAnswer = {sessionId: sessionId, questionType: questionType, answerText: answerText};
+
+            $.ajax({
+                url: 'http://121.43.138.108:8800/medical/qa',
+                method: 'POST',
+                data: JSON.stringify(sampleDtoForAnswer),
+                contentType: 'application/json',
+                processData: false,
+                success: function (responseData) {
+                    questionType = responseData.questionType; // 更新questionType（假设从responseData中获取）
+                    sessionId = responseData.sessionId; // 如果qa接口也返回了新的sessionId，则需要更新
+
+                    handleResponse(responseData);
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.error(textStatus, errorThrown);
+                    alert('提交失败，请重试');
+                }
+            });
+        });
+    }
+
+    function handleInitializationResponse(responseData) {
+        console.log(responseData);
+        if (responseData.question && responseData.reports) {
+            $('#question-container').text(responseData.question);
+            if (Array.isArray(responseData.reports.diagProb)) {
+                let optionsHtml = '';
+                for (const option of responseData.reports.diagProb) {
+                    optionsHtml += '<p>' + option + '</p>';
+                }
+                $('#options-container').html(optionsHtml);
+            } else {
+                $('#options-container').text(responseData.reports.diagProb);
+            }
+        }
+
+        $('#answerText').show();
+        $('#submit-btn').show();
+    }
+
+    function handleResponse(responseData) {
+        if (responseData.question) {
+            $('#question-container').text(responseData.question);
+        } else {
+            $('#question-container').empty();
+        }
+        // 如果questionType不是'reports'则处理常规回复
+        if (responseData.reports && responseData.questionType !== 'reports') {
+            if (responseData.reports.diagProb) {
+                $('#options-container').text(responseData.reports.diagProb);
+            } else {
+                $('#options-container').empty();
+            }
+            if (responseData.options) {
+                $('#options-container').text(responseData.options);
+            } else {
+                $('#options-container').empty();
+            }
+        } else if (responseData.questionType === 'reports') {
+
+
+            const report = {
+                allergies: JSON.parse(responseData.reports.allegries)[0],
+                complications: JSON.parse(responseData.reports.complications)[0],
+                diseaseCourse: JSON.parse(responseData.reports.diseaseCourse)[0],
+                /* bbox: JSON.parse(responseData.reports.bbox),*/
+                /*diagResultsEn: JSON.parse(responseData.reports.diagResultsEn),*/
+                diagResults: JSON.parse(responseData.reports.diagResults),
+                bodyParts: JSON.parse(responseData.reports.bodyParts)[0],
+                symptoms: JSON.parse(responseData.reports.symptoms)[0],
+                diseaseHistory: JSON.parse(responseData.reports.diseaseHistory)[0],
+                medications: JSON.parse(responseData.reports.medications)[0],
+                /*diagProbEn: JSON.parse(responseData.reports.diagProbEn),*/
+                diagProb: JSON.parse(responseData.reports.diagProb),
+                iqa_score: parseFloat(responseData.reports.iqa_score),
+                age: JSON.parse(responseData.reports.age)[0]
+            };
+            const diagProb = report.diagProb;
+            const maxEntry = Object.entries(diagProb).reduce((max, current) => {
+                return parseFloat(current[1]) > parseFloat(max[1]) ? current : max;
+            }, [null, -Infinity]);
+            let reportText = `您好Dr.T为您生成的报告如下：\n\n`;
+            reportText += `年龄：${report.age}\n`;
+            reportText += `过敏史：${report.allergies}\n`;
+            reportText += `并发症：${report.complications}\n`;
+            reportText += `病程：${report.diseaseCourse}\n`;
+            /*  reportText += `关注区域坐标：\n`;
+              for (const box of report.bbox) {
+                  reportText += `${JSON.stringify(box, null, 2)}\n`;
+              }*/
+            /* reportText += `英文诊断结果：${report.diagResultsEn.join(', ')}\n`;*/
+            /* reportText += `诊断结果：${report.diagResults.join(', ')}\n`;*/
+            reportText += `身体部位：${report.bodyParts}\n`;
+            reportText += `症状描述：${report.symptoms}\n`;
+            reportText += `既往疾病史：${report.diseaseHistory}\n`;
+            reportText += `正在使用的药物：${report.medications}\n`;
+            /* reportText += `诊断概率（英文）：\n${JSON.stringify(report.diagProbEn, null, 2)}\n`;*/
+            reportText += `诊断症状概率：${maxEntry[0]}:${(maxEntry[1] * 100).toFixed(2)}%\n`;
+           /* reportText += `整体诊断准确率：${report.iqa_score}%\n`;*/
+            console.log(`最高概率的疾病是：${maxEntry[0]}, 其概率为：${(maxEntry[1] * 100).toFixed(2)}%`);
+
+            let reportNarrative = `您好根据Dr.T生成的诊断报告如下：\n\n`;
+            reportNarrative += `这位患者年龄为：${report.age}岁。\n`;
+            reportNarrative += `在过敏史方面，记录显示为：${report.allergies}。\n`;
+            reportNarrative += `关于并发症情况，当前记录为：${report.complications}。\n`;
+            reportNarrative += `患者的病程时间为：${report.diseaseCourse}。\n`;
+            reportNarrative += `本次报告关注的身体部位为：${report.bodyParts}。\n`;
+            reportNarrative += `症状描述显示为：${report.symptoms}。\n`;
+            reportNarrative += `既往疾病史记录显示为：${report.diseaseHistory}。\n`;
+            reportNarrative += `患者用药记录显示为：${report.medications}。\n`;
+            reportNarrative += `症状的诊断概率数据为：${maxEntry[0]}:${(maxEntry[1] * 100).toFixed(2)}%。\n`;
+            /*reportNarrative += `整体上，本次诊断的准确率为${report.iqa_score}%。\n`;*/
+            reportNarrative += `应该怎么处理？\n\n`;
+            console.log(reportNarrative)
+
+
+            $('#response-report').text(reportText);
+            $('#response-report').show();
+            $('#options-container').empty();
+            // 创建并添加刷新按钮
+            let refreshButton = $('<button>', {
+                id: 'refresh-report-btn',
+                class: 'button-refresh', // 添加类名用于引用CSS样式
+                text: '重新生成'
+            });
+            refreshButton.click(function () {
+                location.reload();
+            });
+            $('#response-report').after(refreshButton);
+
+            // 创建并添加跳转按钮
+            let jumpButton = $('<button>', {
+                id: 'jump-to-detail-btn',
+                class: 'button-jump', // 添加类名用于引用CSS样式
+                text: '询问Dr.T'
+            });
+            // 假设有个详情页面URL，这里用'details.html'作为示例
+            jumpButton.click(function () {
+                window.open('http://121.43.138.108/index.html?results=' + reportNarrative, '_blank');
+            });
+            $('#refresh-report-btn').after(jumpButton);
+
+            // 隐藏无关元素（如果需要）
+            $('#answerText').hide();
+            $('#image-container').hide();
+            $('#modal-container').hide();
+            $('#additional-buttons').hide();
+        }
+        $('#answerText').val('');
+        $('#answerText').show();
+        $('#submit-btn').show();
+    }
+
+</script>
+</body>
+</html>

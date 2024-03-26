@@ -256,7 +256,7 @@
                 formData.set('file', file);
 
                 try {
-                    const response = await fetch('http://121.43.138.108:8800/uploaFile/skinDetection', {
+                    const response = await fetch('http://localhost:8089/uploaFile/skinDetection', {
                         method: 'POST',
                         body: formData
                     });
@@ -288,7 +288,7 @@
         formData.append('files', fileInput.files[0]);
 
 
-        fetch('http://121.43.138.108:8800/uploaFile/getWoundInformation', {
+        fetch('http://localhost:8089/uploaFile/getWoundInformation', {
             method: 'POST',
             body: formData
         }).then(response => {

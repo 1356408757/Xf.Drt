@@ -104,16 +104,25 @@ public class StsServiceSample {
         }
     }
 
+    /**
+     * 上传文件到OSS（阿里云对象存储服务）并返回文件信息的映射。
+     *
+     * @param file 需要上传的多部分文件对象，不可为null。
+     * @param ossClient 用于与OSS交互的客户端对象，不可为null。
+     * @return 一个包含文件名、文件URL（如果上传成功）和原始文件名的映射对象。如果上传失败，返回一个包含错误信息的映射。
+     */
     private static Map<String, Object> uploadFile(MultipartFile file, OSS ossClient) {
         try {
-
-
+            // 图片压缩
             File compressedFile = compressImage(file);
 
+            // 生成唯一的文件名
             String uniqueFileName = generateUniqueFileName(Objects.requireNonNull(file.getOriginalFilename()));
 
+            // 生成签名URL并将压缩后的文件上传到OSS
             URL signedUrl = generateAndUploadObject(ossClient, compressedFile, uniqueFileName);
 
+            // 准备文件信息的映射
             Map<String, Object> fileMap = new HashMap<>();
             fileMap.put("fileName", file.getOriginalFilename());
             if (signedUrl != null) {
@@ -123,7 +132,9 @@ public class StsServiceSample {
 
             return fileMap;
         } catch (Exception e) {
+            // 记录文件上传失败的错误日志
             logger.error("文件上传失败。异常信息: {}", e.getMessage());
+            // 返回包含错误信息的映射
             return createErrorResultMap(e.getMessage());
         }
     }
@@ -140,118 +151,240 @@ public class StsServiceSample {
         }
     }*/
 
+    /**
+     * 将MultipartFile转换为File类型。
+     *
+     * @param file MultipartFile对象，代表上传的文件。
+     * @return 转换后的File对象，该文件存储在系统的临时目录中。
+     * @throws IOException 如果在文件转换或存储过程中发生IO错误。
+     */
     private static File convertMultipartFileToFile(MultipartFile file) throws IOException {
+        // 创建一个临时文件用于存储上传的文件内容
         File tempFile = File.createTempFile("temp", null);
+        // 将上传文件的内容转移到临时文件中
         file.transferTo(tempFile);
         return tempFile;
     }
+    /**
+     * 创建一个包含错误信息的Map对象。
+     *
+     * @param errorMessage 错误信息字符串，用于在Map中存储的错误消息。
+     * @return 返回一个包含"error"键和对应错误消息值的Map对象。
+     */
     private static Map<String, Object> createErrorResultMap(String errorMessage) {
+        // 初始化一个空的HashMap用于存储错误信息
         Map<String, Object> errorResult = new HashMap<>();
+        // 将错误消息放入Map中，键为"error"
         errorResult.put("error", errorMessage);
         return errorResult;
     }
 
+    /**
+     * 生成并上传对象到OSS（阿里云对象存储服务）。
+     *
+     * @param ossClient OSS客户端，用于与OSS进行交互。
+     * @param file 要上传的文件。
+     * @param uniqueFileName 上传至OSS的文件名，需要保证唯一性。
+     * @return 返回上传文件的预签名URL，如果上传失败则返回null。
+     */
     private static URL generateAndUploadObject(OSS ossClient, File file, String uniqueFileName) {
         try {
+            // 创建一个预签名URL请求，用于PUT方法上传文件。
             GeneratePresignedUrlRequest request = new GeneratePresignedUrlRequest("drt-oss-disk", "src/image/" + uniqueFileName, HttpMethod.PUT);
+            // 设置预签名URL的过期时间。
             Date expiration = new Date(System.currentTimeMillis() + 3600 * 1000L);
             request.setExpiration(expiration);
+            // 设置请求的内容类型。
             request.setContentType("multipart/form-data");
+            // 添加自定义元数据。
             request.addUserMetadata("author", "xfdf");
+            // 生成预签名URL。
             URL signedUrl = ossClient.generatePresignedUrl(request);
 
+            // 准备上传时的请求头，包含内容类型和作者信息。
             Map<String, String> requestHeaders = new HashMap<>();
             requestHeaders.put(HttpHeaders.CONTENT_TYPE, "multipart/form-data");
             requestHeaders.put(OSS_USER_METADATA_PREFIX + "author", "xfdf");
 
+            // 使用预签名URL上传文件。
             ossClient.putObject(signedUrl, new BufferedInputStream(new FileInputStream(file)), file.length(), requestHeaders, true);
 
+            // 创建一个预签名URL请求，用于GET方法下载文件。
             GeneratePresignedUrlRequest getUrlRequest = new GeneratePresignedUrlRequest("drt-oss-disk", "src/image/" + uniqueFileName, HttpMethod.GET);
+            // 设置下载URL的过期时间。
             getUrlRequest.setExpiration(expiration);
+            // 生成并返回文件的预签名下载URL。
             return ossClient.generatePresignedUrl(getUrlRequest);
         } catch (Exception e) {
+            // 记录生成和上传对象失败的错误日志。
             logger.error("生成并上传对象失败。异常信息: {}", e.getMessage());
             return null;
         }
     }
 
+
+    /**
+     * 关闭ExecutorService和OSS客户端。
+     * 该方法负责安全地关闭提供的ExecutorService和OSS客户端实例，确保资源得到释放。
+     *
+     * @param executorService ExecutorService实例，如果为null，则不进行关闭操作。
+     * @param ossClient OSS客户端实例，如果为null，则不进行关闭操作。
+     */
     private static void shutdownExecutorAndOssClient(ExecutorService executorService, OSS ossClient) {
+        // 关闭OSS客户端，如果存在的话
         if (ossClient != null) {
             ossClient.shutdown();
         }
+        // 关闭ExecutorService，如果存在的话
         if (executorService != null) {
             executorService.shutdown();
         }
     }
 
+    /**
+     * 判断上传的文件是否为图片文件。
+     *
+     * @param file 上传的文件对象，类型为 MultipartFile。
+     * @return 返回一个布尔值，如果文件类型以"image"开头，则返回 true，表示是图片文件；否则返回 false。
+     */
     private static boolean isImageFile(MultipartFile file) {
+        // 获取上传文件的 content type
         String contentType = file.getContentType();
+        // 判断 content type 是否非空且以"image"开头
         return contentType != null && contentType.startsWith("image");
     }
 
+    /**
+     * 压缩上传的图片文件。
+     *
+     * @param file 上传的图片文件，类型为MultipartFile。
+     * @return 压缩后的图片文件，如果压缩失败则返回原文件。
+     * @throws IOException 如果读取或写入文件发生错误。
+     */
     private static File compressImage(MultipartFile file) {
         try {
+            // 从文件输入流中读取图片
             BufferedImage image = ImageIO.read(file.getInputStream());
 
+            // 设置压缩后的图片宽度为800像素，根据原图宽高比计算高度
             int newWidth = 800;
             int newHeight = (int) (image.getHeight() * ((double) newWidth / image.getWidth()));
 
+            // 创建一个新的缓冲区图像，用于存放调整大小后的图像
             BufferedImage resizedImage = new BufferedImage(newWidth, newHeight, BufferedImage.TYPE_INT_RGB);
             Graphics2D g = resizedImage.createGraphics();
+            // 设置图像拉伸质量
             g.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+            // 在新尺寸上绘制原图
             g.drawImage(image, 0, 0, newWidth, newHeight, null);
-            g.dispose();
+            g.dispose(); // 释放Graphics2D资源
 
+            // 创建一个临时文件，用于存放压缩后的图像
             File compressedFile = File.createTempFile("compressed", ".jpg");
+            // 将调整大小后的图像以JPEG格式写入文件
             ImageIO.write(resizedImage, "jpg", compressedFile);
 
             return compressedFile;
         } catch (IOException e) {
+            // 如果处理图片过程中发生错误，返回原文件
             return new File(Objects.requireNonNull(file.getOriginalFilename()));
         }
     }
 
+
+    /**
+     * 生成唯一的文件名
+     *
+     * @param originalFileName 原始文件名，用于获取文件扩展名
+     * @return 由时间戳、UUID和原始文件扩展名组成的唯一文件名
+     */
     public static String generateUniqueFileName(String originalFileName) {
+        // 创建日期格式化对象，用于生成时间戳字符串
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmm-ssSSS");
+        // 获取当前日期时间的时间戳字符串
         String timestamp = sdf.format(new Date());
+        // 生成UUID并移除其中的"-"
         String uuid = UUID.randomUUID().toString().replace("-", "");
+        // 从原始文件名中提取文件扩展名
         String fileExtension = originalFileName.substring(originalFileName.lastIndexOf("."));
+        // 拼接时间戳、UUID和文件扩展名，形成新的唯一文件名
         return timestamp + "-" + uuid + fileExtension;
     }
 
 
+    /**
+     * 初始化方法，该方法在对象创建后，其依赖注入完成时被调用。
+     * 本方法主要完成以下两项任务：
+     * 1. 创建STS（Security Token Service）客户端。
+     * 2. 刷新STS令牌。
+     *
+     * @throws Exception 如果在创建客户端或刷新令牌时发生错误，则抛出异常。
+     */
     @PostConstruct
     public void init() throws Exception {
+        // 创建STS客户端
         stsClient = createClient();
+        // 刷新STS令牌
         refreshStsToken();
     }
 
+    /**
+     * 定时刷新STS Token。
+     * 该方法使用异步执行，每隔3500秒执行一次。首次执行延迟为0秒。
+     * 无参数和返回值。
+     *
+     * 使用阿里云STS（Security Token Service）服务获取临时访问凭证。
+     * 凭证包括访问密钥ID（AccessKeyId）、访问密钥秘钥（AccessKeySecret）和安全令牌（SecurityToken）。
+     * 刷新成功后，将更新的STS凭证信息记录到相应的字段中。
+     */
     @Scheduled(initialDelay = 0, fixedDelay = 3500000L)
     @Async
     public void refreshStsToken() {
         try {
+            // 构建获取STS Token的请求
             AssumeRoleRequest assumeRoleRequest = new AssumeRoleRequest()
-                    .setDurationSeconds(3600L)
-                    .setPolicy(policy)
-                    .setRoleArn(roleArn)
-                    .setRoleSessionName("SessionTest")
-                    .setExternalId(externalId);
+                    .setDurationSeconds(3600L) // 设置令牌有效期为3600秒
+                    .setPolicy(policy) // 设置权限策略
+                    .setRoleArn(roleArn) // 设置角色ARN
+                    .setRoleSessionName("SessionTest") // 设置角色会话名称
+                    .setExternalId(externalId); // 设置外部ID
+
+            // 创建运行时选项
             RuntimeOptions runtime = new RuntimeOptions();
+
+            // 发起STS Token的刷新请求，并处理响应
             AssumeRoleResponse assumeRoleResponse = stsClient.assumeRoleWithOptions(assumeRoleRequest, runtime);
+
+            // 更新STS凭证信息
             ossAccessKeyId = assumeRoleResponse.getBody().getCredentials().getAccessKeyId();
             ossAccessKeySecret = assumeRoleResponse.getBody().getCredentials().getAccessKeySecret();
             ossSecurityToken = assumeRoleResponse.getBody().getCredentials().getSecurityToken();
+
+            // 记录刷新成功日志
             logger.info("Successfully refreshed STS token: {}", assumeRoleResponse);
         } catch (Exception e) {
+            // 记录刷新失败日志
             logger.error("Failed to refresh STS token: {}", e.getMessage());
         }
     }
 
+
+    /**
+     * 创建并返回一个阿里云 STS 客户端实例。
+     * 该方法不接受任何参数，但需要在类级别上访问 accessKeyId 和 keySecret。
+     *
+     * @return Client 阿里云 STS 客户端实例
+     * @throws Exception 如果在创建客户端时遇到任何问题，则抛出异常
+     */
     private Client createClient() throws Exception {
+        // 设置STS服务的访问端点
         String endpoint = "sts.cn-shanghai.aliyuncs.com";
+        // 配置STS客户端，包括访问密钥ID、密钥和端点
         Config config = new Config().setAccessKeyId(accessKeyId).setAccessKeySecret(keySecret).setEndpoint(endpoint);
+        // 根据配置创建并返回STS客户端实例
         return new Client(config);
     }
+
 
     /**
      * TODO  下面的方法为阿里oss对象存储的上传下载针对于测试类里面的方法，我就不删除了
