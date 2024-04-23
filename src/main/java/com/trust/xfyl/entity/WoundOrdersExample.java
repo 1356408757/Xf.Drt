@@ -4,7 +4,10 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
+/**
+ * @author Bay-max
+ * @date 2024/4/22 14:01
+ **/
 public class WoundOrdersExample {
     protected String orderByClause;
 

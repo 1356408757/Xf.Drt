@@ -5,8 +5,9 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import java.util.Date;
 
 /**
- * @author LENOVO
- */
+ * @author Bay-max
+ * @date 2024/4/22 14:01
+ **/
 public class TrustFile extends BaseBean {
     private Integer fileId;
 

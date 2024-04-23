@@ -1,7 +1,7 @@
 package com.trust.xfyl.service.impl;
 
 import com.trust.xfyl.cache.CacheManager;
-import com.trust.xfyl.config.AppConfig;
+import com.trust.xfyl.entity.dto.AppConfig;
 import com.trust.xfyl.model.ChatMessage;
 import com.trust.xfyl.service.ChatSessionService;
 import org.springframework.stereotype.Service;
@@ -12,8 +12,9 @@ import java.util.Deque;
 import java.util.concurrent.TimeUnit;
 
 /**
- * @author yuanci
- */
+ * @author Bay-max
+ * @date 2024/4/22 15:37
+ **/
 @Service
 public class ChatSessionServiceImpl implements ChatSessionService {
     private static final String CACHE_PREFIX = "chat_session:";

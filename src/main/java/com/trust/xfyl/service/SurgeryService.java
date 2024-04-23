@@ -5,8 +5,9 @@ import com.trust.xfyl.entity.Surgery;
 import org.springframework.stereotype.Service;
 
 /**
- * @author LENOVO
- */
+ * @author Bay-max
+ * @date 2024/4/22 15:37
+ **/
 @Service
 public class SurgeryService {
     private final SurgeryMapper surgeryMapper;
@@ -22,6 +23,6 @@ public class SurgeryService {
 
     public Long updateByPrimaryKeySelective(Surgery surgery) {
         surgeryMapper.updateByPrimaryKeySelective(surgery);
-        return  surgery.getSurgeryId();
+        return surgery.getSurgeryId();
     }
 }

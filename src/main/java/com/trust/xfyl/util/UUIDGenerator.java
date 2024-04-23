@@ -3,10 +3,13 @@ package com.trust.xfyl.util;
 import java.util.UUID;
 
 /**
- * UUID generator
- *
- * @author yuanci
- */
+ * TODO
+ * 
+ * @Description
+ * @author Bay-max
+ * @date 2024/4/22 15:39
+ **/
+
 public class UUIDGenerator {
     public static String generate() {
         UUID uuid = UUID.randomUUID();

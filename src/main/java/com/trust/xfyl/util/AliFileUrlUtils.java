@@ -3,10 +3,9 @@ package com.trust.xfyl.util;
 import com.aliyun.com.viapi.FileUtils;
 
 /**
-* @Author djj
-* @Description //TODO
-* @Date 14:32 2024/2/26
-**/
+ * @author Bay-max
+ * @date 2024/4/22 15:39
+ **/
 public class AliFileUrlUtils {
     /**
      * @return java.lang.String

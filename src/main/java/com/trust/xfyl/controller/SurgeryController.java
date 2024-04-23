@@ -19,8 +19,13 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * @author LENOVO
- */
+ * TODO
+ *
+ * @Description
+ * @author Bay-max
+ * @date 2024/4/22 15:16
+ **/
+
 @Api(value = "手术伤口照片上传", description = "伤口照片上传", tags = "手术伤口照片上传")
 @RestController
 @RequestMapping("/surgery")
@@ -70,7 +75,7 @@ public class SurgeryController {
 
     /**
      * @return com.trust.xfyl.entity.ResultVO
-     * @Author djj
+     * @author djj
      * @Description 首先判断前端传过来的数据是否有surgery的主键，如果有那就修改，如果没有那就新增
      * 新增的时候 根据传过来的surgeryType以及患者的关联主键trackingPersonnelId判断该患者的节点照片是否已经上传过
      * 如果上传过那就返回状态。，如果没有那就新增，新增完成返回表主键，然后将主键，以及设置的图片类型以及上传节点保存到TrustRelationFile里面

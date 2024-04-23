@@ -1,14 +1,16 @@
 package com.trust.xfyl.enums;
 
 /**
- * @author LENOVO
- */
+ * @author Bay-max
+ * @date 2024/4/22 14:01
+ **/
 
 public enum ResultEnum {
 
 
     SUCCESS(0, "success"),
-    FAIL(-1, "fail");
+    FAIL(-1, "fail"),
+    INTERNAL_SERVER_ERROR(1, "内部服务器错误");
 
     private Integer status;
     private String message;

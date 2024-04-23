@@ -25,8 +25,9 @@ import java.util.stream.Collectors;
 import static com.trust.xfyl.util.AliSkinUtils.DF;
 
 /**
- * @author LENOVO
- */
+ * @author Bay-max
+ * @date 2024/4/22 15:37
+ **/
 @Service
 public class FileService {
     private static String uploadImgUrl;

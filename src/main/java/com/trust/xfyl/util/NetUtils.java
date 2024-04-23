@@ -5,8 +5,9 @@ import javax.servlet.http.HttpServletRequest;
 /**
  * common utils
  *
- * @author yuanci
- */
+ * @author Bay-max
+ * @date 2024/4/22 15:39
+ **/
 public class NetUtils {
     public static String getRealIp(HttpServletRequest request) {
         String ip = request.getHeader("X-Forwarded-For");

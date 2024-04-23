@@ -7,9 +7,9 @@ import java.io.Serializable;
 
 /**
  * 会话记录
- *
- * @author yuanci
- */
+ * @author Bay-max
+ * @date 2024/4/22 15:37
+ **/
 @Data
 @ToString
 public class ChatMessage implements Serializable {

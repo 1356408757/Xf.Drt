@@ -15,8 +15,9 @@ import java.util.*;
 /**
  * 上传文件的工具类
  *
- * @author LENOVO
- */
+ * @author Bay-max
+ * @date 2024/4/22 15:39
+ **/
 @Component
 public class FileUtil {
 

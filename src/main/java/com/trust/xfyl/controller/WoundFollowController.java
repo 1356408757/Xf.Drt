@@ -17,10 +17,13 @@ import org.springframework.web.bind.annotation.*;
 import java.util.*;
 
 /**
- * @Author djj
- * @Description //TODO
- * @Date 11:15 2024/1/26
+ * TODO
+ *
+ * @Description
+ * @author Bay-max
+ * @date 2024/4/22 15:17
  **/
+
 @Api(value = "患者随访", description = "患者随访", tags = "患者随访")
 @RestController
 @RequestMapping("/WoundFollow")

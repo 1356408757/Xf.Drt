@@ -4,10 +4,10 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 
 import java.math.BigDecimal;
 import java.util.Date;
-
 /**
- * @author LENOVO
- */
+ * @author Bay-max
+ * @date 2024/4/22 14:01
+ **/
 public class WoundOrderVo {
 
     private Long id;

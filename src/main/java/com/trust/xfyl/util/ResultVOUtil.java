@@ -7,8 +7,9 @@ import com.trust.xfyl.enums.ResultEnum;
 /**
  * json返回通用格式
  *
- * @author LENOVO
- */
+ * @author Bay-max
+ * @date 2024/4/22 15:39
+ **/
 public class ResultVOUtil {
 
     /**

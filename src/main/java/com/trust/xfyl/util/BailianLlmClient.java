@@ -5,8 +5,8 @@ import com.aliyun.broadscope.bailian.sdk.ApplicationClient;
 import com.aliyun.broadscope.bailian.sdk.models.CompletionsRequest;
 import com.aliyun.broadscope.bailian.sdk.models.CompletionsResponse;
 import com.aliyun.broadscope.bailian.sdk.models.ConnectOptions;
-import com.trust.xfyl.config.LlmConfig;
 import com.trust.xfyl.entity.dto.CompletionRequestDTO;
+import com.trust.xfyl.entity.dto.LlmConfig;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 import reactor.core.publisher.Flux;
@@ -19,9 +19,9 @@ import java.util.stream.Collectors;
 
 /**
  * 调用阿里云百炼大模型服务
- *
- * @author yuanci
- */
+ * @author Bay-max
+ * @date 2024/4/22 15:39
+ **/
 
 @Component
 public class BailianLlmClient {

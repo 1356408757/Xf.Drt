@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<!-- 定义mapper接口的命名空间 -->
+<mapper namespace="com.trust.xfyl.dao.CreditPackagesMapper">
+    <!-- 定义结果映射，用于从数据库结果集中将数据映射到CreditPackages实体中 -->
+    <resultMap id="BaseResultMap" type="com.trust.xfyl.entity.CreditPackages">
+        <id column="package_id" property="packageId" jdbcType="INTEGER"/>
+        <result column="package_name" property="packageName" jdbcType="VARCHAR"/>
+        <result column="price" property="price" jdbcType="DECIMAL"/>
+        <result column="credits_per_package" property="creditsPerPackage" jdbcType="INTEGER"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="is_delete" property="isDelete" jdbcType="INTEGER"/>
+    </resultMap>
+    <!-- 定义查询条件的动态SQL -->
+    <sql id="Example_Where_Clause">
+        <where>
+            <foreach collection="oredCriteria" item="criteria" separator="or">
+                <if test="criteria.valid">
+                    <trim prefix="(" suffix=")" prefixOverrides="and">
+                        <foreach collection="criteria.criteria" item="criterion">
+                            <choose>
+                                <when test="criterion.noValue">
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue">
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue">
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue">
+                                    and ${criterion.condition}
+                                    <foreach collection="criterion.value" item="listItem" open="(" close=")"
+                                             separator=",">
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
+            </foreach>
+        </where>
+    </sql>
+    <!-- 定义更新操作中使用的查询条件的动态SQL -->
+    <sql id="Update_By_Example_Where_Clause">
+        <where>
+            <foreach collection="example.oredCriteria" item="criteria" separator="or">
+                <if test="criteria.valid">
+                    <trim prefix="(" suffix=")" prefixOverrides="and">
+                        <foreach collection="criteria.criteria" item="criterion">
+                            <choose>
+                                <when test="criterion.noValue">
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue">
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue">
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue">
+                                    and ${criterion.condition}
+                                    <foreach collection="criterion.value" item="listItem" open="(" close=")"
+                                             separator=",">
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
+            </foreach>
+        </where>
+    </sql>
+    <!-- 定义查询时使用的列 -->
+    <sql id="Base_Column_List">
+        package_id, package_name, price, credits_per_package, create_time, is_delete
+    </sql>
+    <!-- 根据例子查询数据 -->
+    <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.trust.xfyl.entity.CreditPackagesExample">
+        select
+        <if test="distinct">
+            distinct
+        </if>
+        'true' as QUERYID,
+        <include refid="Base_Column_List"/>
+        from creditpackages
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+        <if test="orderByClause != null">
+            order by ${orderByClause}
+        </if>
+    </select>
+    <!-- 根据主键查询数据 -->
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from creditpackages
+        where package_id = #{packageId,jdbcType=INTEGER}
+    </select>
+    <!-- 根据主键删除数据 -->
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+        delete
+        from creditpackages
+        where package_id = #{packageId,jdbcType=INTEGER}
+    </delete>
+    <!-- 根据例子删除数据 -->
+    <delete id="deleteByExample" parameterType="com.trust.xfyl.entity.CreditPackagesExample">
+        delete from creditpackages
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+    </delete>
+    <!-- 插入数据 -->
+    <insert id="insert" parameterType="com.trust.xfyl.entity.CreditPackages">
+        insert into creditpackages (package_id, package_name, price,
+                                    credits_per_package, create_time, is_delete)
+        values (#{packageId,jdbcType=INTEGER}, #{packageName,jdbcType=VARCHAR}, #{price,jdbcType=DECIMAL},
+                #{creditsPerPackage,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{isDelete,jdbcType=INTEGER})
+    </insert>
+
+    <!-- 根据条件插入CreditPackages实体的 selective 数据 -->
+    <insert id="insertSelective" parameterType="com.trust.xfyl.entity.CreditPackages">
+        insert into creditpackages
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="packageId != null">
+                package_id,
+            </if>
+            <if test="packageName != null">
+                package_name,
+            </if>
+            <if test="price != null">
+                price,
+            </if>
+            <if test="creditsPerPackage != null">
+                credits_per_package,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="isDelete != null">
+                is_delete,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="packageId != null">
+                #{packageId,jdbcType=INTEGER},
+            </if>
+            <if test="packageName != null">
+                #{packageName,jdbcType=VARCHAR},
+            </if>
+            <if test="price != null">
+                #{price,jdbcType=DECIMAL},
+            </if>
+            <if test="creditsPerPackage != null">
+                #{creditsPerPackage,jdbcType=INTEGER},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="isDelete != null">
+                #{isDelete,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
+
+    <!-- 根据例子统计creditpackages表中的数据数量 -->
+    <select id="countByExample" parameterType="com.trust.xfyl.entity.CreditPackagesExample"
+            resultType="java.lang.Integer">
+        select count(*) from creditpackages
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+    </select>
+
+    <!-- 根据例子更新creditpackages表中的数据（selective更新） -->
+    <update id="updateByExampleSelective" parameterType="map">
+        update creditpackages
+        <set>
+            <if test="record.packageId != null">
+                package_id = #{record.packageId,jdbcType=INTEGER},
+            </if>
+            <if test="record.packageName != null">
+                package_name = #{record.packageName,jdbcType=VARCHAR},
+            </if>
+            <if test="record.price != null">
+                price = #{record.price,jdbcType=DECIMAL},
+            </if>
+            <if test="record.creditsPerPackage != null">
+                credits_per_package = #{record.creditsPerPackage,jdbcType=INTEGER},
+            </if>
+            <if test="record.createTime != null">
+                create_time = #{record.createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="record.isDelete != null">
+                is_delete = #{record.isDelete,jdbcType=INTEGER},
+            </if>
+        </set>
+        <if test="_parameter != null">
+            <include refid="Update_By_Example_Where_Clause"/>
+        </if>
+    </update>
+
+    <!-- 根据例子更新creditpackages表中的数据 -->
+    <update id="updateByExample" parameterType="map">
+        update creditpackages
+        set package_id = #{record.packageId,jdbcType=INTEGER},
+        package_name = #{record.packageName,jdbcType=VARCHAR},
+        price = #{record.price,jdbcType=DECIMAL},
+        credits_per_package = #{record.creditsPerPackage,jdbcType=INTEGER},
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+        is_delete = #{record.isDelete,jdbcType=INTEGER}
+        <if test="_parameter != null">
+            <include refid="Update_By_Example_Where_Clause"/>
+        </if>
+    </update>
+
+    <!-- 根据主键更新creditpackages表中的 selective 数据 -->
+    <update id="updateByPrimaryKeySelective" parameterType="com.trust.xfyl.entity.CreditPackages">
+        update creditpackages
+        <set>
+            <if test="packageName != null">
+                package_name = #{packageName,jdbcType=VARCHAR},
+            </if>
+            <if test="price != null">
+                price = #{price,jdbcType=DECIMAL},
+            </if>
+            <if test="creditsPerPackage != null">
+                credits_per_package = #{creditsPerPackage,jdbcType=INTEGER},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="isDelete != null">
+                is_delete = #{isDelete,jdbcType=INTEGER},
+            </if>
+        </set>
+        where package_id = #{packageId,jdbcType=INTEGER}
+    </update>
+
+    <!-- 根据主键更新creditpackages表中的数据 -->
+    <update id="updateByPrimaryKey" parameterType="com.trust.xfyl.entity.CreditPackages">
+        update creditpackages
+        set package_name        = #{packageName,jdbcType=VARCHAR},
+            price               = #{price,jdbcType=DECIMAL},
+            credits_per_package = #{creditsPerPackage,jdbcType=INTEGER},
+            create_time         = #{createTime,jdbcType=TIMESTAMP},
+            is_delete           = #{isDelete,jdbcType=INTEGER}
+        where package_id = #{packageId,jdbcType=INTEGER}
+    </update>
+
+</mapper>

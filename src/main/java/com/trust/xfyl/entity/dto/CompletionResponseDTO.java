@@ -4,10 +4,9 @@ import lombok.Data;
 import lombok.ToString;
 
 /**
- * completion response dto for api
- *
- * @author yuanci
- */
+ * @author Bay-max
+ * @date 2024/4/22 14:01
+ **/
 @Data
 @ToString
 public class CompletionResponseDTO {

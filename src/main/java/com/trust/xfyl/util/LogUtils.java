@@ -1,7 +1,7 @@
 package com.trust.xfyl.util;
 
 import com.alibaba.fastjson.JSON;
-import com.trust.xfyl.config.AppConfig;
+import com.trust.xfyl.entity.dto.AppConfig;
 import lombok.Data;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -10,17 +10,15 @@ import org.slf4j.LoggerFactory;
 /**
  * 应用日志工具类，用于监控和跟踪
  *
- * @author yuanci
- */
+ * @author Bay-max
+ * @date 2024/4/22 15:39
+ **/
 public class LogUtils {
 
-    private final static Logger logger = LoggerFactory.getLogger(LogUtils.class);
-
-    private final static Logger monitorLogger = LoggerFactory.getLogger("monitor-log");
-
-    private final static Logger traceLogger = LoggerFactory.getLogger("trace-log");
-
     public static final String SIMPLE_LOG_SPLIT = "@@@";
+    private final static Logger logger = LoggerFactory.getLogger(LogUtils.class);
+    private final static Logger monitorLogger = LoggerFactory.getLogger("monitor-log");
+    private final static Logger traceLogger = LoggerFactory.getLogger("trace-log");
 
     /**
      * 输出调试日志
@@ -65,12 +63,12 @@ public class LogUtils {
     /**
      * 记录监控日志
      *
-     * @param requestId 请求ID
+     * @param requestId   请求ID
      * @param serviceName 服务名称
-     * @param methodName 方法名称
-     * @param errorCode 错误码
-     * @param startTime 开始时间
-     * @param objects 其他日志内容
+     * @param methodName  方法名称
+     * @param errorCode   错误码
+     * @param startTime   开始时间
+     * @param objects     其他日志内容
      */
     public static void monitor(String requestId, String serviceName, String methodName,
                                String errorCode, Long startTime, Object... objects) {
@@ -102,13 +100,13 @@ public class LogUtils {
     /**
      * 记录跟踪日志
      *
-     * @param requestId 请求ID
-     * @param action 动作描述
+     * @param requestId  请求ID
+     * @param action     动作描述
      * @param resultCode 结果码
-     * @param startTime 开始时间
-     * @param input 输入数据
-     * @param output 输出数据
-     * @param objects 其他日志内容
+     * @param startTime  开始时间
+     * @param input      输入数据
+     * @param output     输出数据
+     * @param objects    其他日志内容
      */
     public static void trace(String requestId, String action, String resultCode, Long startTime,
                              Object input, Object output, Object... objects) {
@@ -178,7 +176,7 @@ public class LogUtils {
     /**
      * 向StringBuilder追加日志数据
      *
-     * @param builder StringBuilder实例
+     * @param builder    StringBuilder实例
      * @param logContent 日志内容
      */
     private static void appendLogData(StringBuilder builder, LogContent logContent) {

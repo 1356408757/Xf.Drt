@@ -11,14 +11,15 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
  * Xfyl应用的主入口类。此类负责启动Spring Boot应用，并启用了定时任务调度和Swagger2用于API文档。
  * 注意：为了增强安全性，应确保Swagger接口仅对授权用户可见。同时，推荐使用最新的Swagger版本。
  *
- * @author BigWhite
+ * @author Bay-max
+ * @date 2024/4/22 15:39
  * @EnableScheduling 启用定时任务调度
  * @EnableSwagger2 启用Swagger2用于API文档。建议配置合适的访问权限，避免未授权访问。
  * @SpringBootApplication 扫描包路径为"com.trust.xfyl"，启动Spring Boot应用
  */
 @EnableScheduling
 @EnableSwagger2
-@SpringBootApplication(scanBasePackages = "com.trust.xfyl")
+@SpringBootApplication(scanBasePackages = {"com.trust.xfyl"})
 public class XfylApplication {
     private static final Logger logger = LoggerFactory.getLogger(XfylApplication.class);
     /**

@@ -21,8 +21,8 @@ import java.util.*;
  * 字典表控制器
  * 负责处理与字典表相关的HTTP请求
  *
- * @Author djj
- * @Date 17:52 2024/1/25
+ * @author Bay-max
+ * @date 2024/4/22 14:01
  **/
 @Api(value = "字典表", description = "字典表接口", tags = "字典表")
 @RestController

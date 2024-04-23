@@ -5,8 +5,10 @@ import com.trust.xfyl.enums.ErrorCodeEnum;
 /**
  * 业务异常类，用于处理业务逻辑中发生的异常情况。
  * 继承自RuntimeException，可抛出运行时异常。
- * @author yuanci
- */
+ * @author Bay-max
+ * @date 2024/4/22 15:37
+ **/
+
 public class BizException extends RuntimeException {
     // 错误码，用于标识异常的类型
     private String errorCode;

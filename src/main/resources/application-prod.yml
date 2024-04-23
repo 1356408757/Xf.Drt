@@ -14,7 +14,7 @@ spring:
     content-type: text/html # 内容类型
     template-loader-path: classpath:/templates/,classpath:/static/ # 模板加载路径
   datasource: # 数据源配置
-    url: jdbc:mysql://121.43.138.108:3306/xfyl?serverTimezone=GMT%2b8&useSSL=false&characterEncoding=utf8&allowPublicKeyRetrieval=true&autoReconnect=true # 数据库连接URL
+    url: jdbc:mysql://ai.xinfudrt.com:3306/xfyl?serverTimezone=GMT%2b8&useSSL=false&characterEncoding=utf8&allowPublicKeyRetrieval=true&autoReconnect=true # 数据库连接URL
     username: root # 数据库用户名
     password: Drt@123456 # 数据库密码
     type: com.alibaba.druid.pool.DruidDataSource # 数据源类型
@@ -96,3 +96,6 @@ chat:
     sessionTtl: 2 # 对话缓存时间2小时
   cache: # 缓存配置
     type: caffeine # 缓存类型为Caffeine
+wechat:
+  appId: wx4fdf3026be1910f5
+  appSecret: 2528491e2ad1fe0712f4cf8277d98cb9

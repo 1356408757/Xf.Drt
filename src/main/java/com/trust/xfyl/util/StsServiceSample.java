@@ -39,9 +39,9 @@ import java.util.stream.Collectors;
 import static com.aliyun.oss.internal.OSSHeaders.OSS_USER_METADATA_PREFIX;
 
 /**
- * @Author djj
+ * @author Bay-max
+ * @date 2024/4/22 15:39
  * @Description //TODO 阿里云 sts-临时访问凭证生成 以及上传文件；
- * @Date 14:14 2024/2/23
  **/
 @Component
 public class StsServiceSample {

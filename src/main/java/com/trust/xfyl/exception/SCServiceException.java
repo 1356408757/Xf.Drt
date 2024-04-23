@@ -5,12 +5,9 @@ import com.trust.xfyl.enums.ResultEnum;
 
 
 /**
-* @Author djj
-* @Description //TODO
-* @Date 16:01 2024/1/25
-* @Param
-* @return
-**/
+ * @author Bay-max
+ * @date 2024/4/22 15:37
+ **/
 public class SCServiceException extends RuntimeException {
     private Integer status;
 

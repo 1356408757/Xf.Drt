@@ -3,8 +3,9 @@ package com.trust.xfyl.entity;
 import java.io.Serializable;
 
 /**
- * @author LENOVO
- */
+ * @author Bay-max
+ * @date 2024/4/22 14:01
+ **/
 public class ResultVO<T> implements Serializable {
     private static final long serialVersionUID = -2121347051998174679L;
 
@@ -46,6 +47,5 @@ public class ResultVO<T> implements Serializable {
     public void setData(T data) {
         this.data = data;
     }
-
 
 }

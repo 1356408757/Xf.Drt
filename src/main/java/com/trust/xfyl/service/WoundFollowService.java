@@ -3,7 +3,10 @@ package com.trust.xfyl.service;
 import com.trust.xfyl.dao.WoundFollowMapper;
 import com.trust.xfyl.entity.WoundFollow;
 import org.springframework.stereotype.Service;
-
+/**
+ * @author Bay-max
+ * @date 2024/4/22 15:37
+ **/
 @Service
 public class WoundFollowService {
     private final WoundFollowMapper woundFollowMapper;

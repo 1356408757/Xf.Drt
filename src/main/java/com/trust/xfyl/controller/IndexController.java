@@ -7,8 +7,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * @author yuanci
- */
+ * TODO
+ *
+ * @author Bay-max
+ * @date 2024/4/22 15:14
+ **/
+
 public class IndexController {
     @GetMapping(value = {"/"})
     public String index(HttpServletRequest request, HttpServletResponse response, Model model) {

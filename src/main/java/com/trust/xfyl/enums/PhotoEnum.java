@@ -1,8 +1,16 @@
 package com.trust.xfyl.enums;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
- * @author LENOVO
- */
+ * TODO   照片类型枚举 用于定义不同类型的手术照片
+ *
+ * @Description
+ * @author Bay-max
+ * @date 2024/4/22 15:36
+ **/
+
 
 public enum PhotoEnum {
 
@@ -21,86 +29,48 @@ public enum PhotoEnum {
     Thirteen(13, "术后第三周"),
     Fourteen(14, "标题");
 
-    private Integer status;
-    private String message;
+    private static final Map<Integer, PhotoEnum> STATUS_MAP = new HashMap<>();
 
+    static {
+        for (PhotoEnum e : PhotoEnum.values()) {
+            STATUS_MAP.put(e.status, e);
+        }
+    }
+
+    private final Integer status; // 状态码
+    private final String message; // 对应状态的描述信息
+    /**
+     * 构造函数，用于初始化枚举值
+     *
+     * @param status 状态码
+     * @param message 状态描述信息
+     **/
     PhotoEnum(Integer status, String message) {
         this.status = status;
         this.message = message;
     }
 
-    PhotoEnum() {
-    }
-
     /**
-     * 返回枚举值根据状态
+     * 根据状态码获取对应的照片类型描述信息
      *
-     * @param status
-     * @return
-     */
+     * @param status 状态码
+     * @return 对应状态的描述信息
+     * @throws IllegalStateException 如果传入的状态码不属于任何枚举值，则抛出异常
+     **/
     public static String getMsg(Integer status) {
-        switch (status) {
-            case 1: {
-                return One.getMessage();
-            }
-            case 2: {
-                return Two.getMessage();
-            }
-            case 3: {
-                return Three.getMessage();
-            }
-            case 4: {
-                return Four.getMessage();
-            }
-            case 5: {
-                return Five.getMessage();
-            }
-            case 6: {
-                return Six.getMessage();
-            }
-            case 7: {
-                return Seven.getMessage();
-            }
-            case 8: {
-                return Eight.getMessage();
-            }
-            case 9: {
-                return Nine.getMessage();
-            }
-            case 10: {
-                return Ten.getMessage();
-            }
-            case 11: {
-                return Eleven.getMessage();
-            }
-            case 12: {
-                return Twelve.getMessage();
-            }
-            case 13: {
-                return Thirteen.getMessage();
-            }
-            case 14: {
-                return Fourteen.getMessage();
-            }
-            default:
-                throw new IllegalStateException("Unexpected value: " + status);
+        PhotoEnum enumValue = STATUS_MAP.get(status);
+        if (enumValue == null) {
+            throw new IllegalStateException("Unexpected value: " + status);
         }
-
+        return enumValue.message;
     }
 
+    // Getter方法，用于外部访问枚举实例的属性
     public Integer getStatus() {
         return status;
     }
 
-    public void setStatus(Integer status) {
-        this.status = status;
-    }
-
     public String getMessage() {
         return message;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
     }
 }

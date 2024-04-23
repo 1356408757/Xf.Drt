@@ -4,10 +4,10 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 
 import java.util.Date;
 
+
 /**
- * @Author djj
- * @Description //TODO
- * @Date 15:56 2024/1/25
+ * @author Bay-max
+ * @date 2024/4/22 14:01
  **/
 public class SurgicalName {
     private Long id;

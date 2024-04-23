@@ -6,9 +6,9 @@ import java.util.Deque;
 
 /**
  * 对话历史会话管理
- *
- * @author yuanci
- */
+ * @author Bay-max
+ * @date 2024/4/22 15:37
+ **/
 public interface ChatSessionService {
     /**
      * 获取对话历史记录

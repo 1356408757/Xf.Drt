@@ -10,9 +10,8 @@ import java.util.logging.Logger;
 /**
  * CustomThreadFactory 实现 ThreadFactory，用于创建具有统一命名规范的线程。
  *
- * @Description
- * @Author Bay-max
- * @Date 2024/3/1 14:22
+ * @author Bay-max
+ * @date 2024/4/22 15:39
  **/
 class CustomThreadFactory implements ThreadFactory {
     private static final Logger LOGGER = Logger.getLogger(CustomThreadFactory.class.getName());

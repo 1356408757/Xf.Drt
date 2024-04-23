@@ -1,8 +1,9 @@
 package com.trust.xfyl.enums;
 
 /**
- * @author yuanci
- */
+ * @author Bay-max
+ * @date 2024/4/22 14:01
+ **/
 
 public enum ErrorCodeEnum {
     /**

@@ -5,7 +5,10 @@ import org.springframework.stereotype.Component;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-
+/**
+ * @author Bay-max
+ * @date 2024/4/22 15:39
+ **/
 @Component
 public class MD5Tool {
 

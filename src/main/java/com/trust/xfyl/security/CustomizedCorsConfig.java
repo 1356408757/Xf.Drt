@@ -20,8 +20,9 @@ import java.util.List;
 
 /**
  * 自定义跨域配置类
- * @author yuanci
- */
+ * @author Bay-max
+ * @date 2024/4/22 15:37
+ **/
 @Configuration
 public class CustomizedCorsConfig {
     @Resource
@@ -43,7 +44,7 @@ public class CustomizedCorsConfig {
         // 设置允许携带凭证（如cookies）
         config.setAllowCredentials(true);
         // 设置允许的来源，示例中是硬编码的几个允许来源
-        List<String> allowedOrigins = Arrays.asList("http://121.43.138.108:80", "http://121.43.138.108","http://localhost:3000","http://localhost:63342", "http://121.43.138.108:8800");
+        List<String> allowedOrigins = Arrays.asList("http://localhost:3000","http://localhost:63342", "http://ai.xinfudrt.com");
         config.setAllowedOrigins(allowedOrigins);
         // 将跨域配置应用到所有请求
         source.registerCorsConfiguration("/**", config);

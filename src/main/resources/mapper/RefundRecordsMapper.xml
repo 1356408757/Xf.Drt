@@ -1,0 +1,366 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.trust.xfyl.dao.RefundRecordsMapper">
+    <resultMap id="BaseResultMap" type="com.trust.xfyl.entity.RefundRecords">
+        <id column="refund_id" property="refundId" jdbcType="INTEGER"/>
+        <result column="user_id" property="userId" jdbcType="INTEGER"/>
+        <result column="purchase_id" property="purchaseId" jdbcType="INTEGER"/>
+        <result column="refund_status" property="refundStatus" jdbcType="CHAR"/>
+        <result column="refund_request_time" property="refundRequestTime" jdbcType="TIMESTAMP"/>
+        <result column="refund_approval_time" property="refundApprovalTime" jdbcType="TIMESTAMP"/>
+        <result column="refunded_amount" property="refundedAmount" jdbcType="DECIMAL"/>
+        <result column="admin_contacted" property="adminContacted" jdbcType="BIT"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="is_delete" property="isDelete" jdbcType="INTEGER"/>
+    </resultMap>
+    <resultMap id="ResultMapWithBLOBs" type="com.trust.xfyl.entity.RefundRecords" extends="BaseResultMap">
+        <result column="refund_reason" property="refundReason" jdbcType="LONGVARCHAR"/>
+    </resultMap>
+    <sql id="Example_Where_Clause">
+        <where>
+            <foreach collection="oredCriteria" item="criteria" separator="or">
+                <if test="criteria.valid">
+                    <trim prefix="(" suffix=")" prefixOverrides="and">
+                        <foreach collection="criteria.criteria" item="criterion">
+                            <choose>
+                                <when test="criterion.noValue">
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue">
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue">
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue">
+                                    and ${criterion.condition}
+                                    <foreach collection="criterion.value" item="listItem" open="(" close=")"
+                                             separator=",">
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
+            </foreach>
+        </where>
+    </sql>
+    <sql id="Update_By_Example_Where_Clause">
+        <where>
+            <foreach collection="example.oredCriteria" item="criteria" separator="or">
+                <if test="criteria.valid">
+                    <trim prefix="(" suffix=")" prefixOverrides="and">
+                        <foreach collection="criteria.criteria" item="criterion">
+                            <choose>
+                                <when test="criterion.noValue">
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue">
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue">
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue">
+                                    and ${criterion.condition}
+                                    <foreach collection="criterion.value" item="listItem" open="(" close=")"
+                                             separator=",">
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
+            </foreach>
+        </where>
+    </sql>
+    <sql id="Base_Column_List">
+        refund_id, user_id, purchase_id, refund_status, refund_request_time, refund_approval_time,
+    refunded_amount, admin_contacted, create_time, is_delete
+    </sql>
+    <sql id="Blob_Column_List">
+        refund_reason
+    </sql>
+    <select id="selectByExampleWithBLOBs" resultMap="ResultMapWithBLOBs"
+            parameterType="com.trust.xfyl.entity.RefundRecordsExample">
+        select
+        <if test="distinct">
+            distinct
+        </if>
+        'true' as QUERYID,
+        <include refid="Base_Column_List"/>
+        ,
+        <include refid="Blob_Column_List"/>
+        from refundrecords
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+        <if test="orderByClause != null">
+            order by ${orderByClause}
+        </if>
+    </select>
+    <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.trust.xfyl.entity.RefundRecordsExample">
+        select
+        <if test="distinct">
+            distinct
+        </if>
+        'true' as QUERYID,
+        <include refid="Base_Column_List"/>
+        from refundrecords
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+        <if test="orderByClause != null">
+            order by ${orderByClause}
+        </if>
+    </select>
+    <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        ,
+        <include refid="Blob_Column_List"/>
+        from refundrecords
+        where refund_id = #{refundId,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+        delete
+        from refundrecords
+        where refund_id = #{refundId,jdbcType=INTEGER}
+    </delete>
+    <delete id="deleteByExample" parameterType="com.trust.xfyl.entity.RefundRecordsExample">
+        delete from refundrecords
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+    </delete>
+    <insert id="insert" parameterType="com.trust.xfyl.entity.RefundRecords">
+        insert into refundrecords (refund_id, user_id, purchase_id,
+                                   refund_status, refund_request_time, refund_approval_time,
+                                   refunded_amount, admin_contacted, create_time,
+                                   is_delete, refund_reason)
+        values (#{refundId,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{purchaseId,jdbcType=INTEGER},
+                #{refundStatus,jdbcType=CHAR}, #{refundRequestTime,jdbcType=TIMESTAMP},
+                #{refundApprovalTime,jdbcType=TIMESTAMP},
+                #{refundedAmount,jdbcType=DECIMAL}, #{adminContacted,jdbcType=BIT}, #{createTime,jdbcType=TIMESTAMP},
+                #{isDelete,jdbcType=INTEGER}, #{refundReason,jdbcType=LONGVARCHAR})
+    </insert>
+    <insert id="insertSelective" parameterType="com.trust.xfyl.entity.RefundRecords">
+        insert into refundrecords
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="refundId != null">
+                refund_id,
+            </if>
+            <if test="userId != null">
+                user_id,
+            </if>
+            <if test="purchaseId != null">
+                purchase_id,
+            </if>
+            <if test="refundStatus != null">
+                refund_status,
+            </if>
+            <if test="refundRequestTime != null">
+                refund_request_time,
+            </if>
+            <if test="refundApprovalTime != null">
+                refund_approval_time,
+            </if>
+            <if test="refundedAmount != null">
+                refunded_amount,
+            </if>
+            <if test="adminContacted != null">
+                admin_contacted,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="isDelete != null">
+                is_delete,
+            </if>
+            <if test="refundReason != null">
+                refund_reason,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="refundId != null">
+                #{refundId,jdbcType=INTEGER},
+            </if>
+            <if test="userId != null">
+                #{userId,jdbcType=INTEGER},
+            </if>
+            <if test="purchaseId != null">
+                #{purchaseId,jdbcType=INTEGER},
+            </if>
+            <if test="refundStatus != null">
+                #{refundStatus,jdbcType=CHAR},
+            </if>
+            <if test="refundRequestTime != null">
+                #{refundRequestTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="refundApprovalTime != null">
+                #{refundApprovalTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="refundedAmount != null">
+                #{refundedAmount,jdbcType=DECIMAL},
+            </if>
+            <if test="adminContacted != null">
+                #{adminContacted,jdbcType=BIT},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="isDelete != null">
+                #{isDelete,jdbcType=INTEGER},
+            </if>
+            <if test="refundReason != null">
+                #{refundReason,jdbcType=LONGVARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <select id="countByExample" parameterType="com.trust.xfyl.entity.RefundRecordsExample"
+            resultType="java.lang.Integer">
+        select count(*) from refundrecords
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+    </select>
+    <update id="updateByExampleSelective" parameterType="map">
+        update refundrecords
+        <set>
+            <if test="record.refundId != null">
+                refund_id = #{record.refundId,jdbcType=INTEGER},
+            </if>
+            <if test="record.userId != null">
+                user_id = #{record.userId,jdbcType=INTEGER},
+            </if>
+            <if test="record.purchaseId != null">
+                purchase_id = #{record.purchaseId,jdbcType=INTEGER},
+            </if>
+            <if test="record.refundStatus != null">
+                refund_status = #{record.refundStatus,jdbcType=CHAR},
+            </if>
+            <if test="record.refundRequestTime != null">
+                refund_request_time = #{record.refundRequestTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="record.refundApprovalTime != null">
+                refund_approval_time = #{record.refundApprovalTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="record.refundedAmount != null">
+                refunded_amount = #{record.refundedAmount,jdbcType=DECIMAL},
+            </if>
+            <if test="record.adminContacted != null">
+                admin_contacted = #{record.adminContacted,jdbcType=BIT},
+            </if>
+            <if test="record.createTime != null">
+                create_time = #{record.createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="record.isDelete != null">
+                is_delete = #{record.isDelete,jdbcType=INTEGER},
+            </if>
+            <if test="record.refundReason != null">
+                refund_reason = #{record.refundReason,jdbcType=LONGVARCHAR},
+            </if>
+        </set>
+        <if test="_parameter != null">
+            <include refid="Update_By_Example_Where_Clause"/>
+        </if>
+    </update>
+    <update id="updateByExampleWithBLOBs" parameterType="map">
+        update refundrecords
+        set refund_id = #{record.refundId,jdbcType=INTEGER},
+        user_id = #{record.userId,jdbcType=INTEGER},
+        purchase_id = #{record.purchaseId,jdbcType=INTEGER},
+        refund_status = #{record.refundStatus,jdbcType=CHAR},
+        refund_request_time = #{record.refundRequestTime,jdbcType=TIMESTAMP},
+        refund_approval_time = #{record.refundApprovalTime,jdbcType=TIMESTAMP},
+        refunded_amount = #{record.refundedAmount,jdbcType=DECIMAL},
+        admin_contacted = #{record.adminContacted,jdbcType=BIT},
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+        is_delete = #{record.isDelete,jdbcType=INTEGER},
+        refund_reason = #{record.refundReason,jdbcType=LONGVARCHAR}
+        <if test="_parameter != null">
+            <include refid="Update_By_Example_Where_Clause"/>
+        </if>
+    </update>
+    <update id="updateByExample" parameterType="map">
+        update refundrecords
+        set refund_id = #{record.refundId,jdbcType=INTEGER},
+        user_id = #{record.userId,jdbcType=INTEGER},
+        purchase_id = #{record.purchaseId,jdbcType=INTEGER},
+        refund_status = #{record.refundStatus,jdbcType=CHAR},
+        refund_request_time = #{record.refundRequestTime,jdbcType=TIMESTAMP},
+        refund_approval_time = #{record.refundApprovalTime,jdbcType=TIMESTAMP},
+        refunded_amount = #{record.refundedAmount,jdbcType=DECIMAL},
+        admin_contacted = #{record.adminContacted,jdbcType=BIT},
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+        is_delete = #{record.isDelete,jdbcType=INTEGER}
+        <if test="_parameter != null">
+            <include refid="Update_By_Example_Where_Clause"/>
+        </if>
+    </update>
+    <update id="updateByPrimaryKeySelective" parameterType="com.trust.xfyl.entity.RefundRecords">
+        update refundrecords
+        <set>
+            <if test="userId != null">
+                user_id = #{userId,jdbcType=INTEGER},
+            </if>
+            <if test="purchaseId != null">
+                purchase_id = #{purchaseId,jdbcType=INTEGER},
+            </if>
+            <if test="refundStatus != null">
+                refund_status = #{refundStatus,jdbcType=CHAR},
+            </if>
+            <if test="refundRequestTime != null">
+                refund_request_time = #{refundRequestTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="refundApprovalTime != null">
+                refund_approval_time = #{refundApprovalTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="refundedAmount != null">
+                refunded_amount = #{refundedAmount,jdbcType=DECIMAL},
+            </if>
+            <if test="adminContacted != null">
+                admin_contacted = #{adminContacted,jdbcType=BIT},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="isDelete != null">
+                is_delete = #{isDelete,jdbcType=INTEGER},
+            </if>
+            <if test="refundReason != null">
+                refund_reason = #{refundReason,jdbcType=LONGVARCHAR},
+            </if>
+        </set>
+        where refund_id = #{refundId,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.trust.xfyl.entity.RefundRecords">
+        update refundrecords
+        set user_id              = #{userId,jdbcType=INTEGER},
+            purchase_id          = #{purchaseId,jdbcType=INTEGER},
+            refund_status        = #{refundStatus,jdbcType=CHAR},
+            refund_request_time  = #{refundRequestTime,jdbcType=TIMESTAMP},
+            refund_approval_time = #{refundApprovalTime,jdbcType=TIMESTAMP},
+            refunded_amount      = #{refundedAmount,jdbcType=DECIMAL},
+            admin_contacted      = #{adminContacted,jdbcType=BIT},
+            create_time          = #{createTime,jdbcType=TIMESTAMP},
+            is_delete            = #{isDelete,jdbcType=INTEGER},
+            refund_reason        = #{refundReason,jdbcType=LONGVARCHAR}
+        where refund_id = #{refundId,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.trust.xfyl.entity.RefundRecords">
+        update refundrecords
+        set user_id              = #{userId,jdbcType=INTEGER},
+            purchase_id          = #{purchaseId,jdbcType=INTEGER},
+            refund_status        = #{refundStatus,jdbcType=CHAR},
+            refund_request_time  = #{refundRequestTime,jdbcType=TIMESTAMP},
+            refund_approval_time = #{refundApprovalTime,jdbcType=TIMESTAMP},
+            refunded_amount      = #{refundedAmount,jdbcType=DECIMAL},
+            admin_contacted      = #{adminContacted,jdbcType=BIT},
+            create_time          = #{createTime,jdbcType=TIMESTAMP},
+            is_delete            = #{isDelete,jdbcType=INTEGER}
+        where refund_id = #{refundId,jdbcType=INTEGER}
+    </update>
+</mapper>

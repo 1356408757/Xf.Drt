@@ -267,7 +267,7 @@
                     answerText: text
                 };
                 $.ajax({
-                    url: 'http://localhost:8089/medical/qa',
+                    url: 'http://ai.xinfudrt.com:8800/medical/qa',
                     method: 'POST',
                     data: JSON.stringify(sampleDtoForAnswer),
                     contentType: 'application/json',
@@ -429,7 +429,7 @@
                 text: '重新生成'
             });
             refreshButton.click(function () {
-                window.open('http://121.43.138.108/uploadImage-medQa.html');
+                window.open('http://ai.xinfudrt.com/uploadImage-medQa.html');
             });
 
             // **将刷新按钮添加到报告内容下方**
@@ -442,7 +442,7 @@
                 text: '询问Dr.T'
             });
             jumpButton.click(function () {
-                window.open('http://121.43.138.108/index.html?results=' + encodeURIComponent(reportNarrative), '_blank');
+                window.open('http://ai.xinfudrt.com/index.html?results=' + encodeURIComponent(reportNarrative), '_blank');
             });
 
             // **将跳转按钮添加到刷新按钮下方**

@@ -29,8 +29,10 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * @author LENOVO
- */
+ * @author Bay-max
+ * @date 2024/4/22 15:14
+ **/
+
 @RestController
 @Api(value = "文件上传，下载", description = "文件上传，下载", tags = "文件上传，下载")
 @RequestMapping("/uploaFile")

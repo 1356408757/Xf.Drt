@@ -20,9 +20,9 @@ import java.util.UUID;
 
 /**
  * 对话服务处理类，负责处理对话请求，与聊天模型交互，并处理结果。
- *
- * @author yuanci
- */
+ * @author Bay-max
+ * @date 2024/4/22 15:37
+ **/
 public class ChatServiceHandler {
     private final ChatSessionService chatSessionService; // 聊天会话服务
     private final BailianLlmClient llmClient; // 百炼语言模型客户端

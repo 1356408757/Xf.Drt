@@ -5,8 +5,9 @@ import com.trust.xfyl.entity.TrackingPersonnel;
 import org.springframework.stereotype.Service;
 
 /**
- * @author LENOVO
- */
+ * @author Bay-max
+ * @date 2024/4/22 15:37
+ **/
 @Service
 public class TrackingPersonnelService {
     private final TrackingPersonnelMapper trackingPersonnelMapper;

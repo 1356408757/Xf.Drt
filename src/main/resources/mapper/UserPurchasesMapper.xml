@@ -1,0 +1,280 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.trust.xfyl.dao.UserPurchasesMapper">
+    <resultMap id="BaseResultMap" type="com.trust.xfyl.entity.UserPurchases">
+        <id column="purchase_id" property="purchaseId" jdbcType="INTEGER"/>
+        <result column="user_id" property="userId" jdbcType="INTEGER"/>
+        <result column="package_id" property="packageId" jdbcType="INTEGER"/>
+        <result column="purchase_time" property="purchaseTime" jdbcType="TIMESTAMP"/>
+        <result column="credit_count_purchased" property="creditCountPurchased" jdbcType="INTEGER"/>
+        <result column="transaction_id" property="transactionId" jdbcType="VARCHAR"/>
+        <result column="payment_status" property="paymentStatus" jdbcType="CHAR"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="is_delete" property="isDelete" jdbcType="INTEGER"/>
+    </resultMap>
+    <sql id="Example_Where_Clause">
+        <where>
+            <foreach collection="oredCriteria" item="criteria" separator="or">
+                <if test="criteria.valid">
+                    <trim prefix="(" suffix=")" prefixOverrides="and">
+                        <foreach collection="criteria.criteria" item="criterion">
+                            <choose>
+                                <when test="criterion.noValue">
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue">
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue">
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue">
+                                    and ${criterion.condition}
+                                    <foreach collection="criterion.value" item="listItem" open="(" close=")"
+                                             separator=",">
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
+            </foreach>
+        </where>
+    </sql>
+    <sql id="Update_By_Example_Where_Clause">
+        <where>
+            <foreach collection="example.oredCriteria" item="criteria" separator="or">
+                <if test="criteria.valid">
+                    <trim prefix="(" suffix=")" prefixOverrides="and">
+                        <foreach collection="criteria.criteria" item="criterion">
+                            <choose>
+                                <when test="criterion.noValue">
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue">
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue">
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue">
+                                    and ${criterion.condition}
+                                    <foreach collection="criterion.value" item="listItem" open="(" close=")"
+                                             separator=",">
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
+            </foreach>
+        </where>
+    </sql>
+    <sql id="Base_Column_List">
+        purchase_id, user_id, package_id, purchase_time, credit_count_purchased, transaction_id,
+    payment_status, create_time, is_delete
+    </sql>
+    <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.trust.xfyl.entity.UserPurchasesExample">
+        select
+        <if test="distinct">
+            distinct
+        </if>
+        'true' as QUERYID,
+        <include refid="Base_Column_List"/>
+        from userpurchases
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+        <if test="orderByClause != null">
+            order by ${orderByClause}
+        </if>
+    </select>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from userpurchases
+        where purchase_id = #{purchaseId,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+        delete
+        from userpurchases
+        where purchase_id = #{purchaseId,jdbcType=INTEGER}
+    </delete>
+    <delete id="deleteByExample" parameterType="com.trust.xfyl.entity.UserPurchasesExample">
+        delete from userpurchases
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+    </delete>
+    <insert id="insert" parameterType="com.trust.xfyl.entity.UserPurchases">
+        insert into userpurchases (purchase_id, user_id, package_id,
+                                   purchase_time, credit_count_purchased, transaction_id,
+                                   payment_status, create_time, is_delete)
+        values (#{purchaseId,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{packageId,jdbcType=INTEGER},
+                #{purchaseTime,jdbcType=TIMESTAMP}, #{creditCountPurchased,jdbcType=INTEGER},
+                #{transactionId,jdbcType=VARCHAR},
+                #{paymentStatus,jdbcType=CHAR}, #{createTime,jdbcType=TIMESTAMP}, #{isDelete,jdbcType=INTEGER})
+    </insert>
+    <insert id="insertSelective" parameterType="com.trust.xfyl.entity.UserPurchases">
+        insert into userpurchases
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="purchaseId != null">
+                purchase_id,
+            </if>
+            <if test="userId != null">
+                user_id,
+            </if>
+            <if test="packageId != null">
+                package_id,
+            </if>
+            <if test="purchaseTime != null">
+                purchase_time,
+            </if>
+            <if test="creditCountPurchased != null">
+                credit_count_purchased,
+            </if>
+            <if test="transactionId != null">
+                transaction_id,
+            </if>
+            <if test="paymentStatus != null">
+                payment_status,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="isDelete != null">
+                is_delete,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="purchaseId != null">
+                #{purchaseId,jdbcType=INTEGER},
+            </if>
+            <if test="userId != null">
+                #{userId,jdbcType=INTEGER},
+            </if>
+            <if test="packageId != null">
+                #{packageId,jdbcType=INTEGER},
+            </if>
+            <if test="purchaseTime != null">
+                #{purchaseTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="creditCountPurchased != null">
+                #{creditCountPurchased,jdbcType=INTEGER},
+            </if>
+            <if test="transactionId != null">
+                #{transactionId,jdbcType=VARCHAR},
+            </if>
+            <if test="paymentStatus != null">
+                #{paymentStatus,jdbcType=CHAR},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="isDelete != null">
+                #{isDelete,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
+    <select id="countByExample" parameterType="com.trust.xfyl.entity.UserPurchasesExample"
+            resultType="java.lang.Integer">
+        select count(*) from userpurchases
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+    </select>
+    <update id="updateByExampleSelective" parameterType="map">
+        update userpurchases
+        <set>
+            <if test="record.purchaseId != null">
+                purchase_id = #{record.purchaseId,jdbcType=INTEGER},
+            </if>
+            <if test="record.userId != null">
+                user_id = #{record.userId,jdbcType=INTEGER},
+            </if>
+            <if test="record.packageId != null">
+                package_id = #{record.packageId,jdbcType=INTEGER},
+            </if>
+            <if test="record.purchaseTime != null">
+                purchase_time = #{record.purchaseTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="record.creditCountPurchased != null">
+                credit_count_purchased = #{record.creditCountPurchased,jdbcType=INTEGER},
+            </if>
+            <if test="record.transactionId != null">
+                transaction_id = #{record.transactionId,jdbcType=VARCHAR},
+            </if>
+            <if test="record.paymentStatus != null">
+                payment_status = #{record.paymentStatus,jdbcType=CHAR},
+            </if>
+            <if test="record.createTime != null">
+                create_time = #{record.createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="record.isDelete != null">
+                is_delete = #{record.isDelete,jdbcType=INTEGER},
+            </if>
+        </set>
+        <if test="_parameter != null">
+            <include refid="Update_By_Example_Where_Clause"/>
+        </if>
+    </update>
+    <update id="updateByExample" parameterType="map">
+        update userpurchases
+        set purchase_id = #{record.purchaseId,jdbcType=INTEGER},
+        user_id = #{record.userId,jdbcType=INTEGER},
+        package_id = #{record.packageId,jdbcType=INTEGER},
+        purchase_time = #{record.purchaseTime,jdbcType=TIMESTAMP},
+        credit_count_purchased = #{record.creditCountPurchased,jdbcType=INTEGER},
+        transaction_id = #{record.transactionId,jdbcType=VARCHAR},
+        payment_status = #{record.paymentStatus,jdbcType=CHAR},
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+        is_delete = #{record.isDelete,jdbcType=INTEGER}
+        <if test="_parameter != null">
+            <include refid="Update_By_Example_Where_Clause"/>
+        </if>
+    </update>
+    <update id="updateByPrimaryKeySelective" parameterType="com.trust.xfyl.entity.UserPurchases">
+        update userpurchases
+        <set>
+            <if test="userId != null">
+                user_id = #{userId,jdbcType=INTEGER},
+            </if>
+            <if test="packageId != null">
+                package_id = #{packageId,jdbcType=INTEGER},
+            </if>
+            <if test="purchaseTime != null">
+                purchase_time = #{purchaseTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="creditCountPurchased != null">
+                credit_count_purchased = #{creditCountPurchased,jdbcType=INTEGER},
+            </if>
+            <if test="transactionId != null">
+                transaction_id = #{transactionId,jdbcType=VARCHAR},
+            </if>
+            <if test="paymentStatus != null">
+                payment_status = #{paymentStatus,jdbcType=CHAR},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="isDelete != null">
+                is_delete = #{isDelete,jdbcType=INTEGER},
+            </if>
+        </set>
+        where purchase_id = #{purchaseId,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.trust.xfyl.entity.UserPurchases">
+        update userpurchases
+        set user_id                = #{userId,jdbcType=INTEGER},
+            package_id             = #{packageId,jdbcType=INTEGER},
+            purchase_time          = #{purchaseTime,jdbcType=TIMESTAMP},
+            credit_count_purchased = #{creditCountPurchased,jdbcType=INTEGER},
+            transaction_id         = #{transactionId,jdbcType=VARCHAR},
+            payment_status         = #{paymentStatus,jdbcType=CHAR},
+            create_time            = #{createTime,jdbcType=TIMESTAMP},
+            is_delete              = #{isDelete,jdbcType=INTEGER}
+        where purchase_id = #{purchaseId,jdbcType=INTEGER}
+    </update>
+</mapper>

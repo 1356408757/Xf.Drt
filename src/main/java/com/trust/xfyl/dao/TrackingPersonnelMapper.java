@@ -7,125 +7,92 @@ import org.apache.ibatis.annotations.Param;
 import java.util.List;
 
 /**
- * @Author djj
- * @Description //TODO
- * @Date 17:53 2024/2/2
- * @Param
- * @return
+ * 跟踪人员数据访问接口
  **/
 public interface TrackingPersonnelMapper {
     /**
-     * @return int
-     * @Author djj
-     * @Description //TODO 根据条件查询数据总数
-     * @Date 17:54 2024/2/2
-     * @Param [example]
+     * 根据条件查询数据总数
+     * @param example 查询条件
+     * @return 数据总数
      **/
     int countByExample(TrackingPersonnelExample example);
 
     /**
-     * @return int
-     * @Author djj
-     * @Description //TODO 根据条件删除数据
-     * @Date 17:54 2024/2/2
-     * @Param [example]
+     * 根据条件删除数据
+     * @param example 删除条件
+     * @return 影响行数
      **/
-
     int deleteByExample(TrackingPersonnelExample example);
 
     /**
-     * @return int
-     * @Author djj
-     * @Description //TODO 根据id删除数据
-     * @Date 17:54 2024/2/2
-     * @Param [id]
+     * 根据id删除数据
+     * @param id 人员ID
+     * @return 影响行数
      **/
-
     int deleteByPrimaryKey(Long id);
 
     /**
-     * @return int
-     * @Author djj
-     * @Description //TODO 爆粗拿数据不涉及数据空的判断
-     * @Date 17:55 2024/2/2
-     * @Param [record]
+     * 插入数据，不判断字段是否为空
+     * @param record 要插入的数据记录
+     * @return 影响行数
      **/
-
     int insert(TrackingPersonnel record);
 
     /**
-     * @return int
-     * @Author djj
-     * @Description //TODO 保存数据设置及字段空值的判断
-     * @Date 17:55 2024/2/2
-     * @Param [record]
+     * 保存数据，设置及字段空值的判断
+     * @param record 要保存的数据记录
+     * @return 影响行数
      **/
-
     int insertSelective(TrackingPersonnel record);
 
     /**
-     * @return java.util.List<com.trust.xfyl.entity.TrackingPersonnel>
-     * @Author djj
-     * @Description //TODO 查询列表，以及模糊查询
-     * @Date 17:55 2024/2/2
-     * @Param [example]
+     * 查询列表，以及模糊查询
+     * @param example 查询和筛选条件
+     * @return 数据列表
      **/
-
     List<TrackingPersonnel> selectByExample(TrackingPersonnelExample example);
 
     /**
-     * @return com.trust.xfyl.entity.TrackingPersonnel
-     * @Author djj
-     * @Description //TODO 根据主键查询数据
-     * @Date 17:56 2024/2/2
-     * @Param [id]
+     * 根据主键查询数据
+     * @param id 人员ID
+     * @return 查询到的数据记录
      **/
-
     TrackingPersonnel selectByPrimaryKey(Long id);
 
     /**
-     * @return int
-     * @Author djj
-     * @Description //TODO 更新数据根据条件
-     * @Date 17:56 2024/2/2
-     * @Param [record, example]
+     * 根据条件更新数据，可选择性更新字段
+     * @param record 要更新的数据记录
+     * @param example 更新条件
+     * @return 影响行数
      **/
-
     int updateByExampleSelective(@Param("record") TrackingPersonnel record, @Param("example") TrackingPersonnelExample example);
 
     /**
-     * @return int
-     * @Author djj
-     * @Description //TODO 根据条件更新数据
-     * @Date 17:56 2024/2/2
-     * @Param [record, example]
+     * 根据条件更新数据
+     * @param record 要更新的数据记录
+     * @param example 更新条件
+     * @return 影响行数
      **/
     int updateByExample(@Param("record") TrackingPersonnel record, @Param("example") TrackingPersonnelExample example);
 
     /**
-     * @return int
-     * @Author djj
-     * @Description //TODO 根据条件更新数据
-     * @Date 17:57 2024/2/2
-     * @Param [record]
+     * 根据条件更新数据，可选择性更新字段
+     * @param record 要更新的数据记录
+     * @return 影响行数
      **/
     int updateByPrimaryKeySelective(TrackingPersonnel record);
 
     /**
-     * @return int
-     * @Author djj
-     * @Description //TODO 根据主键更新数据
-     * @Date 17:57 2024/2/2
-     * @Param [record]
+     * 根据主键更新数据
+     * @param record 要更新的数据记录
+     * @return 影响行数
      **/
     int updateByPrimaryKey(TrackingPersonnel record);
 
     /**
-     * @return java.lang.Long
-     * @Author djj
-     * @Description //TODO 根据主键更新数据
-     * @Date 17:57 2024/2/2
-     * @Param [trackingPersonnelExample]
+     * 根据条件查询数据总数
+     * @param trackingPersonnelExample 查询条件
+     * @return 数据总数
      **/
     Long count(TrackingPersonnelExample trackingPersonnelExample);
 }

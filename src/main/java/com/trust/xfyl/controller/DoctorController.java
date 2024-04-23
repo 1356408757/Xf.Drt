@@ -36,9 +36,8 @@ public class DoctorController {
 
     /**
      * @return com.trust.xfyl.entity.ResultVO
-     * @Author djj
-     * @Description //TODO
-     * @Date 17:53 2024/1/25
+     * @author Bay-max
+     * @date 2024/4/22 14:01
      * @Param [surgicalName]
      **/
     @ApiOperation(value = "获取列表", nickname = "selectDoctorAll", notes = "获取列表")

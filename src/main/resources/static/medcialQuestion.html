@@ -258,7 +258,7 @@
         formData.append('file', file);
 
         try {
-            const response = await fetch('http://localhost:8089/uploaFile/skinDetection', {
+            const response = await fetch('http://ai.xinfudrt.com:8800/uploaFile/skinDetection', {
                 method: 'POST',
                 body: formData,
             });
@@ -362,7 +362,7 @@
         }
 
         $.ajax({
-            url: 'http://localhost:8089/medical/up',
+            url: 'http://ai.xinfudrt.com:8800/medical/up',
             method: 'POST',
             data: formData,
             contentType: false,
@@ -392,7 +392,7 @@
             const sampleDtoForAnswer = {sessionId: sessionId, questionType: questionType, answerText: answerText};
 
             $.ajax({
-                url: 'http://localhost:8089/medical/qa',
+                url: 'http://ai.xinfudrt.com:8800/medical/qa',
                 method: 'POST',
                 data: JSON.stringify(sampleDtoForAnswer),
                 contentType: 'application/json',
@@ -528,7 +528,7 @@
             });
             // 假设有个详情页面URL，这里用'details.html'作为示例
             jumpButton.click(function () {
-                window.open('http://121.43.138.108/index.html?results=' + reportNarrative, '_blank');
+                window.open('http://ai.xinfudrt.com/index.html?results=' + reportNarrative, '_blank');
             });
             $('#refresh-report-btn').after(jumpButton);
 

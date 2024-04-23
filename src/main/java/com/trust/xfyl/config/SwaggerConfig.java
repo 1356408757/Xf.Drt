@@ -25,10 +25,9 @@ import java.util.List;
 
 /**
  * Swagger 接口文档配置类
- *
- * @author djj
- * @Date 2023/6/17
- */
+ * @author Bay-max
+ * @date 2024/4/22 14:01
+ **/
 
 @EnableSwagger2
 @Configuration

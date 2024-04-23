@@ -235,3 +235,92 @@ CREATE TABLE `wound_orders`
   ROW_FORMAT = Dynamic;
 
 SET FOREIGN_KEY_CHECKS = 1;
+CREATE TABLE Users
+(
+    -- 用户ID，主键，自动递增
+    user_id              INT PRIMARY KEY AUTO_INCREMENT,
+    -- 微信授权登录后返回的openid，唯一标识用户
+    wechat_openid        VARCHAR(100) NOT NULL UNIQUE,
+    -- 用户昵称，来源于微信
+    nickname             VARCHAR(255),
+    -- 用户头像URL
+    avatar_url           VARCHAR(2083),
+    -- 注册/首次登录时间，默认当前时间戳
+    register_time        TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    -- 最近登录时间
+    last_login_time      TIMESTAMP,
+    -- 首次登录赠送的免费次数，默认值可以设定为50
+    initial_credit_count INT       DEFAULT 50,
+    -- 当前剩余可用次数
+    current_credit_count INT,
+    -- 用户联系方式，用于退款时联系
+    contact_info         VARCHAR(255)
+);
+CREATE TABLE CreditPackages
+(
+    -- 套餐ID，主键，自动递增
+    package_id          INT PRIMARY KEY AUTO_INCREMENT,
+    -- 套餐名称
+    package_name        VARCHAR(255),
+    -- 套餐价格，每单位次数的售价
+    price               DECIMAL(10, 2),
+    -- 每个套餐包含的总次数
+    credits_per_package INT
+);
+CREATE TABLE UserPurchases
+(
+    -- 购买记录ID，主键，自动递增
+    purchase_id            INT PRIMARY KEY AUTO_INCREMENT,
+    -- 用户ID，外键，关联Users表的user_id
+    user_id                INT,
+    FOREIGN KEY (user_id) REFERENCES Users (user_id),
+    -- 套餐ID，外键，关联CreditPackages表的package_id
+    package_id             INT,
+    FOREIGN KEY (package_id) REFERENCES CreditPackages (package_id),
+    -- 购买时间，默认当前时间戳
+    purchase_time          TIMESTAMP                           DEFAULT CURRENT_TIMESTAMP,
+    -- 购买的次数总数
+    credit_count_purchased INT,
+    -- 交易订单号
+    transaction_id         VARCHAR(100),
+    -- 支付状态（已支付、待支付、已退款等）
+    payment_status         ENUM ('PAID', 'UNPAID', 'REFUNDED') DEFAULT 'UNPAID'
+);
+CREATE TABLE UserConsumptions
+(
+    -- 消费记录ID，主键，自动递增
+    consumption_id     INT PRIMARY KEY AUTO_INCREMENT,
+    -- 用户ID，外键，关联Users表的user_id
+    user_id            INT,
+    FOREIGN KEY (user_id) REFERENCES Users (user_id),
+    -- 消费时间，默认当前时间戳
+    consumption_time   TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    -- 发送消息消耗的次数
+    message_sent_count INT,
+    -- 购买记录ID，如果消耗的是购买的次数，则引用购买记录ID，外键
+    purchase_id        INT,
+    FOREIGN KEY (purchase_id) REFERENCES UserPurchases (purchase_id)
+);
+CREATE TABLE RefundRecords
+(
+    -- 退款记录ID，主键，自动递增
+    refund_id            INT PRIMARY KEY AUTO_INCREMENT,
+    -- 用户ID，外键，关联Users表的user_id
+    user_id              INT,
+    FOREIGN KEY (user_id) REFERENCES Users (user_id),
+    -- 要退款的购买记录ID，外键，关联UserPurchases表的purchase_id
+    purchase_id          INT,
+    FOREIGN KEY (purchase_id) REFERENCES UserPurchases (purchase_id),
+    -- 退款原因
+    refund_reason        TEXT,
+    -- 退款状态（申请中、已同意、已拒绝、已完成退款）
+    refund_status        ENUM ('APPLIED', 'APPROVED', 'REJECTED', 'COMPLETED') DEFAULT 'APPLIED',
+    -- 申请退款时间，默认当前时间戳
+    refund_request_time  TIMESTAMP                                             DEFAULT CURRENT_TIMESTAMP,
+    -- 退款审批时间（如已批准）
+    refund_approval_time TIMESTAMP,
+    -- 退款金额
+    refunded_amount      DECIMAL(10, 2),
+    -- 标记是否已通知管理员处理退款
+    admin_contacted      BOOLEAN                                               DEFAULT FALSE
+);

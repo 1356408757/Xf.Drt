@@ -6,6 +6,7 @@ import com.github.benmanes.caffeine.cache.Caffeine;
 import com.trust.xfyl.cache.CacheManager;
 import com.trust.xfyl.cache.impl.CaffeineCacheManager;
 import com.trust.xfyl.cache.impl.RedisCacheManager;
+import com.trust.xfyl.entity.dto.AppConfig;
 import org.apache.commons.lang3.StringUtils;
 import org.redisson.Redisson;
 import org.redisson.api.RedissonClient;
@@ -21,9 +22,9 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * 缓存配置类，提供根据配置文件选择使用redis或caffeine作为缓存方式的功能。
- *
- * @author yuanci
- */
+ * @author Bay-max
+ * @date 2024/4/22 14:01
+ **/
 @Configuration
 public class CacheConfig {
     // Redis配置资源
@@ -35,39 +36,42 @@ public class CacheConfig {
     private AppConfig appConfig;
 
     /**
-     * 创建并返回Redis缓存管理器的Bean实例。
-     * 仅当chat.cache.type配置为redis时被激活。
+     * 根据配置创建并返回Redis缓存管理器的Bean实例。
+     * 仅当chat.cache.type配置为redis时，该方法激活并返回Redis缓存管理器实例。
      *
      * @return RedisCacheManager Redis缓存管理器实例
      */
     @Bean
     @ConditionalOnProperty(name = "chat.cache.type", havingValue = "redis")
     public CacheManager redisCacheManager() {
-        // 初始化Redisson配置
+        // 初始化并配置Redisson连接
         Config config = new Config();
         config.setCodec(new JsonJacksonCodec());
         SingleServerConfig singleServerConfig = config.useSingleServer();
 
-        // 设置Redis服务器连接配置
+        // 设置Redis服务器连接参数
         int port = redisConfig.getPort() != null ? redisConfig.getPort() : 6379;
         singleServerConfig.setAddress("redis://" + redisConfig.getHost() + ":" + port);
+        // 设置连接池大小
         singleServerConfig.setConnectionPoolSize(500);
+        // 设置订阅连接池大小
         singleServerConfig.setSubscriptionConnectionPoolSize(300);
+        // 设置每个连接的订阅数量
         singleServerConfig.setSubscriptionsPerConnection(500);
 
-        // 如果配置了密码，则设置密码
+        // 配置密码（如果已提供）
         if (StringUtils.isNotBlank(redisConfig.getPassword())) {
             singleServerConfig.setPassword(redisConfig.getPassword());
         }
 
-        // 创建Redisson客户端并返回Redis缓存管理器
+        // 创建Redisson客户端，并返回Redis缓存管理器
         RedissonClient redissonClient = Redisson.create(config);
         return new RedisCacheManager(redissonClient);
     }
 
     /**
-     * 创建并返回Caffeine缓存管理器的Bean实例。
-     * 仅当chat.cache.type配置为caffeine时被激活。
+     * 根据配置创建并返回Caffeine缓存管理器的Bean实例。
+     * 当chat.cache.type配置为caffeine时，该方法激活并返回Caffeine缓存管理器实例。
      *
      * @return CaffeineCacheManager Caffeine缓存管理器实例
      */
@@ -76,7 +80,9 @@ public class CacheConfig {
     public CacheManager caffeineCacheManager() {
         // 创建并配置Caffeine缓存
         Cache<Object, Object> cache = Caffeine.newBuilder()
+                // 设置过期时间
                 .expireAfterAccess(appConfig.getSessionTtl(), TimeUnit.HOURS)
+                // 设置最大大小
                 .maximumSize(100000)
                 .build();
 
@@ -84,4 +90,3 @@ public class CacheConfig {
         return new CaffeineCacheManager(cache);
     }
 }
-

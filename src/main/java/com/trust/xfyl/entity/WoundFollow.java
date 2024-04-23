@@ -3,7 +3,10 @@ package com.trust.xfyl.entity;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import java.util.Date;
-
+/**
+ * @author Bay-max
+ * @date 2024/4/22 14:01
+ **/
 public class WoundFollow extends BaseBean {
     private Long id;
 

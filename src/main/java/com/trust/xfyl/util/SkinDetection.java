@@ -12,8 +12,8 @@ import java.io.IOException;
  * 皮肤检测工具类
  *
  * @Description 实现对图片中皮肤的检测
- * @Author Bay-max
- * @Date 2024/3/18 10:49
+ * @author Bay-max
+ * @date 2024/4/22 15:39
  **/
 public class SkinDetection {
 

@@ -6,127 +6,112 @@ import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
+
 /**
- * @Author djj
- * @Description //TODO
- * @Date 9:47 2024/1/26
+ * TODO 伤口跟进数据访问接口
+ *
+ * @author Bay-max
+ * @date 2024/4/22 15:08
  **/
+
 public interface WoundFollowMapper {
     /**
-     * @return int
-     * @Author djj
-     * @Description //TODO
-     * @Date 9:47 2024/1/26
-     * @Param [example]
+     * 根据条件计算记录数
+     *
+     * @param example 查询条件实例
+     * @return 符合条件的记录数
      **/
+
+
     int countByExample(WoundFollowExample example);
 
     /**
-     * @return int
-     * @Author djj
-     * @Description //TODO
-     * @Date 9:47 2024/1/26
-     * @Param [example]
+     * 根据条件删除记录
+     *
+     * @param example 查询条件实例
+     * @return 影响的记录数
      **/
-
     int deleteByExample(WoundFollowExample example);
 
     /**
-     * @return int
-     * @Author djj
-     * @Description //TODO
-     * @Date 9:47 2024/1/26
-     * @Param [id]
+     * 根据主键删除记录
+     *
+     * @param id 主键ID
+     * @return 影响的记录数
      **/
-
     int deleteByPrimaryKey(Long id);
 
     /**
-     * @return int
-     * @Author djj
-     * @Description //TODO
-     * @Date 9:47 2024/1/26
-     * @Param [record]
+     * 插入一条记录
+     *
+     * @param record 数据记录实例
+     * @return 影响的记录数
      **/
-
     int insert(WoundFollow record);
 
     /**
-     * @return int
-     * @Author djj
-     * @Description //TODO
-     * @Date 9:48 2024/1/26
-     * @Param [record]
+     * 选择性插入一条记录
+     *
+     * @param record 数据记录实例
+     * @return 影响的记录数
      **/
-
     int insertSelective(WoundFollow record);
 
     /**
-     * @return java.util.List<com.trust.xfyl.entity.WoundFollow>
-     * @Author djj
-     * @Description //TODO
-     * @Date 9:48 2024/1/26
-     * @Param [example]
+     * 根据条件查询记录列表
+     *
+     * @param example 查询条件实例
+     * @return 符合条件的记录列表
      **/
-
     List<WoundFollow> selectByExample(WoundFollowExample example);
 
     /**
-     * @return com.trust.xfyl.entity.WoundFollow
-     * @Author djj
-     * @Description //TODO
-     * @Date 9:48 2024/1/26
-     * @Param [id]
+     * 根据主键查询一条记录
+     *
+     * @param id 主键ID
+     * @return 对应的记录实例
      **/
-
     WoundFollow selectByPrimaryKey(Long id);
 
     /**
-     * @return int
-     * @Author djj
-     * @Description //TODO
-     * @Date 9:48 2024/1/26
-     * @Param [record, example]
+     * 根据条件选择性更新记录
+     *
+     * @param record  数据记录实例
+     * @param example 查询条件实例
+     * @return 影响的记录数
      **/
-
     int updateByExampleSelective(@Param("record") WoundFollow record, @Param("example") WoundFollowExample example);
 
     /**
-     * @return int
-     * @Author djj
-     * @Description //TODO
-     * @Date 9:48 2024/1/26
-     * @Param [record, example]
+     * 根据条件更新记录
+     *
+     * @param record  数据记录实例
+     * @param example 查询条件实例
+     * @return 影响的记录数
      **/
-
     int updateByExample(@Param("record") WoundFollow record, @Param("example") WoundFollowExample example);
 
     /**
-     * @return int
-     * @Author djj
-     * @Description //TODO
-     * @Date 9:48 2024/1/26
-     * @Param [record]
+     * 根据主键选择性更新记录
+     *
+     * @param record 数据记录实例
+     * @return 影响的记录数
      **/
-
     int updateByPrimaryKeySelective(WoundFollow record);
 
     /**
-     * @return int
-     * @Author djj
-     * @Description //TODO
-     * @Date 9:48 2024/1/26
-     * @Param [record]
+     * 根据主键更新记录
+     *
+     * @param record 数据记录实例
+     * @return 影响的记录数
      **/
-
     int updateByPrimaryKey(WoundFollow record);
 
     /**
-     * @return java.lang.Long
-     * @Author djj
-     * @Description //TODO
-     * @Date 16:56 2024/1/26
-     * @Param [woundFollowExample]
+     * 根据条件计算记录数
+     *
+     * @param woundFollowExample 查询条件实例
+     * @return 符合条件的记录数
      **/
     Long count(WoundFollowExample woundFollowExample);
 }

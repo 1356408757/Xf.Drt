@@ -6,8 +6,13 @@ import java.util.List;
 import java.util.UUID;
 
 /**
- * @author LENOVO
- */
+ * TODO
+ * 
+ * @Description
+ * @author Bay-max
+ * @date 2024/4/22 15:39
+ **/
+
 public class UuidUtil {
     /**
      * 拿到uuid且去掉里面的符号

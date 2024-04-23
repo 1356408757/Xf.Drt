@@ -1,8 +1,9 @@
 package com.trust.xfyl.entity;
 
 /**
- * @author LENOVO
- */
+ * @author Bay-max
+ * @date 2024/4/22 14:01
+ **/
 public class TrustRelationFile {
     private String busiType;
 

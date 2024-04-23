@@ -24,10 +24,11 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * @Author djj
- * @Description //TODO
- * @Date 11:14 2024/2/18
+ * @author Bay-max
+ * @Description
+ * @date 2024/4/22 15:15
  **/
+
 @Api(value = "订单", description = "订单", tags = "订单")
 @RestController
 @RequestMapping("/order")
@@ -49,12 +50,15 @@ public class OrderController {
     }
 
     /**
+     * TODO
+     *
+     * @param woundOrders
      * @return com.trust.xfyl.entity.ResultVO
-     * @Author djj
-     * @Description //TODO 获取订单列表以及所关联的患者信息，医生信息，图片信息的列表集合。
-     * @Date 17:04 2024/2/18
-     * @Param [woundOrders]
+     * @Description
+     * @author Bay-max
+     * @date 2024/4/22 15:16
      **/
+
     @ApiOperation(value = "获取列表", nickname = "selectOrderAll", notes = "获取列表")
     @PostMapping("/selectOrderAll")
     public ResultVO selectOrderAll(@ApiParam(value = "订单对象", required = true) @RequestBody WoundOrders woundOrders) {

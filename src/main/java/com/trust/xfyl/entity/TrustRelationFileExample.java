@@ -2,7 +2,10 @@ package com.trust.xfyl.entity;
 
 import java.util.ArrayList;
 import java.util.List;
-
+/**
+ * @author Bay-max
+ * @date 2024/4/22 14:01
+ **/
 public class TrustRelationFileExample {
     protected String orderByClause;
 

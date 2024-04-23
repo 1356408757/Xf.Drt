@@ -1,4 +1,4 @@
-package com.trust.xfyl.config;
+package com.trust.xfyl.entity.dto;
 
 import lombok.Data;
 import org.apache.commons.lang3.StringUtils;
@@ -6,10 +6,10 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * Lvmh LLM config
- *
- * @author yuanci
- */
+ * @author Bay-max
+ * @date 2024/4/22 14:01
+ **/
+
 @Configuration
 @ConfigurationProperties(prefix = "chat.llm")
 @Data

@@ -21,9 +21,9 @@ import javax.servlet.http.HttpServletResponse;
 
 /**
  * 聊天对话控制器
- *
- * @author yuanci
- */
+ * @author Bay-max
+ * @date 2024/4/22 14:01
+ **/
 @RestController
 @RequestMapping("/v1")
 public class CompletionController {

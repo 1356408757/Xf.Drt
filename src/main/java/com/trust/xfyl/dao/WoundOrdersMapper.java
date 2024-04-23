@@ -7,148 +7,113 @@ import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
+
 /**
- * @Author djj
- * @Description //TODO
- * @Date 11:32 2024/2/20
+ * TODO 伤口订单数据访问接口
+ *
+ * @description
+ * @author Bay-max
+ * @date 2024/4/22 15:10
  **/
+
 public interface WoundOrdersMapper {
     /**
-     * @return int
-     * @Author djj
-     * @Description //TODO 获取数据量的数值
-     * @Date 11:32 2024/2/20
-     * @Param [example]
+     * 根据条件统计订单数量
+     * @param example 查询条件
+     * @return 订单数量
      **/
     int countByExample(WoundOrdersExample example);
 
     /**
-     * @return int
-     * @Author djj
-     * @Description //TODO 根据条件删除数据
-     * @Date 11:32 2024/2/20
-     * @Param [example]
+     * 根据条件删除订单数据
+     * @param example 查询条件
+     * @return 影响行数
      **/
-
     int deleteByExample(WoundOrdersExample example);
 
     /**
-     * @return int
-     * @Author djj
-     * @Description //TODO 根据id删除数据
-     * @Date 11:32 2024/2/20
-     * @Param [id]
+     * 根据订单ID删除订单数据
+     * @param id 订单ID
+     * @return 影响行数
      **/
-
     int deleteByPrimaryKey(Long id);
 
     /**
-     * @return int
-     * @Author djj
-     * @Description //TODO 保存数据 但是不过滤空值
-     * @Date 11:33 2024/2/20
-     * @Param [record]
+     * 插入订单数据，不过滤空值
+     * @param record 订单记录
+     * @return 影响行数
      **/
-
     int insert(WoundOrders record);
 
     /**
-     * @return int
-     * @Author djj
-     * @Description //TODO 保存一条数据，返回主键 且过滤空值
-     * @Date 11:34 2024/2/20
-     * @Param [record]
+     * 插入订单数据，返回生成的主键，过滤空值
+     * @param record 订单记录
+     * @return 生成的主键
      **/
-
     int insertSelective(WoundOrders record);
 
     /**
-     * @return java.util.List<com.trust.xfyl.entity.WoundOrders>
-     * @Author djj
-     * @Description //TODO 根据条件查询列表
-     * @Date 11:34 2024/2/20
-     * @Param [example]
+     * 根据条件查询订单列表
+     * @param example 查询条件
+     * @return 订单列表
      **/
-
     List<WoundOrders> selectByExample(WoundOrdersExample example);
 
     /**
-     * @return com.trust.xfyl.entity.WoundOrders
-     * @Author djj
-     * @Description //TODO 根据id查询单条数据
-     * @Date 11:34 2024/2/20
-     * @Param [id]
+     * 根据订单ID查询订单详情
+     * @param id 订单ID
+     * @return 订单详情
      **/
-
     WoundOrders selectByPrimaryKey(Long id);
 
     /**
-     * @return int
-     * @Author djj
-     * @Description //TODO 根据条件修改数据
-     * @Date 11:35 2024/2/20
-     * @Param [record, example]
+     * 根据条件更新订单数据，选择性更新非空字段
+     * @param record 订单记录
+     * @param example 查询条件
+     * @return 影响行数
      **/
-
     int updateByExampleSelective(@Param("record") WoundOrders record, @Param("example") WoundOrdersExample example);
 
     /**
-     * @return int
-     * @Author djj
-     * @Description //TODO 根据条件修改数据
-     * @Date 11:35 2024/2/20
-     * @Param [record, example]
+     * 根据条件更新订单数据
+     * @param record 订单记录
+     * @param example 查询条件
+     * @return 影响行数
      **/
-
     int updateByExample(@Param("record") WoundOrders record, @Param("example") WoundOrdersExample example);
 
     /**
-     * @return int
-     * @Author djj
-     * @Description //TODO 根据条件修改数据 返回主键且过滤空值
-     * @Date 11:35 2024/2/20
-     * @Param [record]
+     * 根据订单ID选择性更新订单数据，过滤空值
+     * @param record 订单记录
+     * @return 影响行数
      **/
-
     int updateByPrimaryKeySelective(WoundOrders record);
 
     /**
-     * @return int
-     * @Author djj
-     * @Description //TODO 根据id修改数据
-     * @Date 11:35 2024/2/20
-     * @Param [record]
+     * 根据订单ID更新订单数据
+     * @param record 订单记录
+     * @return 影响行数
      **/
-
     int updateByPrimaryKey(WoundOrders record);
 
     /**
-     * @return java.lang.Long
-     * @Author djj
-     * @Description //TODO 自定义查询总数的方法，跟下面的查询列表是匹配的
-     * @Date 11:36 2024/2/20
-     * @Param [woundOrders]
+     * 自定义查询订单总数的方法，与下面的查询列表方法相匹配
+     * @param woundOrders 查询条件
+     * @return 订单总数
      **/
-
     Long count(WoundOrders woundOrders);
 
     /**
-     * @return java.util.List<com.trust.xfyl.entity.vo.WoundOrderVo>
-     * @Author djj
-     * @Description //TODO 自定义查询列表的方法 跟上面查询总数是匹配的
-     * //TODO 且返回带有该订单关联的医生的，患者的，图片等数据列 且包含分页 传值为 page:1 count:10;
-     * @Date 11:37 2024/2/20
-     * @Param [woundOrders]
+     * 自定义查询订单列表的方法，返回带有订单关联的医生、患者、图片等数据，包含分页信息
+     * @param woundOrders 查询条件
+     * @return 订单列表
      **/
-
     List<WoundOrderVo> selectAll(WoundOrders woundOrders);
 
     /**
-     * @return com.trust.xfyl.entity.vo.WoundOrderVo
-     * @Author djj
-     * @Description //TODO 根据id获取该订单关联的医生，患者，图片等信息。
-     * @Date 11:38 2024/2/20
-     * @Param [id]
+     * 根据订单ID获取该订单关联的医生、患者、图片等信息
+     * @param id 订单ID
+     * @return 订单关联信息
      **/
     WoundOrderVo selectWoundOrdersById(Long id);
 }

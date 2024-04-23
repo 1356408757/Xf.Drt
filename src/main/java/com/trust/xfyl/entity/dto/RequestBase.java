@@ -6,8 +6,9 @@ import lombok.ToString;
 import java.io.Serializable;
 
 /**
- * @author yuanci
- */
+ * @author Bay-max
+ * @date 2024/4/22 14:01
+ **/
 @Data
 @ToString
 public class RequestBase implements Serializable {

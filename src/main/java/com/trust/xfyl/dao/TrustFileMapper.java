@@ -1,118 +1,118 @@
 package com.trust.xfyl.dao;
 
-
 import com.trust.xfyl.entity.TrustFile;
 import com.trust.xfyl.entity.TrustFileExample;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
-
 /**
- * @author LENOVO
- * @Date: 2014-01-24
+ * TrustFile数据访问接口
  */
-
 public interface TrustFileMapper {
     /**
-     * 查询总数
+     * 根据条件查询记录总数
      *
-     * @param example
-     * @return int
+     * @param example 查询条件
+     * @return 记录总数
      */
     int countByExample(TrustFileExample example);
 
     /**
-     * 根据条件删除数据
+     * 根据条件删除记录
      *
-     * @param example
-     * @return int
+     * @param example 查询条件
+     * @return 影响的记录数
      */
     int deleteByExample(TrustFileExample example);
 
     /**
-     * 根据条件删除数据
+     * 根据主键删除记录
      *
-     * @param fileId
-     * @return int
+     * @param fileId 主键
+     * @return 影响的记录数
      */
     int deleteByPrimaryKey(Integer fileId);
 
     /**
-     * 添加一条数据
+     * 插入一条记录
      *
-     * @param record
-     * @return int
+     * @param record 待插入的数据
+     * @return 影响的记录数
      */
     int insert(TrustFile record);
 
     /**
-     * 添加一条数据
+     * 选择性插入一条记录
      *
-     * @param record
-     * @return int
+     * @param record 待插入的数据
+     * @return 影响的记录数
      */
     int insertSelective(TrustFile record);
 
     /**
-     * 根据条件查询列表
+     * 根据条件查询记录列表
      *
-     * @param example
-     * @return List<TrustFile>
+     * @param example 查询条件
+     * @return 记录列表
      */
     List<TrustFile> selectByExample(TrustFileExample example);
 
     /**
-     * 根据id查询数据
+     * 根据主键查询记录
      *
-     * @param fileId
-     * @return TrustFile
+     * @param fileId 主键
+     * @return 对应的记录
      */
     TrustFile selectByPrimaryKey(Integer fileId);
 
     /**
-     * 根据条件修改数据
+     * 根据条件选择性更新记录
      *
-     * @param record
-     * @param example
-     * @return int
+     * @param record 待更新的数据
+     * @param example 查询条件
+     * @return 影响的记录数
      */
     int updateByExampleSelective(@Param("record") TrustFile record, @Param("example") TrustFileExample example);
 
     /**
-     * 根据条件修改数据
+     * 根据条件更新记录
      *
-     * @param record
-     * @param example
-     * @return int
+     * @param record 待更新的数据
+     * @param example 查询条件
+     * @return 影响的记录数
      */
     int updateByExample(@Param("record") TrustFile record, @Param("example") TrustFileExample example);
 
     /**
-     * 根据条件修改数据
+     * 根据主键选择性更新记录
      *
-     * @param record
-     * @param record
-     * @return int
+     * @param record 待更新的数据
+     * @return 影响的记录数
      */
     int updateByPrimaryKeySelective(TrustFile record);
 
     /**
-     * 根据条件修改数据
+     * 根据主键更新记录
      *
-     * @param record
-     * @param record
-     * @return int
+     * @param record 待更新的数据
+     * @return 影响的记录数
      */
     int updateByPrimaryKey(TrustFile record);
 
     /**
-     * 获取总数
+     * 根据条件获取记录总数
      *
-     * @param trustFileExample
-     * @return Long
+     * @param trustFileExample 查询条件
+     * @return 记录总数
      */
     Long count(TrustFileExample trustFileExample);
 
-    int afterInsertFile(@Param("list")List list);
+    /**
+     * 插入文件信息后处理
+     *
+     * @param list 文件信息列表
+     * @return 影响的记录数
+     */
+    int afterInsertFile(@Param("list") List list);
 }

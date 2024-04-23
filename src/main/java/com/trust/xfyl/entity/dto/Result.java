@@ -6,10 +6,9 @@ import lombok.Data;
 import java.io.Serializable;
 
 /**
- * response base DTO
- *
- * @author yuanci
- */
+ * @author Bay-max
+ * @date 2024/4/22 14:01
+ **/
 @Data
 public class Result<T> implements Serializable {
     private static final long serialVersionUID = -488730624643299315L;

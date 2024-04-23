@@ -17,8 +17,8 @@ import java.util.Objects;
  * TODO 调用阿里医学智能的接口
  *
  * @Description
- * @Author Bay-max
- * @Date 2024/3/15 16:17
+ * @author Bay-max
+ * @date 2024/4/22 15:39
  **/
 
 @Slf4j

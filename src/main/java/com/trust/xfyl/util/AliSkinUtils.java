@@ -15,7 +15,10 @@ import java.io.InputStreamReader;
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
-
+/**
+ * @author Bay-max
+ * @date 2024/4/22 15:39
+ **/
 public class AliSkinUtils {
     // HTTPMethod推荐使用POST
 

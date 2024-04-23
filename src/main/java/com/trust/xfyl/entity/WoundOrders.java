@@ -2,7 +2,10 @@ package com.trust.xfyl.entity;
 
 import java.math.BigDecimal;
 import java.util.Date;
-
+/**
+ * @author Bay-max
+ * @date 2024/4/22 14:01
+ **/
 public class WoundOrders extends BaseBean {
     private Long id;
 

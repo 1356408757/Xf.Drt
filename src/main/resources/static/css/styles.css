@@ -1,120 +1,170 @@
-.chat-container {
+
+body {
+    font-family: 'Arial', sans-serif;
+    background: linear-gradient(to right, #f6f6f6, #e9e9e9);
+    margin: 0;
+    padding: 0;
     display: flex;
     flex-direction: column;
-    align-items: stretch;
+    justify-content: flex-start;
+    align-items: center;
     height: 100vh;
-    overflow-y: scroll;
 }
 
-.message-received-container,
-.message-sent-container {
-    width: calc(50% - 10px); /* 分别占据一半宽度减去间隔 */
-    padding: 0.5rem;
+#uploadForm {
+    background-color: #ffffff;
     border-radius: 10px;
-    /* 根据实际需要添加背景色、阴影等样式 */
-    margin-bottom: 1rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    padding: 25px;
+    width: 400px;
+    text-align: center;
+    transition: transform 0.3s ease;
+    margin-top: 10%;
 }
 
-.message-received-container {
-    background-color: #f0f0f0; /* 示例背景颜色 */
-    text-align: left;
+#uploadForm:hover {
+    transform: translateY(-5px);
 }
 
-.message-sent-container {
-    background-color: #008cba; /* 示例背景颜色 */
-    color: white;
-    text-align: right;
-}
-
-.message-bubble {
-    margin-bottom: 1rem;
-    padding: 0.5rem;
-    word-wrap: break-word;
-}
-
-.footer {
-    position: sticky;
-    bottom: 0;
-    width: 100%;
-    background-color: #f8f9fa;
-    padding: 1rem;
-}
-
-.answer-text-input {
-    resize: none;
-    height: 3rem;
-}
-.message-bubble {
-    margin-bottom: 0.5rem; /* 缩小消息气泡之间的间距 */
-    padding: 1rem; /* 增加消息气泡的内边距 */
-    border-radius: 15px; /* 圆角边框 */
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1); /* 添加轻微阴影效果 */
-}
-
-/* 优化输入框样式 */
-.answer-text-input {
-    resize: none;
-    height: 3rem;
-    border-radius: 15px;
-    padding: 1rem;
-    border: 1px solid #ccc; /* 细边框 */
-}
-
-/* 美化发送按钮 */
-.btn-primary {
-    border-radius: 15px;
-    padding: 0.75rem 2rem; /* 调整内边距 */
-}
-
-/* 调整底部栏样式 */
-.footer {
-    background-color: #f8f9fa;
-    padding: 1rem;
-}
-
-/* 动画效果 */
-.message-received-container,
-.message-sent-container {
-    transition: transform 0.3s ease; /* 添加平滑过渡效果 */
-}
-.message-received-container:hover,
-.message-sent-container:hover {
-    transform: scale(1.05); /* 鼠标悬停时略微放大消息气泡 */
-}
-#option-list-container {
-    padding-left: 0;
-}
-
-#option-list-container .option-item {
-    margin-bottom: 0.5rem;
-    font-weight: bold;
-    /* 其他样式... */
-}
-.report-section {
-    margin-top: 1rem;
-    border: 1px solid #ccc;
-    padding: 1rem;
-    background-color: #f5f5f5;
-    border-radius: 5px;
-    overflow-wrap: break-word;
-}
-.custom-option-list {
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    padding: 10px;
-    max-height: 200px;
-    overflow-y: auto;
-}
-
-/* 美化单个选项 */
-.option-item {
-    list-style-type: none;
+h2 {
+    margin-top: 0;
     color: #333;
-    font-size: 14px;
-    line-height: 1.5;
-    transition: background-color 0.2s ease-in-out;
+    font-weight: 600;
+    font-size: 24px;
+    margin-bottom: 20px;
 }
 
-.option-item:hover {
-    background-color: #f0f0f0;
+input[type="file"] {
+    display: none;
+}
+
+label.upload-btn {
+    background: linear-gradient(to right, #4caf50, #388e3c);
+    border: none;
+    color: white;
+    padding: 12px 28px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin-bottom: 20px;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: background-color 0.3s ease;
+}
+
+label.upload-btn:hover {
+    background: linear-gradient(to right, #357a38, #2e7d32);
+}
+
+button.upload-btn {
+    background: linear-gradient(to right, #4caf50, #388e3c);
+    border: none;
+    color: white;
+    padding: 12px 28px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin-bottom: 20px;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: background-color 0.3s ease;
+}
+
+button.upload-btn:hover {
+    background: linear-gradient(to right, #357a38, #2e7d32);
+}
+
+#imagePreview {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    margin-top: 20px;
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+}
+
+#imagePreview img {
+    width: 300px;
+    height: 300px;
+    object-fit: cover;
+    margin: 10px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease;
+    cursor: pointer;
+}
+
+#imagePreview img:hover {
+    transform: scale(1.1);
+}
+
+.result-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    width: 400px;
+    margin-top: 20px;
+}
+
+.enlarged-image {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.5);
+    justify-content: center;
+    align-items: center;
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modal-content {
+    background-color: #f9f9f9;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    width: 80%;
+    max-width: 400px;
+    text-align: center;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+}
+
+#modalMessage {
+    font-size: 18px;
+    margin-bottom: 20px;
+}
+
+button {
+    padding: 10px 20px;
+    background-color:#357a38;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color:#357a38;
 }

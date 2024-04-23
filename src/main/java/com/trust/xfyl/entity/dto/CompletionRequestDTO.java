@@ -7,10 +7,9 @@ import lombok.EqualsAndHashCode;
 import java.util.Deque;
 
 /**
- * completion request dto for API
- *
- * @author yuanci
- */
+ * @author Bay-max
+ * @date 2024/4/22 15:11
+ **/
 
 @EqualsAndHashCode(callSuper = true)
 @Data
