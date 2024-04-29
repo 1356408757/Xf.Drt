@@ -98,6 +98,3 @@ chat:
     sessionTtl: 2 # 对话缓存时间，单位：小时
   cache: # 缓存配置
     type: caffeine # 缓存类型
-wechat:
-  appId: wx4fdf3026be1910f5
-  appSecret: 2528491e2ad1fe0712f4cf8277d98cb9
