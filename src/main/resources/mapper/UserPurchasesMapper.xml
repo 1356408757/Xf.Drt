@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.trust.xfyl.dao.UserPurchasesMapper">
-    <resultMap id="BaseResultMap" type="com.trust.xfyl.entity.UserPurchases">
+    <resultMap id="BaseResultMap" type="com.trust.xfyl.model.po.UserPurchases">
         <id column="purchase_id" property="purchaseId" jdbcType="INTEGER"/>
         <result column="user_id" property="userId" jdbcType="INTEGER"/>
         <result column="package_id" property="packageId" jdbcType="INTEGER"/>
@@ -76,7 +76,7 @@
         purchase_id, user_id, package_id, purchase_time, credit_count_purchased, transaction_id,
     payment_status, create_time, is_delete
     </sql>
-    <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.trust.xfyl.entity.UserPurchasesExample">
+    <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.trust.xfyl.model.po.UserPurchasesExample">
         select
         <if test="distinct">
             distinct
@@ -102,13 +102,13 @@
         from userpurchases
         where purchase_id = #{purchaseId,jdbcType=INTEGER}
     </delete>
-    <delete id="deleteByExample" parameterType="com.trust.xfyl.entity.UserPurchasesExample">
+    <delete id="deleteByExample" parameterType="com.trust.xfyl.model.po.UserPurchasesExample">
         delete from userpurchases
         <if test="_parameter != null">
             <include refid="Example_Where_Clause"/>
         </if>
     </delete>
-    <insert id="insert" parameterType="com.trust.xfyl.entity.UserPurchases">
+    <insert id="insert" parameterType="com.trust.xfyl.model.po.UserPurchases">
         insert into userpurchases (purchase_id, user_id, package_id,
                                    purchase_time, credit_count_purchased, transaction_id,
                                    payment_status, create_time, is_delete)
@@ -117,7 +117,7 @@
                 #{transactionId,jdbcType=VARCHAR},
                 #{paymentStatus,jdbcType=CHAR}, #{createTime,jdbcType=TIMESTAMP}, #{isDelete,jdbcType=INTEGER})
     </insert>
-    <insert id="insertSelective" parameterType="com.trust.xfyl.entity.UserPurchases">
+    <insert id="insertSelective" parameterType="com.trust.xfyl.model.po.UserPurchases">
         insert into userpurchases
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="purchaseId != null">
@@ -178,7 +178,7 @@
             </if>
         </trim>
     </insert>
-    <select id="countByExample" parameterType="com.trust.xfyl.entity.UserPurchasesExample"
+    <select id="countByExample" parameterType="com.trust.xfyl.model.po.UserPurchasesExample"
             resultType="java.lang.Integer">
         select count(*) from userpurchases
         <if test="_parameter != null">
@@ -235,7 +235,7 @@
             <include refid="Update_By_Example_Where_Clause"/>
         </if>
     </update>
-    <update id="updateByPrimaryKeySelective" parameterType="com.trust.xfyl.entity.UserPurchases">
+    <update id="updateByPrimaryKeySelective" parameterType="com.trust.xfyl.model.po.UserPurchases">
         update userpurchases
         <set>
             <if test="userId != null">
@@ -265,7 +265,7 @@
         </set>
         where purchase_id = #{purchaseId,jdbcType=INTEGER}
     </update>
-    <update id="updateByPrimaryKey" parameterType="com.trust.xfyl.entity.UserPurchases">
+    <update id="updateByPrimaryKey" parameterType="com.trust.xfyl.model.po.UserPurchases">
         update userpurchases
         set user_id                = #{userId,jdbcType=INTEGER},
             package_id             = #{packageId,jdbcType=INTEGER},

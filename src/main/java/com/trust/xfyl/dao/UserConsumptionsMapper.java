@@ -1,7 +1,7 @@
 package com.trust.xfyl.dao;
 
-import com.trust.xfyl.entity.UserConsumptions;
-import com.trust.xfyl.entity.UserConsumptionsExample;
+import com.trust.xfyl.model.po.UserConsumptions;
+import com.trust.xfyl.model.po.UserConsumptionsExample;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -12,6 +12,7 @@ import java.util.List;
 public interface UserConsumptionsMapper {
     /**
      * 根据条件查询用户消费记录的数量
+     *
      * @param example 包含查询条件的实例
      * @return 符合条件的记录数
      */
@@ -19,6 +20,7 @@ public interface UserConsumptionsMapper {
 
     /**
      * 根据条件删除用户消费记录
+     *
      * @param example 包含删除条件的实例
      * @return 影响的记录数
      */
@@ -26,6 +28,7 @@ public interface UserConsumptionsMapper {
 
     /**
      * 根据消费ID删除用户消费记录
+     *
      * @param consumptionId 消费记录的ID
      * @return 影响的记录数
      */
@@ -33,6 +36,7 @@ public interface UserConsumptionsMapper {
 
     /**
      * 插入一条用户消费记录
+     *
      * @param record 要插入的用户消费记录
      * @return 影响的记录数
      */
@@ -40,6 +44,7 @@ public interface UserConsumptionsMapper {
 
     /**
      * 选择性插入一条用户消费记录
+     *
      * @param record 要插入的用户消费记录
      * @return 影响的记录数
      */
@@ -47,6 +52,7 @@ public interface UserConsumptionsMapper {
 
     /**
      * 根据条件查询用户消费记录
+     *
      * @param example 包含查询条件的实例
      * @return 符合条件的用户消费记录列表
      */
@@ -54,6 +60,7 @@ public interface UserConsumptionsMapper {
 
     /**
      * 根据消费ID查询用户消费记录
+     *
      * @param consumptionId 消费记录的ID
      * @return 对应的用户消费记录
      */
@@ -61,7 +68,8 @@ public interface UserConsumptionsMapper {
 
     /**
      * 根据条件选择性更新用户消费记录
-     * @param record 要更新的用户消费记录
+     *
+     * @param record  要更新的用户消费记录
      * @param example 包含更新条件的实例
      * @return 影响的记录数
      */
@@ -69,7 +77,8 @@ public interface UserConsumptionsMapper {
 
     /**
      * 根据条件更新用户消费记录
-     * @param record 要更新的用户消费记录
+     *
+     * @param record  要更新的用户消费记录
      * @param example 包含更新条件的实例
      * @return 影响的记录数
      */
@@ -77,6 +86,7 @@ public interface UserConsumptionsMapper {
 
     /**
      * 根据消费ID选择性更新用户消费记录
+     *
      * @param record 要更新的用户消费记录
      * @return 影响的记录数
      */
@@ -84,6 +94,7 @@ public interface UserConsumptionsMapper {
 
     /**
      * 根据消费ID更新用户消费记录
+     *
      * @param record 要更新的用户消费记录
      * @return 影响的记录数
      */

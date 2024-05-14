@@ -3,23 +3,37 @@ package com.trust.xfyl.controller;
 import com.trust.xfyl.dao.DoctorMapper;
 import com.trust.xfyl.dao.TrustFileMapper;
 import com.trust.xfyl.dao.TrustRelationFileMapper;
-import com.trust.xfyl.entity.*;
 import com.trust.xfyl.enums.PhotoEnum;
 import com.trust.xfyl.exception.SCServiceException;
-import com.trust.xfyl.service.DoctorService;
-import com.trust.xfyl.service.FileService;
-import com.trust.xfyl.util.ResultVOUtil;
+import com.trust.xfyl.model.ResultVO;
+import com.trust.xfyl.model.ResultVOUtil;
+import com.trust.xfyl.model.po.*;
+import com.trust.xfyl.service.impl.DoctorService;
+import com.trust.xfyl.service.impl.FileService;
+import com.trust.xfyl.util.ScExceptionUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
 
-@Api(value = "医生信息", description = "医生信息", tags = "医生信息")
+/**
+ * TODO
+ *
+ * @author Bay-max
+ * @Description
+ * @date 2024/5/20 14:42
+ **/
+
+@Api(value = "医生控制器", description = "医生控制器", tags = "医生控制器")
 @RestController
 @RequestMapping("/Doctor")
 public class DoctorController {
+    private final static Logger logger = LoggerFactory.getLogger(DoctorController.class);
     private final DoctorMapper doctorMapper;
     private final DoctorService doctorService;
     private final FileService fileService;
@@ -56,7 +70,11 @@ public class DoctorController {
             returnMap.put("data", doctors);
             return ResultVOUtil.success(returnMap);
         } catch (SCServiceException e) {
-            return ResultVOUtil.error(e.toString());
+            logger.error("Service Exception: {}", ScExceptionUtils.sanitizeErrorMessage(e.getMessage()), e);
+            return ResultVOUtil.error(e.getStatus(), ScExceptionUtils.sanitizeErrorMessage(e.getMessage()));
+        } catch (Exception e) {
+            logger.error("Error fetching doctor: {}", ScExceptionUtils.sanitizeErrorMessage(e.getMessage()), e);
+            return ResultVOUtil.error(HttpStatus.INTERNAL_SERVER_ERROR.value(), "服务器内部错误");
         }
 
     }
@@ -113,9 +131,11 @@ public class DoctorController {
                 }
             }
         } catch (SCServiceException e) {
-            return ResultVOUtil.error(e.getStatus(), e.getMessage());
+            logger.error("Service Exception: {}", ScExceptionUtils.sanitizeErrorMessage(e.getMessage()), e);
+            return ResultVOUtil.error(e.getStatus(), ScExceptionUtils.sanitizeErrorMessage(e.getMessage()));
         } catch (Exception e) {
-            return ResultVOUtil.error(-1, e.getMessage());
+            logger.error("Error fetching doctor: {}", ScExceptionUtils.sanitizeErrorMessage(e.getMessage()), e);
+            return ResultVOUtil.error(HttpStatus.INTERNAL_SERVER_ERROR.value(), "服务器内部错误");
         }
     }
 
@@ -146,9 +166,11 @@ public class DoctorController {
                 return ResultVOUtil.error("失败");
             }
         } catch (SCServiceException e) {
-            return ResultVOUtil.error(e.getStatus(), e.getMessage());
+            logger.error("Service Exception: {}", ScExceptionUtils.sanitizeErrorMessage(e.getMessage()), e);
+            return ResultVOUtil.error(e.getStatus(), ScExceptionUtils.sanitizeErrorMessage(e.getMessage()));
         } catch (Exception e) {
-            return ResultVOUtil.error(-1, e.getMessage());
+            logger.error("Error fetching doctor: {}", ScExceptionUtils.sanitizeErrorMessage(e.getMessage()), e);
+            return ResultVOUtil.error(HttpStatus.INTERNAL_SERVER_ERROR.value(), "服务器内部错误");
         }
     }
 
@@ -174,7 +196,11 @@ public class DoctorController {
             returnMap.put("tlRelationFiles", tlRelationFiles);
             return ResultVOUtil.success(returnMap);
         } catch (SCServiceException e) {
-            return ResultVOUtil.error(e.toString());
+            logger.error("Service Exception: {}", ScExceptionUtils.sanitizeErrorMessage(e.getMessage()), e);
+            return ResultVOUtil.error(e.getStatus(), ScExceptionUtils.sanitizeErrorMessage(e.getMessage()));
+        } catch (Exception e) {
+            logger.error("Error fetching doctor: {}", ScExceptionUtils.sanitizeErrorMessage(e.getMessage()), e);
+            return ResultVOUtil.error(HttpStatus.INTERNAL_SERVER_ERROR.value(), "服务器内部错误");
         }
     }
 }

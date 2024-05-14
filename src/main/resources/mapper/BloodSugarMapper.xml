@@ -1,0 +1,372 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.trust.xfyl.dao.BloodSugarMapper">
+    <resultMap id="BaseResultMap" type="com.trust.xfyl.model.po.BloodSugar">
+        <id column="blood_id" property="bloodId" jdbcType="INTEGER"/>
+        <result column="user_id" property="userId" jdbcType="INTEGER"/>
+        <result column="sugar_level" property="sugarLevel" jdbcType="DOUBLE"/>
+        <result column="sugar_time" property="sugarTime" jdbcType="VARCHAR"/>
+        <result column="sugar_date" property="sugarDate" jdbcType="TIMESTAMP"/>
+        <result column="sugar_diet" property="sugarDiet" jdbcType="VARCHAR"/>
+        <result column="sugar_exercise" property="sugarExercise" jdbcType="VARCHAR"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="is_delete" property="isDelete" jdbcType="VARCHAR"/>
+        <result column="sugar_remark" property="sugarRemark" jdbcType="VARCHAR"/>
+        <result column="remark_photo" property="remarkPhoto" jdbcType="VARCHAR"/>
+        <result column="sugar_time_id" property="sugarTimeId" jdbcType="INTEGER"/>
+        <result column="sugar_diet_id" property="sugarDietId" jdbcType="INTEGER"/>
+    </resultMap>
+    <sql id="Example_Where_Clause">
+        <where>
+            <foreach collection="oredCriteria" item="criteria" separator="or">
+                <if test="criteria.valid">
+                    <trim prefix="(" suffix=")" prefixOverrides="and">
+                        <foreach collection="criteria.criteria" item="criterion">
+                            <choose>
+                                <when test="criterion.noValue">
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue">
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue">
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue">
+                                    and ${criterion.condition}
+                                    <foreach collection="criterion.value" item="listItem" open="(" close=")"
+                                             separator=",">
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
+            </foreach>
+        </where>
+    </sql>
+    <sql id="Update_By_Example_Where_Clause">
+        <where>
+            <foreach collection="example.oredCriteria" item="criteria" separator="or">
+                <if test="criteria.valid">
+                    <trim prefix="(" suffix=")" prefixOverrides="and">
+                        <foreach collection="criteria.criteria" item="criterion">
+                            <choose>
+                                <when test="criterion.noValue">
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue">
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue">
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue">
+                                    and ${criterion.condition}
+                                    <foreach collection="criterion.value" item="listItem" open="(" close=")"
+                                             separator=",">
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
+            </foreach>
+        </where>
+    </sql>
+    <sql id="Base_Column_List">
+        blood_id, user_id, sugar_level, sugar_time, sugar_date, sugar_diet, sugar_exercise,
+    create_time, is_delete, sugar_remark, remark_photo, sugar_time_id, sugar_diet_id
+    </sql>
+    <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.trust.xfyl.model.po.BloodSugarExample">
+        select
+        <if test="distinct">
+            distinct
+        </if>
+        'true' as QUERYID,
+        <include refid="Base_Column_List"/>
+        from blood_sugar
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+        <if test="orderByClause != null">
+            order by ${orderByClause}
+        </if>
+        <if test="start != null and end != null">
+            limit #{start,jdbcType=INTEGER},#{end,jdbcType=INTEGER}
+        </if>
+    </select>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from blood_sugar
+        where blood_id = #{bloodId,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+        delete
+        from blood_sugar
+        where blood_id = #{bloodId,jdbcType=INTEGER}
+    </delete>
+    <delete id="deleteByExample" parameterType="com.trust.xfyl.model.po.BloodSugarExample">
+        delete from blood_sugar
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+    </delete>
+    <insert id="insert" parameterType="com.trust.xfyl.model.po.BloodSugar">
+        insert into blood_sugar (blood_id, user_id, sugar_level,
+                                 sugar_time, sugar_date, sugar_diet,
+                                 sugar_exercise, create_time, is_delete,
+                                 sugar_remark, remark_photo, sugar_time_id,
+                                 sugar_diet_id)
+        values (#{bloodId,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{sugarLevel,jdbcType=DOUBLE},
+                #{sugarTime,jdbcType=VARCHAR}, #{sugarDate,jdbcType=TIMESTAMP}, #{sugarDiet,jdbcType=VARCHAR},
+                #{sugarExercise,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{isDelete,jdbcType=VARCHAR},
+                #{sugarRemark,jdbcType=VARCHAR}, #{remarkPhoto,jdbcType=VARCHAR}, #{sugarTimeId,jdbcType=INTEGER},
+                #{sugarDietId,jdbcType=INTEGER})
+    </insert>
+    <insert id="insertSelective" parameterType="com.trust.xfyl.model.po.BloodSugar">
+        insert into blood_sugar
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="bloodId != null">
+                blood_id,
+            </if>
+            <if test="userId != null">
+                user_id,
+            </if>
+            <if test="sugarLevel != null">
+                sugar_level,
+            </if>
+            <if test="sugarTime != null">
+                sugar_time,
+            </if>
+            <if test="sugarDate != null">
+                sugar_date,
+            </if>
+            <if test="sugarDiet != null">
+                sugar_diet,
+            </if>
+            <if test="sugarExercise != null">
+                sugar_exercise,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="isDelete != null">
+                is_delete,
+            </if>
+            <if test="sugarRemark != null">
+                sugar_remark,
+            </if>
+            <if test="remarkPhoto != null">
+                remark_photo,
+            </if>
+            <if test="sugarTimeId != null">
+                sugar_time_id,
+            </if>
+            <if test="sugarDietId != null">
+                sugar_diet_id,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="bloodId != null">
+                #{bloodId,jdbcType=INTEGER},
+            </if>
+            <if test="userId != null">
+                #{userId,jdbcType=INTEGER},
+            </if>
+            <if test="sugarLevel != null">
+                #{sugarLevel,jdbcType=DOUBLE},
+            </if>
+            <if test="sugarTime != null">
+                #{sugarTime,jdbcType=VARCHAR},
+            </if>
+            <if test="sugarDate != null">
+                #{sugarDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="sugarDiet != null">
+                #{sugarDiet,jdbcType=VARCHAR},
+            </if>
+            <if test="sugarExercise != null">
+                #{sugarExercise,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="isDelete != null">
+                #{isDelete,jdbcType=VARCHAR},
+            </if>
+            <if test="sugarRemark != null">
+                #{sugarRemark,jdbcType=VARCHAR},
+            </if>
+            <if test="remarkPhoto != null">
+                #{remarkPhoto,jdbcType=VARCHAR},
+            </if>
+            <if test="sugarTimeId != null">
+                #{sugarTimeId,jdbcType=INTEGER},
+            </if>
+            <if test="sugarDietId != null">
+                #{sugarDietId,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
+    <select id="countByExample" parameterType="com.trust.xfyl.model.po.BloodSugarExample" resultType="java.lang.Integer">
+        select count(*) from blood_sugar
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+    </select>
+    <select id="findAll" resultType="com.trust.xfyl.model.po.BloodSugar">
+
+
+    </select>
+
+    <update id="updateByExampleSelective" parameterType="map">
+        update blood_sugar
+        <set>
+            <if test="record.bloodId != null">
+                blood_id = #{record.bloodId,jdbcType=INTEGER},
+            </if>
+            <if test="record.userId != null">
+                user_id = #{record.userId,jdbcType=INTEGER},
+            </if>
+            <if test="record.sugarLevel != null">
+                sugar_level = #{record.sugarLevel,jdbcType=DOUBLE},
+            </if>
+            <if test="record.sugarTime != null">
+                sugar_time = #{record.sugarTime,jdbcType=VARCHAR},
+            </if>
+            <if test="record.sugarDate != null">
+                sugar_date = #{record.sugarDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="record.sugarDiet != null">
+                sugar_diet = #{record.sugarDiet,jdbcType=VARCHAR},
+            </if>
+            <if test="record.sugarExercise != null">
+                sugar_exercise = #{record.sugarExercise,jdbcType=VARCHAR},
+            </if>
+            <if test="record.createTime != null">
+                create_time = #{record.createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="record.isDelete != null">
+                is_delete = #{record.isDelete,jdbcType=VARCHAR},
+            </if>
+            <if test="record.sugarRemark != null">
+                sugar_remark = #{record.sugarRemark,jdbcType=VARCHAR},
+            </if>
+            <if test="record.remarkPhoto != null">
+                remark_photo = #{record.remarkPhoto,jdbcType=VARCHAR},
+            </if>
+            <if test="record.sugarTimeId != null">
+                sugar_time_id = #{record.sugarTimeId,jdbcType=INTEGER},
+            </if>
+            <if test="record.sugarDietId != null">
+                sugar_diet_id = #{record.sugarDietId,jdbcType=INTEGER},
+            </if>
+        </set>
+        <if test="_parameter != null">
+            <include refid="Update_By_Example_Where_Clause"/>
+        </if>
+    </update>
+    <update id="updateByExample" parameterType="map">
+        update blood_sugar
+        set blood_id = #{record.bloodId,jdbcType=INTEGER},
+        user_id = #{record.userId,jdbcType=INTEGER},
+        sugar_level = #{record.sugarLevel,jdbcType=DOUBLE},
+        sugar_time = #{record.sugarTime,jdbcType=VARCHAR},
+        sugar_date = #{record.sugarDate,jdbcType=TIMESTAMP},
+        sugar_diet = #{record.sugarDiet,jdbcType=VARCHAR},
+        sugar_exercise = #{record.sugarExercise,jdbcType=VARCHAR},
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+        is_delete = #{record.isDelete,jdbcType=VARCHAR},
+        sugar_remark = #{record.sugarRemark,jdbcType=VARCHAR},
+        remark_photo = #{record.remarkPhoto,jdbcType=VARCHAR},
+        sugar_time_id = #{record.sugarTimeId,jdbcType=INTEGER},
+        sugar_diet_id = #{record.sugarDietId,jdbcType=INTEGER}
+        <if test="_parameter != null">
+            <include refid="Update_By_Example_Where_Clause"/>
+        </if>
+    </update>
+    <update id="updateByPrimaryKeySelective" parameterType="com.trust.xfyl.model.po.BloodSugar">
+        update blood_sugar
+        <set>
+            <if test="userId != null">
+                user_id = #{userId,jdbcType=INTEGER},
+            </if>
+            <if test="sugarLevel != null">
+                sugar_level = #{sugarLevel,jdbcType=DOUBLE},
+            </if>
+            <if test="sugarTime != null">
+                sugar_time = #{sugarTime,jdbcType=VARCHAR},
+            </if>
+            <if test="sugarDate != null">
+                sugar_date = #{sugarDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="sugarDiet != null">
+                sugar_diet = #{sugarDiet,jdbcType=VARCHAR},
+            </if>
+            <if test="sugarExercise != null">
+                sugar_exercise = #{sugarExercise,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="isDelete != null">
+                is_delete = #{isDelete,jdbcType=VARCHAR},
+            </if>
+            <if test="sugarRemark != null">
+                sugar_remark = #{sugarRemark,jdbcType=VARCHAR},
+            </if>
+            <if test="remarkPhoto != null">
+                remark_photo = #{remarkPhoto,jdbcType=VARCHAR},
+            </if>
+            <if test="sugarTimeId != null">
+                sugar_time_id = #{sugarTimeId,jdbcType=INTEGER},
+            </if>
+            <if test="sugarDietId != null">
+                sugar_diet_id = #{sugarDietId,jdbcType=INTEGER},
+            </if>
+        </set>
+        where blood_id = #{bloodId,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.trust.xfyl.model.po.BloodSugar">
+        update blood_sugar
+        set user_id        = #{userId,jdbcType=INTEGER},
+            sugar_level    = #{sugarLevel,jdbcType=DOUBLE},
+            sugar_time     = #{sugarTime,jdbcType=VARCHAR},
+            sugar_date     = #{sugarDate,jdbcType=TIMESTAMP},
+            sugar_diet     = #{sugarDiet,jdbcType=VARCHAR},
+            sugar_exercise = #{sugarExercise,jdbcType=VARCHAR},
+            create_time    = #{createTime,jdbcType=TIMESTAMP},
+            is_delete      = #{isDelete,jdbcType=VARCHAR},
+            sugar_remark   = #{sugarRemark,jdbcType=VARCHAR},
+            remark_photo   = #{remarkPhoto,jdbcType=VARCHAR},
+            sugar_time_id  = #{sugarTimeId,jdbcType=INTEGER},
+            sugar_diet_id  = #{sugarDietId,jdbcType=INTEGER}
+        where blood_id = #{bloodId,jdbcType=INTEGER}
+    </update>
+    <select id="count" resultType="java.lang.Long" parameterType="com.trust.xfyl.model.po.BloodSugarExample">
+        select
+        count(1)
+        from(
+        select
+        <if test="distinct">
+            distinct
+        </if>
+        'true' as QUERYID,
+        <include refid="Base_Column_List"/>
+        from blood_sugar
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+        <if test="orderByClause != null">
+            order by ${orderByClause}
+        </if>
+        <if test="start != null and end != null">
+            limit #{start,jdbcType=INTEGER},#{end,jdbcType=INTEGER}
+        </if>
+        )count
+    </select>
+</mapper>

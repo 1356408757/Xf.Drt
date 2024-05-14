@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.trust.xfyl.dao.WoundFollowMapper">
-    <resultMap id="BaseResultMap" type="com.trust.xfyl.entity.WoundFollow">
+    <resultMap id="BaseResultMap" type="com.trust.xfyl.model.po.WoundFollow">
         <id column="id" property="id" jdbcType="BIGINT"/>
         <result column="tracking_personnel_id" property="trackingPersonnelId" jdbcType="BIGINT"/>
         <result column="medical_number" property="medicalNumber" jdbcType="VARCHAR"/>
@@ -84,7 +84,7 @@
     wound_shooting_date, taking_lens, wound_photo, wound_condition, create_time, creator,
     update_time, update_name, is_delete, is_confirm
     </sql>
-    <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.trust.xfyl.entity.WoundFollowExample">
+    <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.trust.xfyl.model.po.WoundFollowExample">
         select
         <if test="distinct">
             distinct
@@ -113,13 +113,13 @@
         from wound_follow
         where id = #{id,jdbcType=BIGINT}
     </delete>
-    <delete id="deleteByExample" parameterType="com.trust.xfyl.entity.WoundFollowExample">
+    <delete id="deleteByExample" parameterType="com.trust.xfyl.model.po.WoundFollowExample">
         delete from wound_follow
         <if test="_parameter != null">
             <include refid="Example_Where_Clause"/>
         </if>
     </delete>
-    <insert id="insert" parameterType="com.trust.xfyl.entity.WoundFollow">
+    <insert id="insert" parameterType="com.trust.xfyl.model.po.WoundFollow">
         insert into wound_follow (id, tracking_personnel_id, medical_number,
                                   doctor_id, doctor_name, postoperative_stage,
                                   wound_shooting_date, taking_lens, wound_photo,
@@ -133,7 +133,7 @@
                 #{updateTime,jdbcType=TIMESTAMP}, #{updateName,jdbcType=VARCHAR}, #{isDelete,jdbcType=INTEGER},
                 #{isConfirm,jdbcType=VARCHAR})
     </insert>
-    <insert id="insertSelective" parameterType="com.trust.xfyl.entity.WoundFollow" useGeneratedKeys="true"
+    <insert id="insertSelective" parameterType="com.trust.xfyl.model.po.WoundFollow" useGeneratedKeys="true"
             keyProperty="id">
         insert into wound_follow
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -237,7 +237,7 @@
             </if>
         </trim>
     </insert>
-    <select id="countByExample" parameterType="com.trust.xfyl.entity.WoundFollowExample" resultType="java.lang.Integer">
+    <select id="countByExample" parameterType="com.trust.xfyl.model.po.WoundFollowExample" resultType="java.lang.Integer">
         select count(*) from wound_follow
         <if test="_parameter != null">
             <include refid="Example_Where_Clause"/>
@@ -321,7 +321,7 @@
             <include refid="Update_By_Example_Where_Clause"/>
         </if>
     </update>
-    <update id="updateByPrimaryKeySelective" parameterType="com.trust.xfyl.entity.WoundFollow" useGeneratedKeys="true"
+    <update id="updateByPrimaryKeySelective" parameterType="com.trust.xfyl.model.po.WoundFollow" useGeneratedKeys="true"
             keyProperty="id">
         update wound_follow
         <set>
@@ -373,7 +373,7 @@
         </set>
         where id = #{id,jdbcType=BIGINT}
     </update>
-    <update id="updateByPrimaryKey" parameterType="com.trust.xfyl.entity.WoundFollow">
+    <update id="updateByPrimaryKey" parameterType="com.trust.xfyl.model.po.WoundFollow">
         update wound_follow
         set tracking_personnel_id = #{trackingPersonnelId,jdbcType=BIGINT},
             medical_number        = #{medicalNumber,jdbcType=VARCHAR},
@@ -393,7 +393,7 @@
         where id = #{id,jdbcType=BIGINT}
     </update>
 
-    <select id="count" resultType="java.lang.Long" parameterType="com.trust.xfyl.entity.WoundFollowExample">
+    <select id="count" resultType="java.lang.Long" parameterType="com.trust.xfyl.model.po.WoundFollowExample">
         select
         count(1)
         from(

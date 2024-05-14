@@ -1,15 +1,15 @@
 package com.trust.xfyl.handler;
 
 import com.aliyun.broadscope.bailian.sdk.models.CompletionsResponse;
-import com.trust.xfyl.entity.dto.CompletionRequestDTO;
-import com.trust.xfyl.entity.dto.CompletionResponseDTO;
-import com.trust.xfyl.entity.dto.Result;
 import com.trust.xfyl.enums.ErrorCodeEnum;
 import com.trust.xfyl.exception.BizException;
-import com.trust.xfyl.model.ChatMessage;
+import com.trust.xfyl.model.Result;
+import com.trust.xfyl.model.dto.CompletionRequestDTO;
+import com.trust.xfyl.model.dto.CompletionResponseDTO;
+import com.trust.xfyl.model.po.ChatMessage;
 import com.trust.xfyl.service.ChatSessionService;
-import com.trust.xfyl.util.BailianLlmClient;
-import com.trust.xfyl.util.LogUtils;
+import com.trust.xfyl.util.alibabaCloudTools.BailianLlmClient;
+import com.trust.xfyl.util.alibabaCloudTools.LogUtils;
 import org.apache.commons.lang3.StringUtils;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;

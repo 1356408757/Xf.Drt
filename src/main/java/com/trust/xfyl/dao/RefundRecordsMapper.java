@@ -1,7 +1,7 @@
 package com.trust.xfyl.dao;
 
-import com.trust.xfyl.entity.RefundRecords;
-import com.trust.xfyl.entity.RefundRecordsExample;
+import com.trust.xfyl.model.po.RefundRecords;
+import com.trust.xfyl.model.po.RefundRecordsExample;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -81,7 +81,7 @@ public interface RefundRecordsMapper {
     /**
      * 根据条件选择性更新记录
      *
-     * @param record 记录实体
+     * @param record  记录实体
      * @param example 查询条件实例
      * @return 影响的记录数
      */
@@ -90,7 +90,7 @@ public interface RefundRecordsMapper {
     /**
      * 根据条件带BLOBs字段选择性更新记录
      *
-     * @param record 记录实体
+     * @param record  记录实体
      * @param example 查询条件实例
      * @return 影响的记录数
      */
@@ -99,7 +99,7 @@ public interface RefundRecordsMapper {
     /**
      * 根据条件更新记录
      *
-     * @param record 记录实体
+     * @param record  记录实体
      * @param example 查询条件实例
      * @return 影响的记录数
      */

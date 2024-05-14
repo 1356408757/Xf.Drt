@@ -1,6 +1,5 @@
 package com.trust.xfyl.config;
 
-
 import io.swagger.annotations.Api;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -24,118 +23,100 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Swagger 接口文档配置类
+ * Swagger 接口文档配置类，用于配置Swagger的相关信息，并启用Swagger2。
+ *
  * @author Bay-max
  * @date 2024/4/22 14:01
  **/
-
 @EnableSwagger2
 @Configuration
 public class SwaggerConfig extends WebMvcConfigurationSupport {
 
-
-    //配置扫描的api控制包路径 这里配置的是你后端框架controller类对应的路径
-
+    // Swagger配置常量，包括基础包路径、服务URL、Swagger UI路径等
     private static final String BASE_PACKAGE = "com.trust.xfyl.controller";
-
-
-    //服务器路径 代码部署服务的路径，选添，可以不写
-
-    private static final String SERVICE_URL = "xxxxxxxxx";
+    private static final String SERVICE_URL = "http://localhost:8089/";
+    private static final String SWAGGER_UI_PATH = "/swagger-ui.html";
+    private static final String WEBJARS_PATH = "/webjars/**";
+    private static final String DOC_HTML_PATH = "doc.html";
+    private static final String CLASSPATH_STATIC = "classpath:/static/";
 
     /**
-     * @return springfox.documentation.spring.web.plugins.Docket
-     * @Author djj
-     * @Description //TODO
-     * @Date 15:59 2024/1/25
-     * @Param []
-     **/
+     * 创建REST API的Docket Bean。
+     *
+     * @return Docket配置实例
+     */
     @Bean
     public Docket createRestApi() {
         return new Docket(DocumentationType.SWAGGER_2)
                 .apiInfo(apiInfo())
                 .select()
-
-                // 设置扫描基础包
+                // 设置扫描的API基础包
                 .apis(RequestHandlerSelectors.basePackage(BASE_PACKAGE))
-
-                // 扫描使用Api注解的控制器
+                // 扫描使用@Api注解的控制器
                 .apis(RequestHandlerSelectors.withClassAnnotation(Api.class))
                 .paths(PathSelectors.any())
                 .build()
-
-                //添加登录认证
-                //这里下面两行代码已经相关下面包可以注释掉，这里是配置的Swagger文档登录验证，需要在application.yml文件中进行相关的配置，配置信息见后面详细情况
-                /*  .securitySchemes(securitySchemes())*/
+                // 添加登录认证配置
+                // 请在application.yml中配置相关的安全信息
+                /* .securitySchemes(securitySchemes())*/
                 .securityContexts(securityContexts());
-
     }
 
+    /**
+     * 创建RequestMappingInfoHandlerMapping Bean，用于处理请求映射。
+     *
+     * @return RequestMappingInfoHandlerMapping实例
+     */
     @Bean
     public RequestMappingInfoHandlerMapping requestMapping() {
         return new RequestMappingHandlerMapping();
     }
 
     /**
-     * @return springfox.documentation.service.ApiInfo
-     * @Author djj
-     * @Description //TODO
-     * @Date 15:59 2024/1/25
-     * @Param []
-     **/
+     * 配置Swagger的API信息。
+     *
+     * @return ApiInfo实例，包含API的标题、描述、版本等信息
+     */
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
-
-                // 页面标题(自由发挥)
                 .title("信芙醫療")
-
-                // API描述
                 .description("接口文檔-api")
-
-                // 创建路径
                 .termsOfServiceUrl(SERVICE_URL)
                 .version("1.0.0")
                 .build();
-
-
     }
 
-
     /**
-     * @Author djj
-     * @Description 解决 swagger 静态资源 404问题
-     * @Date 15:58 2024/1/25
-     * @Param [registry]
-     **/
+     * 配置静态资源和Swagger资源的访问路径。
+     *
+     * @param registry 资源注册表
+     */
     @Override
     protected void addResourceHandlers(ResourceHandlerRegistry registry) {
-
-        // 解决静态资源无法访问
+        // 配置静态资源访问
         registry.addResourceHandler("/**")
-                .addResourceLocations("classpath:/static/");
+                .addResourceLocations(CLASSPATH_STATIC);
 
-        // 解决swagger无法访问
-        registry.addResourceHandler("/swagger-ui.html")
+        // 配置Swagger UI资源访问
+        registry.addResourceHandler(SWAGGER_UI_PATH)
                 .addResourceLocations("classpath:/META-INF/resources/");
 
-        // 解决swagger的js文件无法访问
-        registry.addResourceHandler("/webjars/**")
+        // 配置Swagger的WebJars资源访问
+        registry.addResourceHandler(WEBJARS_PATH)
                 .addResourceLocations("classpath:/META-INF/resources/webjars/");
 
-        // 解决swagger-bootstrap 无法访问
-        registry.addResourceHandler("doc.html").
-                addResourceLocations("classpath:/META-INF/resources/");
+        // 配置Swagger Bootstrap UI资源访问
+        registry.addResourceHandler(DOC_HTML_PATH)
+                .addResourceLocations("classpath:/META-INF/resources/");
     }
 
     /**
-     * @return java.util.List<springfox.documentation.service.ApiKey>
-     * @Author djj
-     * @Description //TODO
-     * @Date 15:58 2024/1/25
-     * @Param []
-     **/
+     * 配置Swagger的请求头信息（ApiKey）。
+     *
+     * @return 包含请求头信息的ApiKey列表
+     */
     private List<ApiKey> securitySchemes() {
-        //设置请求头信息
+        // 设置请求头中的Authorization信息
         List<ApiKey> result = new ArrayList<>();
         ApiKey apiKey = new ApiKey("Authorization", "Authorization", "header");
         result.add(apiKey);
@@ -143,42 +124,34 @@ public class SwaggerConfig extends WebMvcConfigurationSupport {
     }
 
     /**
-     * @return java.util.List<springfox.documentation.spi.service.contexts.SecurityContext>
-     * @Author djj
-     * @Description //TODO
-     * @Date 15:58 2024/1/25
-     * @Param []
-     **/
+     * 配置需要认证的路径。
+     *
+     * @return 安全上下文列表，指定需要认证的路径
+     */
     private List<SecurityContext> securityContexts() {
-        //设置需要登录认证的路径
+        // 设置需要通过"Authorization"认证的路径
         List<SecurityContext> result = new ArrayList<>();
-
-        // 所有请求路径
-        result.add(getContextByPath("/.*"));
+        result.add(getContextByPath());
         return result;
     }
 
     /**
-     * @return springfox.documentation.spi.service.contexts.SecurityContext
-     * @Author djj
-     * @Description //TODO
-     * @Date 15:58 2024/1/25
-     * @Param [pathRegex]
-     **/
-    private SecurityContext getContextByPath(String pathRegex) {
+     * 获取安全上下文，指定哪些路径需要认证。
+     *
+     * @return SecurityContext实例，包含认证信息
+     */
+    private SecurityContext getContextByPath() {
         return SecurityContext.builder()
                 .securityReferences(defaultAuth())
-                .forPaths(PathSelectors.regex(pathRegex))
+                .forPaths(PathSelectors.regex("/.*"))
                 .build();
     }
 
     /**
-     * @return java.util.List<springfox.documentation.service.SecurityReference>
-     * @Author djj
-     * @Description //TODO
-     * @Date 15:58 2024/1/25
-     * @Param []
-     **/
+     * 获取默认的认证信息。
+     *
+     * @return 包含认证范围的SecurityReference列表
+     */
     private List<SecurityReference> defaultAuth() {
         List<SecurityReference> result = new ArrayList<>();
         AuthorizationScope authorizationScope = new AuthorizationScope("global", "accessEverything");
@@ -187,7 +160,4 @@ public class SwaggerConfig extends WebMvcConfigurationSupport {
         result.add(new SecurityReference("Authorization", authorizationScopes));
         return result;
     }
-
-
 }
-

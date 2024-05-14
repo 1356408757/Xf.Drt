@@ -1,6 +1,6 @@
 package com.trust.xfyl.service;
 
-import com.trust.xfyl.model.ChatMessage;
+import com.trust.xfyl.model.po.ChatMessage;
 
 import java.util.Deque;
 

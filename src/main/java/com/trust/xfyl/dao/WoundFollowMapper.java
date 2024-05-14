@@ -1,7 +1,7 @@
 package com.trust.xfyl.dao;
 
-import com.trust.xfyl.entity.WoundFollow;
-import com.trust.xfyl.entity.WoundFollowExample;
+import com.trust.xfyl.model.po.WoundFollow;
+import com.trust.xfyl.model.po.WoundFollowExample;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;

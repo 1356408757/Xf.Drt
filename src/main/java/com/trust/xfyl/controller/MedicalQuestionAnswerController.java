@@ -2,11 +2,12 @@ package com.trust.xfyl.controller;
 
 import com.aliyun.imageprocess20200320.models.RunMedQARequest;
 import com.aliyun.imageprocess20200320.models.RunMedQAResponseBody;
-import com.trust.xfyl.entity.ResultVO;
-import com.trust.xfyl.entity.dto.SampleDto;
-import com.trust.xfyl.util.ResultVOUtil;
-import com.trust.xfyl.util.Sample;
-import com.trust.xfyl.util.StsServiceSample;
+import com.trust.xfyl.model.ResultVO;
+import com.trust.xfyl.model.ResultVOUtil;
+import com.trust.xfyl.model.dto.SampleDto;
+import com.trust.xfyl.util.alibabaCloudTools.AliMedIQAUtils;
+import com.trust.xfyl.util.alibabaCloudTools.AliOSSClientUtils;
+import io.swagger.annotations.Api;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +25,7 @@ import java.util.Map;
  * @Author Bay-max
  * @Date 2024/3/15 15:58
  **/
+@Api(value = "阿里智能医疗问答控制器", description = "阿里智能医疗问答控制器", tags = "阿里智能医疗问答控制器")
 @RequestMapping("/medical")
 @RestController
 public class MedicalQuestionAnswerController {
@@ -45,7 +47,7 @@ public class MedicalQuestionAnswerController {
         // 设置问题类型为图片
         initialSampleDto.setQuestionType("images");
         // 调用文件上传服务，上传答案图片
-        ResultVO resultVO = StsServiceSample.uploadFiles(answerImageFile);
+        ResultVO resultVO = AliOSSClientUtils.uploadFiles(answerImageFile);
         // 解析上传服务返回的结果，获取图片的URL列表
         List<Map<String, Object>> dataList = (List<Map<String, Object>>) resultVO.getData();
         List<RunMedQARequest.RunMedQARequestAnswerImageURLList> answerImageList = new ArrayList<>();
@@ -60,7 +62,7 @@ public class MedicalQuestionAnswerController {
         }
         // 将答案图片URL列表设置到SampleDto对象中
         initialSampleDto.setAnswerImageList(answerImageList);
-        RunMedQAResponseBody.RunMedQAResponseBodyData responseData = Sample.executeMedicalQuestionAndAnswer(initialSampleDto);
+        RunMedQAResponseBody.RunMedQAResponseBodyData responseData = AliMedIQAUtils.executeMedicalQuestionAndAnswer(initialSampleDto);
         return ResultVOUtil.success(responseData);
 
     }
@@ -84,7 +86,7 @@ public class MedicalQuestionAnswerController {
             throw new IllegalArgumentException("answerText must not be empty when sessionId is provided and the question type is not 'images'");
         }
         // 执行医疗问题解答流程，并返回结果
-        RunMedQAResponseBody.RunMedQAResponseBodyData responseData = Sample.executeMedicalQuestionAndAnswer(sampleDto);
+        RunMedQAResponseBody.RunMedQAResponseBodyData responseData = AliMedIQAUtils.executeMedicalQuestionAndAnswer(sampleDto);
         System.out.println(responseData);
         return ResponseEntity.ok(responseData);
     }

@@ -2,15 +2,24 @@ package com.trust.xfyl.controller;
 
 import com.trust.xfyl.dao.SurgeryMapper;
 import com.trust.xfyl.dao.TrustRelationFileMapper;
-import com.trust.xfyl.entity.*;
 import com.trust.xfyl.exception.SCServiceException;
-import com.trust.xfyl.service.FileService;
-import com.trust.xfyl.service.SurgeryService;
-import com.trust.xfyl.util.ResultVOUtil;
+import com.trust.xfyl.model.ResultVO;
+import com.trust.xfyl.model.ResultVOUtil;
+import com.trust.xfyl.model.po.Surgery;
+import com.trust.xfyl.model.po.SurgeryExample;
+import com.trust.xfyl.model.po.TrustRelationFile;
+import com.trust.xfyl.model.po.TrustRelationFileExample;
+import com.trust.xfyl.service.impl.FileService;
+import com.trust.xfyl.service.impl.SurgeryService;
+import com.trust.xfyl.util.ScExceptionUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import net.sf.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
@@ -21,15 +30,16 @@ import java.util.Map;
 /**
  * TODO
  *
- * @Description
  * @author Bay-max
+ * @Description
  * @date 2024/4/22 15:16
  **/
 
-@Api(value = "手术伤口照片上传", description = "伤口照片上传", tags = "手术伤口照片上传")
+@Api(value = "手术伤口照片控制器", description = "手术伤口照片控制器", tags = "手术伤口照片控制器")
 @RestController
 @RequestMapping("/surgery")
 public class SurgeryController {
+    private final static Logger logger = LoggerFactory.getLogger(SurgeryController.class);
     private final SurgeryMapper surgeryMapper;
     private final SurgeryService surgeryService;
     private final FileService fileService;
@@ -67,7 +77,11 @@ public class SurgeryController {
             returnMap.put("data", surgeries);
             return ResultVOUtil.success(returnMap);
         } catch (SCServiceException e) {
-            return ResultVOUtil.error(e.toString());
+            logger.error("Service Exception: {}", ScExceptionUtils.sanitizeErrorMessage(e.getMessage()), e);
+            return ResultVOUtil.error(e.getStatus(), ScExceptionUtils.sanitizeErrorMessage(e.getMessage()));
+        } catch (Exception e) {
+            logger.error("Error fetching surgery: {}", ScExceptionUtils.sanitizeErrorMessage(e.getMessage()), e);
+            return ResultVOUtil.error(HttpStatus.INTERNAL_SERVER_ERROR.value(), "服务器内部错误");
         }
 
     }
@@ -87,6 +101,7 @@ public class SurgeryController {
      * @Param [surgery]
      **/
 
+    @Transactional
     @ApiOperation(value = "保存一条上传伤口照片的记录", nickname = "saveSurgery", notes = "保存一条上传伤口照片的记录")
     @PostMapping("/saveSurgery")
     public ResultVO saveSurgery(@ApiParam(value = "手术伤口照片上传的对象", required = true) @RequestBody Surgery surgery) {
@@ -135,7 +150,7 @@ public class SurgeryController {
                     }
                     surgery.setCreatTime(new Date());
                     Long aLong = surgeryService.insertSelective(surgery);
-                    if (aLong >0 && (surgery.getFileId() != null)) {
+                    if (aLong > 0 && (surgery.getFileId() != null)) {
                         TrustRelationFile trustRelationFile = new TrustRelationFile();
                         trustRelationFile.setFileId(surgery.getFileId());
                         trustRelationFile.setBusiType("surgery");
@@ -143,7 +158,7 @@ public class SurgeryController {
                         trustRelationFile.setPhotoType(surgery.getSurgeryType());
                         fileService.addFileRela(trustRelationFile);
                     }
-                    if (aLong >0) {
+                    if (aLong > 0) {
                         return ResultVOUtil.success();
                     } else {
                         return ResultVOUtil.error("添加失败");
@@ -152,9 +167,11 @@ public class SurgeryController {
             }
 
         } catch (SCServiceException e) {
-            return ResultVOUtil.error(e.getStatus(), e.getMessage());
+            logger.error("Service Exception: {}", ScExceptionUtils.sanitizeErrorMessage(e.getMessage()), e);
+            return ResultVOUtil.error(e.getStatus(), ScExceptionUtils.sanitizeErrorMessage(e.getMessage()));
         } catch (Exception e) {
-            return ResultVOUtil.error(-1, e.getMessage());
+            logger.error("Error fetching surgery: {}", ScExceptionUtils.sanitizeErrorMessage(e.getMessage()), e);
+            return ResultVOUtil.error(HttpStatus.INTERNAL_SERVER_ERROR.value(), "服务器内部错误");
         }
     }
 
@@ -185,9 +202,11 @@ public class SurgeryController {
                 return ResultVOUtil.error("失败");
             }
         } catch (SCServiceException e) {
-            return ResultVOUtil.error(e.getStatus(), e.getMessage());
+            logger.error("Service Exception: {}", ScExceptionUtils.sanitizeErrorMessage(e.getMessage()), e);
+            return ResultVOUtil.error(e.getStatus(), ScExceptionUtils.sanitizeErrorMessage(e.getMessage()));
         } catch (Exception e) {
-            return ResultVOUtil.error(-1, e.getMessage());
+            logger.error("Error fetching surgery: {}", ScExceptionUtils.sanitizeErrorMessage(e.getMessage()), e);
+            return ResultVOUtil.error(HttpStatus.INTERNAL_SERVER_ERROR.value(), "服务器内部错误");
         }
     }
 
@@ -201,7 +220,11 @@ public class SurgeryController {
             returnMap.put("surgery", surgery1);
             return ResultVOUtil.success(returnMap);
         } catch (SCServiceException e) {
-            return ResultVOUtil.error(e.toString());
+            logger.error("Service Exception: {}", ScExceptionUtils.sanitizeErrorMessage(e.getMessage()), e);
+            return ResultVOUtil.error(e.getStatus(), ScExceptionUtils.sanitizeErrorMessage(e.getMessage()));
+        } catch (Exception e) {
+            logger.error("Error fetching surgery: {}", ScExceptionUtils.sanitizeErrorMessage(e.getMessage()), e);
+            return ResultVOUtil.error(HttpStatus.INTERNAL_SERVER_ERROR.value(), "服务器内部错误");
         }
     }
 }

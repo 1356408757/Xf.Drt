@@ -4,17 +4,26 @@ import com.trust.xfyl.dao.DoctorMapper;
 import com.trust.xfyl.dao.TrackingPersonnelMapper;
 import com.trust.xfyl.dao.TrustRelationFileMapper;
 import com.trust.xfyl.dao.WoundOrdersMapper;
-import com.trust.xfyl.entity.*;
-import com.trust.xfyl.entity.vo.WoundOrderVo;
 import com.trust.xfyl.exception.SCServiceException;
-import com.trust.xfyl.service.FileService;
-import com.trust.xfyl.service.OrderService;
-import com.trust.xfyl.util.ResultVOUtil;
-import com.trust.xfyl.util.UuidUtil;
+import com.trust.xfyl.model.ResultVO;
+import com.trust.xfyl.model.ResultVOUtil;
+import com.trust.xfyl.model.po.TrustRelationFile;
+import com.trust.xfyl.model.po.TrustRelationFileExample;
+import com.trust.xfyl.model.po.WoundOrders;
+import com.trust.xfyl.model.po.WoundOrdersExample;
+import com.trust.xfyl.model.vo.WoundOrderVo;
+import com.trust.xfyl.service.impl.FileService;
+import com.trust.xfyl.service.impl.OrderService;
+import com.trust.xfyl.util.ScExceptionUtils;
+import com.trust.xfyl.util.UuidUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import net.sf.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
@@ -29,24 +38,21 @@ import java.util.Map;
  * @date 2024/4/22 15:15
  **/
 
-@Api(value = "订单", description = "订单", tags = "订单")
+@Api(value = "订单控制器", description = "订单控制器", tags = "订单控制器")
 @RestController
 @RequestMapping("/order")
 public class OrderController {
+    private final static Logger logger = LoggerFactory.getLogger(OrderController.class);
     private final OrderService orderService;
     private final WoundOrdersMapper woundOrdersMapper;
     private final FileService fileService;
     private final TrustRelationFileMapper trustRelationFileMapper;
-    private final DoctorMapper doctorMapper;
-    private final TrackingPersonnelMapper trackingPersonnelMapper;
 
     public OrderController(OrderService orderService, WoundOrdersMapper woundOrdersMapper, FileService fileService, TrustRelationFileMapper trustRelationFileMapper, DoctorMapper doctorMapper, TrackingPersonnelMapper trackingPersonnelMapper) {
         this.orderService = orderService;
         this.woundOrdersMapper = woundOrdersMapper;
         this.fileService = fileService;
         this.trustRelationFileMapper = trustRelationFileMapper;
-        this.doctorMapper = doctorMapper;
-        this.trackingPersonnelMapper = trackingPersonnelMapper;
     }
 
     /**
@@ -76,13 +82,18 @@ public class OrderController {
             returnMap.put("woundOrders", woundOrders1);
             return ResultVOUtil.success(returnMap);
         } catch (SCServiceException e) {
-            return ResultVOUtil.error(e.toString());
+            logger.error("Service Exception: {}", ScExceptionUtils.sanitizeErrorMessage(e.getMessage()), e);
+            return ResultVOUtil.error(e.getStatus(), ScExceptionUtils.sanitizeErrorMessage(e.getMessage()));
+        } catch (Exception e) {
+            logger.error("Error fetching order: {}", ScExceptionUtils.sanitizeErrorMessage(e.getMessage()), e);
+            return ResultVOUtil.error(HttpStatus.INTERNAL_SERVER_ERROR.value(), "服务器内部错误");
         }
 
     }
 
     @ApiOperation(value = "保存一条数据", nickname = "saveOrder", notes = "保存一条数据")
     @PostMapping("/saveOrder")
+    @Transactional
     public ResultVO saveOrder(@ApiParam(value = "订单对象", required = true) @RequestBody WoundOrders woundOrders) {
         try {
             // 判断是新增还是更新订单
@@ -94,9 +105,11 @@ public class OrderController {
                 return insertOrder(woundOrders);
             }
         } catch (SCServiceException e) {
-            return ResultVOUtil.error(e.getStatus(), e.getMessage());
+            logger.error("Service Exception: {}", ScExceptionUtils.sanitizeErrorMessage(e.getMessage()), e);
+            return ResultVOUtil.error(e.getStatus(), ScExceptionUtils.sanitizeErrorMessage(e.getMessage()));
         } catch (Exception e) {
-            return ResultVOUtil.error(-1, "系统错误，请联系管理员");
+            logger.error("Error fetching order: {}", ScExceptionUtils.sanitizeErrorMessage(e.getMessage()), e);
+            return ResultVOUtil.error(HttpStatus.INTERNAL_SERVER_ERROR.value(), "服务器内部错误");
         }
     }
 
@@ -127,7 +140,7 @@ public class OrderController {
         return integer > 0 ? ResultVOUtil.success("保存成功") : ResultVOUtil.error("保存失败");
     }
 
-    private void updateWoundPhotos(Long orderId, String surgeryType, String photoIds) {
+    void updateWoundPhotos(Long orderId, String surgeryType, String photoIds) {
         TrustRelationFileExample trustRelationFileExample = new TrustRelationFileExample();
         trustRelationFileExample.createCriteria().andBusiTypeEqualTo("woundOrders").andBusiIdEqualTo(String.valueOf(orderId)).andPhotoTypeEqualTo(surgeryType);
         List<TrustRelationFile> trustRelationFiles = trustRelationFileMapper.selectByExample(trustRelationFileExample);
@@ -153,7 +166,7 @@ public class OrderController {
     private void setupNewOrder(WoundOrders woundOrders) {
         woundOrders.setCreateTime(new Date());
         woundOrders.setIsDelete(0);
-        woundOrders.setOrderNumber(UuidUtil.getUUID());
+        woundOrders.setOrderNumber(UuidUtils.getUUID());
         woundOrders.setOrderPrice(BigDecimal.valueOf(0.00));
         woundOrders.setOrderType("待服务");
         woundOrders.setAppointmentType("直接预约");
@@ -176,7 +189,11 @@ public class OrderController {
             returnMap.put("woundOrderVo", woundOrderVo);
             return ResultVOUtil.success(returnMap);
         } catch (SCServiceException e) {
-            return ResultVOUtil.error(e.toString());
+            logger.error("Service Exception: {}", ScExceptionUtils.sanitizeErrorMessage(e.getMessage()), e);
+            return ResultVOUtil.error(e.getStatus(), ScExceptionUtils.sanitizeErrorMessage(e.getMessage()));
+        } catch (Exception e) {
+            logger.error("Error fetching order: {}", ScExceptionUtils.sanitizeErrorMessage(e.getMessage()), e);
+            return ResultVOUtil.error(HttpStatus.INTERNAL_SERVER_ERROR.value(), "服务器内部错误");
         }
     }
 
@@ -200,9 +217,11 @@ public class OrderController {
             }
 
         } catch (SCServiceException e) {
-            return ResultVOUtil.error(e.getStatus(), e.getMessage());
+            logger.error("Service Exception: {}", ScExceptionUtils.sanitizeErrorMessage(e.getMessage()), e);
+            return ResultVOUtil.error(e.getStatus(), ScExceptionUtils.sanitizeErrorMessage(e.getMessage()));
         } catch (Exception e) {
-            return ResultVOUtil.error(-1, e.getMessage());
+            logger.error("Error fetching order: {}", ScExceptionUtils.sanitizeErrorMessage(e.getMessage()), e);
+            return ResultVOUtil.error(HttpStatus.INTERNAL_SERVER_ERROR.value(), "服务器内部错误");
         }
     }
 }

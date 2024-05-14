@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.trust.xfyl.dao.WoundOrdersMapper">
-    <resultMap id="BaseResultMap" type="com.trust.xfyl.entity.WoundOrders">
+    <resultMap id="BaseResultMap" type="com.trust.xfyl.model.po.WoundOrders">
         <id column="id" property="id" jdbcType="BIGINT"/>
         <result column="order_number" property="orderNumber" jdbcType="VARCHAR"/>
         <result column="task_id" property="taskId" jdbcType="BIGINT"/>
@@ -94,7 +94,7 @@
     wound_photo_ids, wound_photography_time, taking_lens, wound_condition, is_confirm, 
     is_reservation, create_time, creator, update_time, updator, is_delete, association_id
     </sql>
-    <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.trust.xfyl.entity.WoundOrdersExample">
+    <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.trust.xfyl.model.po.WoundOrdersExample">
         select
         <if test="distinct">
             distinct
@@ -120,13 +120,13 @@
         from wound_orders
         where id = #{id,jdbcType=BIGINT}
     </delete>
-    <delete id="deleteByExample" parameterType="com.trust.xfyl.entity.WoundOrdersExample">
+    <delete id="deleteByExample" parameterType="com.trust.xfyl.model.po.WoundOrdersExample">
         delete from wound_orders
         <if test="_parameter != null">
             <include refid="Example_Where_Clause"/>
         </if>
     </delete>
-    <insert id="insert" parameterType="com.trust.xfyl.entity.WoundOrders">
+    <insert id="insert" parameterType="com.trust.xfyl.model.po.WoundOrders">
         insert into wound_orders (id, order_number, task_id,
                                   doctor_id, ord_type, order_price,
                                   business, medical_number, appointment_type,
@@ -148,7 +148,7 @@
                 #{updateTime,jdbcType=TIMESTAMP}, #{updator,jdbcType=VARCHAR}, #{isDelete,jdbcType=INTEGER},
                 #{associationId,jdbcType=BIGINT})
     </insert>
-    <insert id="insertSelective" parameterType="com.trust.xfyl.entity.WoundOrders" useGeneratedKeys="true"
+    <insert id="insertSelective" parameterType="com.trust.xfyl.model.po.WoundOrders" useGeneratedKeys="true"
             keyProperty="id">
         insert into wound_orders
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -306,7 +306,7 @@
             </if>
         </trim>
     </insert>
-    <select id="countByExample" parameterType="com.trust.xfyl.entity.WoundOrdersExample" resultType="java.lang.Integer">
+    <select id="countByExample" parameterType="com.trust.xfyl.model.po.WoundOrdersExample" resultType="java.lang.Integer">
         select count(*) from wound_orders
         <if test="_parameter != null">
             <include refid="Example_Where_Clause"/>
@@ -427,7 +427,7 @@
         </if>
     </update>
 
-    <update id="updateByPrimaryKeySelective" parameterType="com.trust.xfyl.entity.WoundOrders" useGeneratedKeys="true"
+    <update id="updateByPrimaryKeySelective" parameterType="com.trust.xfyl.model.po.WoundOrders" useGeneratedKeys="true"
             keyProperty="id">
         update wound_orders
         <set>
@@ -506,7 +506,7 @@
         </set>
         where id = #{id,jdbcType=BIGINT}
     </update>
-    <update id="updateByPrimaryKey" parameterType="com.trust.xfyl.entity.WoundOrders">
+    <update id="updateByPrimaryKey" parameterType="com.trust.xfyl.model.po.WoundOrders">
         update wound_orders
         set order_number           = #{orderNumber,jdbcType=VARCHAR},
             task_id                = #{taskId,jdbcType=BIGINT},
@@ -534,8 +534,8 @@
             association_id         = #{associationId,jdbcType=BIGINT}
         where id = #{id,jdbcType=BIGINT}
     </update>
-    <select id="selectAll" resultType="com.trust.xfyl.entity.vo.WoundOrderVo"
-            parameterType="com.trust.xfyl.entity.WoundOrders">
+    <select id="selectAll" resultType="com.trust.xfyl.model.vo.WoundOrderVo"
+            parameterType="com.trust.xfyl.model.po.WoundOrders">
         SELECT
         wo.id,
         wo.appointment_type,
@@ -625,7 +625,7 @@
         wo.create_time DESC
         LIMIT #{start,jdbcType=INTEGER},#{end,jdbcType=INTEGER}
     </select>
-    <select id="count" resultType="java.lang.Long" parameterType="com.trust.xfyl.entity.WoundFollowExample">
+    <select id="count" resultType="java.lang.Long" parameterType="com.trust.xfyl.model.po.WoundFollowExample">
         select
         count(1)
         from(
@@ -720,8 +720,8 @@
         )count
     </select>
 
-    <select id="selectWoundOrdersById" resultType="com.trust.xfyl.entity.vo.WoundOrderVo"
-            parameterType="com.trust.xfyl.entity.WoundOrders">
+    <select id="selectWoundOrdersById" resultType="com.trust.xfyl.model.vo.WoundOrderVo"
+            parameterType="com.trust.xfyl.model.po.WoundOrders">
         SELECT wo.id,
                wo.appointment_type,
                wo.association_id,
