@@ -3,7 +3,7 @@
 <!-- 定义mapper接口的命名空间 -->
 <mapper namespace="com.trust.xfyl.dao.CreditPackagesMapper">
     <!-- 定义结果映射，用于从数据库结果集中将数据映射到CreditPackages实体中 -->
-    <resultMap id="BaseResultMap" type="com.trust.xfyl.entity.CreditPackages">
+    <resultMap id="BaseResultMap" type="com.trust.xfyl.model.po.CreditPackages">
         <id column="package_id" property="packageId" jdbcType="INTEGER"/>
         <result column="package_name" property="packageName" jdbcType="VARCHAR"/>
         <result column="price" property="price" jdbcType="DECIMAL"/>
@@ -78,7 +78,7 @@
         package_id, package_name, price, credits_per_package, create_time, is_delete
     </sql>
     <!-- 根据例子查询数据 -->
-    <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.trust.xfyl.entity.CreditPackagesExample">
+    <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.trust.xfyl.model.po.CreditPackagesExample">
         select
         <if test="distinct">
             distinct
@@ -91,6 +91,9 @@
         </if>
         <if test="orderByClause != null">
             order by ${orderByClause}
+        </if>
+        <if test="start != null and end != null">
+            limit #{start,jdbcType=INTEGER},#{end,jdbcType=INTEGER}
         </if>
     </select>
     <!-- 根据主键查询数据 -->
@@ -107,14 +110,14 @@
         where package_id = #{packageId,jdbcType=INTEGER}
     </delete>
     <!-- 根据例子删除数据 -->
-    <delete id="deleteByExample" parameterType="com.trust.xfyl.entity.CreditPackagesExample">
+    <delete id="deleteByExample" parameterType="com.trust.xfyl.model.po.CreditPackagesExample">
         delete from creditpackages
         <if test="_parameter != null">
             <include refid="Example_Where_Clause"/>
         </if>
     </delete>
     <!-- 插入数据 -->
-    <insert id="insert" parameterType="com.trust.xfyl.entity.CreditPackages">
+    <insert id="insert" parameterType="com.trust.xfyl.model.po.CreditPackages">
         insert into creditpackages (package_id, package_name, price,
                                     credits_per_package, create_time, is_delete)
         values (#{packageId,jdbcType=INTEGER}, #{packageName,jdbcType=VARCHAR}, #{price,jdbcType=DECIMAL},
@@ -122,7 +125,7 @@
     </insert>
 
     <!-- 根据条件插入CreditPackages实体的 selective 数据 -->
-    <insert id="insertSelective" parameterType="com.trust.xfyl.entity.CreditPackages">
+    <insert id="insertSelective" parameterType="com.trust.xfyl.model.po.CreditPackages">
         insert into creditpackages
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="packageId != null">
@@ -167,7 +170,7 @@
     </insert>
 
     <!-- 根据例子统计creditpackages表中的数据数量 -->
-    <select id="countByExample" parameterType="com.trust.xfyl.entity.CreditPackagesExample"
+    <select id="countByExample" parameterType="com.trust.xfyl.model.po.CreditPackagesExample"
             resultType="java.lang.Integer">
         select count(*) from creditpackages
         <if test="_parameter != null">
@@ -218,7 +221,7 @@
     </update>
 
     <!-- 根据主键更新creditpackages表中的 selective 数据 -->
-    <update id="updateByPrimaryKeySelective" parameterType="com.trust.xfyl.entity.CreditPackages">
+    <update id="updateByPrimaryKeySelective" parameterType="com.trust.xfyl.model.po.CreditPackages">
         update creditpackages
         <set>
             <if test="packageName != null">
@@ -241,7 +244,7 @@
     </update>
 
     <!-- 根据主键更新creditpackages表中的数据 -->
-    <update id="updateByPrimaryKey" parameterType="com.trust.xfyl.entity.CreditPackages">
+    <update id="updateByPrimaryKey" parameterType="com.trust.xfyl.model.po.CreditPackages">
         update creditpackages
         set package_name        = #{packageName,jdbcType=VARCHAR},
             price               = #{price,jdbcType=DECIMAL},
@@ -250,5 +253,26 @@
             is_delete           = #{isDelete,jdbcType=INTEGER}
         where package_id = #{packageId,jdbcType=INTEGER}
     </update>
-
+    <select id="count" resultType="java.lang.Long" parameterType="com.trust.xfyl.model.po.CreditPackagesExample">
+        select
+        count(1)
+        from(
+        select
+        <if test="distinct">
+            distinct
+        </if>
+        'true' as QUERYID,
+        <include refid="Base_Column_List"/>
+        from creditpackages
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+        <if test="orderByClause != null">
+            order by ${orderByClause}
+        </if>
+        <if test="start != null and end != null">
+            limit #{start,jdbcType=INTEGER},#{end,jdbcType=INTEGER}
+        </if>
+        )count
+    </select>
 </mapper>

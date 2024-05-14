@@ -13,18 +13,19 @@ spring:
     enabled: true # 是否启用
     content-type: text/html # 内容类型
     template-loader-path: classpath:/templates/,classpath:/static/ # 模板加载路径
-  datasource: # 数据源配置
-    url: jdbc:mysql://127.0.0.1:3306/xfyl?serverTimezone=GMT%2b8&useSSL=false&characterEncoding=utf8&allowPublicKeyRetrieval=true&autoReconnect=true # 数据库连接URL
-    username: root # 数据库用户名
-    password: 616627hj # 数据库密码
-    type: com.alibaba.druid.pool.DruidDataSource # 数据源类型
-    driverClassName: com.mysql.cj.jdbc.Driver # 数据库驱动类名
-    hikari: # Hikari连接池配置
-      minimum-idle: 10 # 最小空闲连接数
-      maximum-pool-size: 20 # 最大池大小
-      connection-test-query: SELECT 1 # 连接测试查询语句
-      connection-timeout: 30000 # 连接超时时间
-      validation-timeout: 30000 # 验证超时时间
+  datasource:
+    url: jdbc:mysql://localhost:3306/xfyl?serverTimezone=GMT%2b8&useSSL=false&characterEncoding=utf8&allowPublicKeyRetrieval=true&autoReconnect=true # 数据库连接URL
+    username: xxxxxxxxxxx
+    password: xxxxxxxxxxxxx
+    type: com.alibaba.druid.pool.DruidDataSource
+    driverClassName: com.mysql.cj.jdbc.Driver
+    druid:
+      initial-size: 10 # 初始化连接池大小，类似minimum-idle
+      min-idle: 10 # 最小空闲连接数
+      max-active: 20 # 最大活跃连接数，类似maximum-pool-size
+      test-on-borrow: true # 借用连接时进行测试
+      validation-query: SELECT 1 # 测试查询语句
+      connect-timeout: 30000 # 连接超时时间
   servlet: # Servlet配置
     multipart: # 多部分文件上传配置
       max-file-size: 20MB # 最大文件大小
@@ -34,15 +35,21 @@ spring:
 # 日志配置
 logging:
   level:
-    com.trust.xfyl: info # 日志级别
+    com.trust.xfyl: debug # 日志级别
 
 # MyBatis配置
 mybatis:
   mapper-locations: mapper/*.xml # Mapper文件位置
-  type-aliases-package: com.trust.xfyl.entity # 类型别名包
+  type-aliases-package: com.trust.xfyl.model # 类型别名包
   mybatis-config-file: mybatis-config.xml # MyBatis配置文件位置
   configuration.map-underscore-to-camel-case: false # 是否将下划线映射到驼峰命名
-
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+pagehelper:
+  helperDialect: mysql
+  reasonable: true
+  supportMethodsArguments: true
+  params: count=countSql
 # 图片上传路径配置
 imageurl:
   uploadImgUrl: D:\home\app\uploadImg\
@@ -55,7 +62,7 @@ downloadurl:
 aliyun:
   api: # 阿里云API配置
     url: https://vision.console.aliyun.com/cn-shanghai/detail/imageprocess # API地址
-    roleArn: acs:ram::1306143105217098:role/ramosstest # 角色ARN
+    roleArn: acs:ram::xxxxxxxxxxxxxxxxx:role/ramosstest # 角色ARN
     policy: | # 策略配置
       {
         "Version": "1",
@@ -88,8 +95,6 @@ chat:
     timeout: 60 # 超时时间，单位：秒
   security: # 安全配置
     refererWhitelist: # 引用来源白名单
-      - http://127.0.0.1:8089
-      - http://127.0.0.1:8080
       - http://localhost:3000
       - http://localhost:63342
   app: # 应用配置
@@ -98,3 +103,9 @@ chat:
     sessionTtl: 2 # 对话缓存时间，单位：小时
   cache: # 缓存配置
     type: caffeine # 缓存类型
+wechat:
+  appId: zzzzzzzzzzzzzzzzzzzzz
+  appSecret: xxxxxxxxxxxxxxxxx
+yskin:
+  clientId: xxxxxxxxxxxxxxxxxxxxxxx
+  clientSecret: xxxxxxxxxxxxx

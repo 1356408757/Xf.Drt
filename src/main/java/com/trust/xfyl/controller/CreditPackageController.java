@@ -1,11 +1,12 @@
 package com.trust.xfyl.controller;
 
 import com.trust.xfyl.dao.CreditPackagesMapper;
-import com.trust.xfyl.entity.CreditPackages;
-import com.trust.xfyl.entity.CreditPackagesExample;
-import com.trust.xfyl.entity.ResultVO;
 import com.trust.xfyl.exception.SCServiceException;
-import com.trust.xfyl.util.ResultVOUtil;
+import com.trust.xfyl.model.ResultVO;
+import com.trust.xfyl.model.ResultVOUtil;
+import com.trust.xfyl.model.po.CreditPackages;
+import com.trust.xfyl.model.po.CreditPackagesExample;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.slf4j.Logger;
@@ -25,6 +26,7 @@ import java.util.Map;
  * @author Bay-max
  * @date 2024/4/23 10:32
  **/
+@Api(value = "次卡管理", description = "次卡管理", tags = "次卡管理")
 @RestController
 @RequestMapping("/cre")
 public class CreditPackageController {
@@ -46,7 +48,7 @@ public class CreditPackageController {
      * @param creditPackages 套餐参数对象，包含分页信息和查询条件
      * @return 返回套餐列表查询结果
      */
-    @ApiOperation(value = "获取套餐列表", nickname = "selectCreditPackagesList", notes = "获取套餐列表")
+    @ApiOperation(value = "获取套餐列表", nickname = "v1", notes = "获取套餐列表")
     @PostMapping("/v1")
     public ResultVO selectCreditPackagesList(@ApiParam(value = "套餐对象", required = true) @RequestBody @Valid CreditPackages creditPackages) {
         try {
@@ -61,27 +63,57 @@ public class CreditPackageController {
             if (creditPackages.getPackageName() != null) {
                 creditPackagesExample.createCriteria().andPackageNameEqualTo(creditPackages.getPackageName());
             }
+            creditPackagesExample.createCriteria().andIsDeleteEqualTo(0);
             creditPackagesExample.setStart((creditPackages.getPage() - 1) * creditPackages.getCount());
             creditPackagesExample.setEnd(creditPackages.getCount());
-
             List<CreditPackages> creditPackagesLists = creditPackagesMapper.selectByExample(creditPackagesExample);
-            int count = creditPackagesMapper.countByExample(creditPackagesExample);
+            System.out.println(creditPackagesLists.get(0).getPrice());
+            Long count = creditPackagesMapper.count(creditPackagesExample);
             Map<String, Object> returnPage = new HashMap<>();
             returnPage.put("totalCount", count);
             returnPage.put("page", creditPackages.getPage());
             returnPage.put("count", creditPackages.getCount());
             returnMap.put("returnPage", returnPage);
             returnMap.put("msg", "success");
-            returnMap.put("data", creditPackagesLists);
+            returnMap.put("cardPackages", creditPackagesLists);
             return ResultVOUtil.success(returnMap);
         } catch (SCServiceException e) {
-            return ResultVOUtil.error(e.toString());
+            logger.error("Service Exception: {}", sanitizeErrorMessage(e.getMessage()), e);
+            return ResultVOUtil.error(e.getStatus(), sanitizeErrorMessage(e.getMessage()));
         } catch (Exception e) {
-            logger.error("Error fetching credit packages: {}", e.getMessage());
+            logger.error("Error fetching credit packages: {}", sanitizeErrorMessage(e.getMessage()), e);
             return ResultVOUtil.error(HttpStatus.INTERNAL_SERVER_ERROR.value(), "服务器内部错误");
         }
     }
-
+    /**
+     * 清理错误信息，将错误信息分为错误类型和堆栈信息，并对堆栈信息进行简化和敏感信息替换。
+     *
+     * @param errorMessage 原始错误信息，格式为“错误类型: 堆栈信息”。
+     * @return 清理后的错误信息，包含错误类型和简化、脱敏后的堆栈信息。
+     */
+    private String sanitizeErrorMessage(String errorMessage) {
+        // 分割错误信息为错误类型和堆栈信息
+        String[] errorParts = errorMessage.split(": ", 2);
+        String errorType = errorParts[0];
+        String stackTrace = errorParts.length > 1 ? errorParts[1] : "";
+        // 初始化用于存储清理后的堆栈信息的StringBuilder
+        // 定义最大堆栈行数
+        int maxStackTraceLines = 5;
+        String[] stackTraceLines = stackTrace.split("\n");
+        StringBuilder sanitizedStackTrace = new StringBuilder();
+        for (int i = 0; i < Math.min(stackTraceLines.length, maxStackTraceLines); i++) {
+            // 对每行堆栈信息进行敏感信息替换
+            String line = stackTraceLines[i];
+            sanitizedStackTrace.append(line.replaceAll("(?i)jdbc:mysql://.*@", "jdbc:mysql://****@"))
+                    .append("\n");
+        }
+        // 如果堆栈信息超过最大行数，追加省略号
+        if (stackTraceLines.length > maxStackTraceLines) {
+            sanitizedStackTrace.append("...\n");
+        }
+        // 返回错误类型和清理后的堆栈信息
+        return errorType + ": " + sanitizedStackTrace;
+    }
     /**
      * 保存或更新一条套餐信息
      *

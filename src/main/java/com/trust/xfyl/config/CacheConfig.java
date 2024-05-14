@@ -3,10 +3,9 @@ package com.trust.xfyl.config;
 
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
-import com.trust.xfyl.cache.CacheManager;
-import com.trust.xfyl.cache.impl.CaffeineCacheManager;
-import com.trust.xfyl.cache.impl.RedisCacheManager;
-import com.trust.xfyl.entity.dto.AppConfig;
+import com.trust.xfyl.service.CacheManager;
+import com.trust.xfyl.service.impl.CaffeineCacheManager;
+import com.trust.xfyl.service.impl.RedisCacheManager;
 import org.apache.commons.lang3.StringUtils;
 import org.redisson.Redisson;
 import org.redisson.api.RedissonClient;
@@ -22,6 +21,7 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * 缓存配置类，提供根据配置文件选择使用redis或caffeine作为缓存方式的功能。
+ *
  * @author Bay-max
  * @date 2024/4/22 14:01
  **/

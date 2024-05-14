@@ -4,7 +4,10 @@ package com.trust.xfyl;
 import com.aliyun.oss.OSS;
 import com.aliyuncs.exceptions.ClientException;
 import com.trust.xfyl.entity.ResultVO;
-import com.trust.xfyl.util.StsServiceSample;
+import com.trust.xfyl.util.alUtilts.AliFileUrlUtils;
+import com.trust.xfyl.util.alUtilts.AliSkinUtils;
+import com.trust.xfyl.util.alUtilts.StsServiceSample;
+import org.json.JSONObject;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -15,21 +18,13 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.trust.xfyl.util.alUtilts.AliSkinUtils.DF;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-
-*/
-/**
- * @Author djj
- * @Description//TODO 阿里oss对象存属测试类
- * @Date 21:15 2024/2/28
- * @Param
- * @return
- **//*
-
 
 
 @SpringBootTest
@@ -45,8 +40,8 @@ public class StsServiceSampleTest {
     public void testUploadFiles() throws IOException, ClientException {
         // 创建要上传的文件列表
         List<MultipartFile> files = new ArrayList<>();
-        File file1 = new File("D:\\home\\app\\uploadImg\\8a231dc9-c6de-4628-8c73-c81903edc64e.jfif");
-        File file2 = new File("D:\\home\\app\\uploadImg\\13af9fa6-48c5-4540-971f-71780785868f.png");
+        File file1 = new File("D:\\image\\微信图片_20240520112301.jpg");
+        File file2 = new File("D:\\image\\微信图片_20240520111741.jpg");
 
         MockMultipartFile mockFile1 = new MockMultipartFile(
                 "file",
@@ -86,18 +81,8 @@ public class StsServiceSampleTest {
 
     }
 
-    */
-/**
-     * @return void
-     * @Author djj
-     * @Description//TODO 测试阿里云oss下载文件的方法
-     * @Date 21:15 2024/2/28
-     * @Param []
-     **//*
 
-
- */
-/*   @Test
+    @Test
     void download() throws Throwable {
         StsServiceSample.download();
 
@@ -108,17 +93,15 @@ public class StsServiceSampleTest {
         StsServiceSample.ossTest();
 
     }
-*//*
 
 
     //TODO 测试阿里云oss对象存储跟阿里皮肤检测接口逻辑对接的方法；
 
-  */
-/*  @Test
+    @Test
     void getFileUrl() throws Throwable {
         String accessKeyId = System.getenv("ALIBABA_CLOUD_ACCESS_KEY_ID");
         String keySecret = System.getenv("ALIBABA_CLOUD_ACCESS_KEY_SECRET");
-        String url = "https://drt-oss-disk.oss-cn-shanghai.aliyuncs.com/src/image/202402271205-40589-d1f905a37fe14322a695e0210811fbdf.jpg?Expires=1709086278&OSSAccessKeyId=STS.NT6pPWgUYc61TRvA9ZyChKCbX&Signature=Qe14m7T2YOIR2RU%2FqjzigWOfM8I%3D&security-token=CAISzwJ1q6Ft5B2yfSjIr5eDO%2Brjiop41PTaVnTHpTkPdcxEpIbJujz2IHhMeHZtCO4ct%2Fk%2FnWxY6foTlqJIRoReREvCUcZr8szFZYAi1dOT1fau5Jko1bdpcAr6UmwNta2%2FSuH9S8ynJJXJQlvYlyh17KLnfDG5JTKMOoGIjpgVGLZyWRKjPwJbGPBcJAZptK1%2FMmDKZ9mgLjnggGfbEDBd2GxGhHh49L60z%2BCF9xPalyea8OIOoJnrKZXWRqsaNZxkAdCux740JOiT3DRMrh9R7%2BJ6jbdHvizdtZbfYS5Y6A7UNPHPoJ89bl11fLR%2FHLVf6fT9jv4%2FtuHIi8O16W4UZrkLCniEHdj9mpKbQLL5DLtjK%2BanYUaq%2B8uUK5z4vzkjZX8mLw5Qc7IjUCQoUUBzF2CEcPb6qAmWMlj%2FGrLnyqgz1oFu01jz4cooq495ySBZuxqAAQeogjEAPF26XoOmOKGuFOznr4b%2BRF7vaqFnlEuIU63e2HIe590kY2mR8u%2BTFMnQH0jMs43iqyYUDhz7fZfIBwxjQcOtjK2%2F8fLE5BcZL4q7iFm2DpOATCJM2KVdybwa6xu5UMbp3WA3CEbgbFA98qm8g2ZCouwR635pC3lHkN9nIAA%3D";
+        String url = "https://drt-oss-disk.oss-cn-shanghai.aliyuncs.com/src/image/202405201546-15763-c4cd0d5ea4c340ce883b1b5356ea4a41.jpg?Expires=1716194775&OSSAccessKeyId=STS.NUXkqF8nezaoqeBs1P1b4Rkv6&Signature=j8PczEnWRcr1ZmKQmDTCLKOjHng%3D&security-token=CAISnAN1q6Ft5B2yfSjIr5btIMvy1bFEzaOEc0PzlzEFPe0Yva7d1Dz2IHhMeHZtCO4ct%2Fk%2FnWxY6foTlqJIRoReREvCUcZr8syiK9Ng8tOT1fau5Jko1bdpcAr6UmwNta2%2FSuH9S8ynJJXJQlvYlyh17KLnfDG5JTKMOoGIjpgVGLZyWRKjPwJbGPBcJAZptK1%2FMmDKZ9mgLjnggGfbEDBd2GxGhHh49L60z%2BCF9xPalyea8OIOoJnrKZXWRqsaNZxkAdCux740JOiT3DRMrh9R7%2BJ6jbdHvizdtZbfYS5Y6A7UNPHPoJ89bl11fLR%2FHLVf6fT9jv4%2FtuHIi8O16W4UZrkLCniEHdj9mpKbQLL5DLtjK%2BanYUaq%2B8uUK5z4vzkjZX8mLw5Qc7IjUCQoUUBzF2CEcPb6qAmWMlj%2FGrLnyqgz1oFu01jz4cooq495ySBZu8xxGOjfDytAX3Z%2BtQRqgryb1Za7nXnTpqdH4PSSfZEvSFLSx3n2fAdOoL85QXNQCT2oxC7hlwvxcBwktahZUPBs1w2OJwDnExfw4i98GoABEBUH2BwDwqYmVSsNiTWdTj2Xi0aCMg4acts3%2FkLD8uXOs3BulEBixrAaM%2BCH32jnBK5kkjxYJjqe8ydMxvbq%2BWmrqLIY9tatrs6odyKkE7ZXJ9PBWc%2BAlpZawSlWP71XE8n2Rs1DDJ4zUGIojQj7W7jxlKi7Jcz47KHhBHcKQeEgAA%3D%3D";
         DF.setTimeZone(new java.util.SimpleTimeZone(0, "GMT"));
         // 业务参数名字是大驼峰
         Map<String, String> params = new HashMap<>();
@@ -131,7 +114,7 @@ public class StsServiceSampleTest {
         params.put("Url", url);
         // API Action，能力名称，请参考具体算法文档详情页中的Action参数，
         String action = "DetectSkinDisease";
-        JSONObject execute = AliSkinUtils.execute(action, accessKeyId, accessSecret, params);
+        JSONObject execute = AliSkinUtils.execute(action, accessKeyId, keySecret, params);
         //返回的结果集，通过getKey的方式获取里面单个参数，然后打印到控制台;
         System.out.println("execute" + "=====================================" + execute.toString());
         Object data = execute.get("Data");
@@ -151,8 +134,6 @@ public class StsServiceSampleTest {
         System.out.println("ImageType===图片类型============================================================" + imageType);
 
 
-    }*//*
-
-
+    }
 }
 */

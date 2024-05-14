@@ -3,16 +3,21 @@ package com.trust.xfyl.controller;
 import com.trust.xfyl.dao.DictionaryMapper;
 import com.trust.xfyl.dao.TrustFileMapper;
 import com.trust.xfyl.dao.TrustRelationFileMapper;
-import com.trust.xfyl.entity.Dictionary;
-import com.trust.xfyl.entity.*;
 import com.trust.xfyl.enums.PhotoEnum;
 import com.trust.xfyl.exception.SCServiceException;
-import com.trust.xfyl.service.DictionaryService;
-import com.trust.xfyl.service.FileService;
-import com.trust.xfyl.util.ResultVOUtil;
+import com.trust.xfyl.model.ResultVO;
+import com.trust.xfyl.model.ResultVOUtil;
+import com.trust.xfyl.model.po.Dictionary;
+import com.trust.xfyl.model.po.*;
+import com.trust.xfyl.service.impl.DictionaryService;
+import com.trust.xfyl.service.impl.FileService;
+import com.trust.xfyl.util.ScExceptionUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
@@ -24,10 +29,11 @@ import java.util.*;
  * @author Bay-max
  * @date 2024/4/22 14:01
  **/
-@Api(value = "字典表", description = "字典表接口", tags = "字典表")
+@Api(value = "字典表控制器", description = "字典表控制器", tags = "字典表控制器")
 @RestController
 @RequestMapping("/Dictionary")
 public class DictionaryController {
+    private final static Logger logger = LoggerFactory.getLogger(DictionaryController.class);
     // 数据库操作接口，用于字典表的增删改查
     private final DictionaryMapper dictionaryMapper;
     // 字典表服务层，封装了业务逻辑
@@ -60,7 +66,7 @@ public class DictionaryController {
 
     /**
      * @return com.trust.xfyl.entity.ResultVO
-     * @Author djj
+     * @Author Bay-max
      * @Description //TODO
      * @Date 17:53 2024/1/25
      * @Param [surgicalName]
@@ -79,9 +85,12 @@ public class DictionaryController {
             returnMap.put("data", dictionaries);
             return ResultVOUtil.success(returnMap);
         } catch (SCServiceException e) {
-            return ResultVOUtil.error(e.toString());
+            logger.error("Service Exception: {}", ScExceptionUtils.sanitizeErrorMessage(e.getMessage()), e);
+            return ResultVOUtil.error(e.getStatus(), ScExceptionUtils.sanitizeErrorMessage(e.getMessage()));
+        } catch (Exception e) {
+            logger.error("Error fetching dictionary: {}", ScExceptionUtils.sanitizeErrorMessage(e.getMessage()), e);
+            return ResultVOUtil.error(HttpStatus.INTERNAL_SERVER_ERROR.value(), "服务器内部错误");
         }
-
     }
 
     @ApiOperation(value = "保存一条数据", nickname = "saveDictionary", notes = "保存一条数据")
@@ -95,9 +104,11 @@ public class DictionaryController {
                 return insertDictionary(dictionary);
             }
         } catch (SCServiceException e) {
-            return ResultVOUtil.error(e.getStatus(), e.getMessage());
+            logger.error("Service Exception: {}", ScExceptionUtils.sanitizeErrorMessage(e.getMessage()), e);
+            return ResultVOUtil.error(e.getStatus(), ScExceptionUtils.sanitizeErrorMessage(e.getMessage()));
         } catch (Exception e) {
-            return ResultVOUtil.error(-1, e.getMessage());
+            logger.error("Error fetching dictionary: {}", ScExceptionUtils.sanitizeErrorMessage(e.getMessage()), e);
+            return ResultVOUtil.error(HttpStatus.INTERNAL_SERVER_ERROR.value(), "服务器内部错误");
         }
     }
 
@@ -178,9 +189,11 @@ public class DictionaryController {
                 return ResultVOUtil.error("失败");
             }
         } catch (SCServiceException e) {
-            return ResultVOUtil.error(e.getStatus(), e.getMessage());
+            logger.error("Service Exception: {}", ScExceptionUtils.sanitizeErrorMessage(e.getMessage()), e);
+            return ResultVOUtil.error(e.getStatus(), ScExceptionUtils.sanitizeErrorMessage(e.getMessage()));
         } catch (Exception e) {
-            return ResultVOUtil.error(-1, e.getMessage());
+            logger.error("Error fetching dictionary: {}", ScExceptionUtils.sanitizeErrorMessage(e.getMessage()), e);
+            return ResultVOUtil.error(HttpStatus.INTERNAL_SERVER_ERROR.value(), "服务器内部错误");
         }
     }
 
@@ -210,7 +223,11 @@ public class DictionaryController {
             returnMap.put("trustFile", list);
             return ResultVOUtil.success(returnMap);
         } catch (SCServiceException e) {
-            return ResultVOUtil.error(e.toString());
+            logger.error("Service Exception: {}", ScExceptionUtils.sanitizeErrorMessage(e.getMessage()), e);
+            return ResultVOUtil.error(e.getStatus(), ScExceptionUtils.sanitizeErrorMessage(e.getMessage()));
+        } catch (Exception e) {
+            logger.error("Error fetching dictionary: {}", ScExceptionUtils.sanitizeErrorMessage(e.getMessage()), e);
+            return ResultVOUtil.error(HttpStatus.INTERNAL_SERVER_ERROR.value(), "服务器内部错误");
         }
     }
 }

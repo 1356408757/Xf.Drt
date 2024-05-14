@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 /**
@@ -19,6 +20,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
  */
 @EnableScheduling
 @EnableSwagger2
+@EnableTransactionManagement
 @SpringBootApplication(scanBasePackages = {"com.trust.xfyl"})
 public class XfylApplication {
     private static final Logger logger = LoggerFactory.getLogger(XfylApplication.class);

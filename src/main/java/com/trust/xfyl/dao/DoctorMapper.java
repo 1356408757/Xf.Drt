@@ -1,7 +1,7 @@
 package com.trust.xfyl.dao;
 
-import com.trust.xfyl.entity.Doctor;
-import com.trust.xfyl.entity.DoctorExample;
+import com.trust.xfyl.model.po.Doctor;
+import com.trust.xfyl.model.po.DoctorExample;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -12,6 +12,7 @@ import java.util.List;
 public interface DoctorMapper {
     /**
      * 根据条件查询医生总数
+     *
      * @param example 查询条件
      * @return 医生总数
      **/
@@ -19,6 +20,7 @@ public interface DoctorMapper {
 
     /**
      * 根据条件删除医生
+     *
      * @param example 查询条件
      * @return 影响的记录数
      **/
@@ -26,6 +28,7 @@ public interface DoctorMapper {
 
     /**
      * 根据id删除医生信息
+     *
      * @param id 医生主键ID
      * @return 影响的记录数
      **/
@@ -33,6 +36,7 @@ public interface DoctorMapper {
 
     /**
      * 插入一条医生信息，不判断字段空值
+     *
      * @param record 医生记录
      * @return 影响的记录数
      **/
@@ -40,6 +44,7 @@ public interface DoctorMapper {
 
     /**
      * 插入一条医生信息，带有字段空值判断
+     *
      * @param record 医生记录
      * @return 影响的记录数
      **/
@@ -47,6 +52,7 @@ public interface DoctorMapper {
 
     /**
      * 根据条件查询医生列表
+     *
      * @param example 查询条件
      * @return 医生列表
      **/
@@ -54,6 +60,7 @@ public interface DoctorMapper {
 
     /**
      * 根据主键查询一条医生信息
+     *
      * @param id 医生主键ID
      * @return 医生记录
      **/
@@ -61,7 +68,8 @@ public interface DoctorMapper {
 
     /**
      * 根据条件更新医生信息，可选更新字段
-     * @param record 医生记录（更新数据）
+     *
+     * @param record  医生记录（更新数据）
      * @param example 查询条件
      * @return 影响的记录数
      **/
@@ -69,7 +77,8 @@ public interface DoctorMapper {
 
     /**
      * 根据条件更新医生信息
-     * @param record 医生记录（更新数据）
+     *
+     * @param record  医生记录（更新数据）
      * @param example 查询条件
      * @return 影响的记录数
      **/
@@ -77,6 +86,7 @@ public interface DoctorMapper {
 
     /**
      * 根据条件更新医生信息，可选更新字段
+     *
      * @param record 医生记录（更新数据）
      * @return 影响的记录数
      **/
@@ -84,6 +94,7 @@ public interface DoctorMapper {
 
     /**
      * 根据主键更新医生信息
+     *
      * @param record 医生记录（更新数据）
      * @return 影响的记录数
      **/

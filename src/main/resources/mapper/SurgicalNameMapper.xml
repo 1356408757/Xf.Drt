@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.trust.xfyl.dao.SurgicalNameMapper">
-    <resultMap id="BaseResultMap" type="com.trust.xfyl.entity.SurgicalName">
+    <resultMap id="BaseResultMap" type="com.trust.xfyl.model.po.SurgicalName">
         <id column="id" property="id" jdbcType="BIGINT"/>
         <result column="name" property="name" jdbcType="VARCHAR"/>
         <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
@@ -73,7 +73,7 @@
     <sql id="Base_Column_List">
         id, `name`, create_time, is_delete, `level`, creator, update_time
     </sql>
-    <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.trust.xfyl.entity.SurgicalNameExample">
+    <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.trust.xfyl.model.po.SurgicalNameExample">
         select
         <if test="distinct">
             distinct
@@ -99,13 +99,13 @@
         from surgical_name
         where id = #{id,jdbcType=BIGINT}
     </delete>
-    <delete id="deleteByExample" parameterType="com.trust.xfyl.entity.SurgicalNameExample">
+    <delete id="deleteByExample" parameterType="com.trust.xfyl.model.po.SurgicalNameExample">
         delete from surgical_name
         <if test="_parameter != null">
             <include refid="Example_Where_Clause"/>
         </if>
     </delete>
-    <insert id="insert" parameterType="com.trust.xfyl.entity.SurgicalName">
+    <insert id="insert" parameterType="com.trust.xfyl.model.po.SurgicalName">
         insert into surgical_name (id, `name`, create_time,
                                    is_delete, `level`, creator,
                                    update_time)
@@ -113,7 +113,7 @@
                 #{isDelete,jdbcType=INTEGER}, #{level,jdbcType=INTEGER}, #{creator,jdbcType=VARCHAR},
                 #{updateTime,jdbcType=TIMESTAMP})
     </insert>
-    <insert id="insertSelective" parameterType="com.trust.xfyl.entity.SurgicalName">
+    <insert id="insertSelective" parameterType="com.trust.xfyl.model.po.SurgicalName">
         insert into surgical_name
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -162,7 +162,7 @@
             </if>
         </trim>
     </insert>
-    <select id="countByExample" parameterType="com.trust.xfyl.entity.SurgicalNameExample"
+    <select id="countByExample" parameterType="com.trust.xfyl.model.po.SurgicalNameExample"
             resultType="java.lang.Integer">
         select count(*) from surgical_name
         <if test="_parameter != null">
@@ -211,7 +211,7 @@
             <include refid="Update_By_Example_Where_Clause"/>
         </if>
     </update>
-    <update id="updateByPrimaryKeySelective" parameterType="com.trust.xfyl.entity.SurgicalName">
+    <update id="updateByPrimaryKeySelective" parameterType="com.trust.xfyl.model.po.SurgicalName">
         update surgical_name
         <set>
             <if test="name != null">
@@ -235,7 +235,7 @@
         </set>
         where id = #{id,jdbcType=BIGINT}
     </update>
-    <update id="updateByPrimaryKey" parameterType="com.trust.xfyl.entity.SurgicalName">
+    <update id="updateByPrimaryKey" parameterType="com.trust.xfyl.model.po.SurgicalName">
         update surgical_name
         set `name`      = #{name,jdbcType=VARCHAR},
             create_time = #{createTime,jdbcType=TIMESTAMP},

@@ -1,7 +1,7 @@
 package com.trust.xfyl.dao;
 
-import com.trust.xfyl.entity.TrustFile;
-import com.trust.xfyl.entity.TrustFileExample;
+import com.trust.xfyl.model.po.TrustFile;
+import com.trust.xfyl.model.po.TrustFileExample;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -69,7 +69,7 @@ public interface TrustFileMapper {
     /**
      * 根据条件选择性更新记录
      *
-     * @param record 待更新的数据
+     * @param record  待更新的数据
      * @param example 查询条件
      * @return 影响的记录数
      */
@@ -78,7 +78,7 @@ public interface TrustFileMapper {
     /**
      * 根据条件更新记录
      *
-     * @param record 待更新的数据
+     * @param record  待更新的数据
      * @param example 查询条件
      * @return 影响的记录数
      */

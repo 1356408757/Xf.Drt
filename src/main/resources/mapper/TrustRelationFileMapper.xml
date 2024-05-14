@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.trust.xfyl.dao.TrustRelationFileMapper">
-    <resultMap id="BaseResultMap" type="com.trust.xfyl.entity.TrustRelationFile">
+    <resultMap id="BaseResultMap" type="com.trust.xfyl.model.po.TrustRelationFile">
         <result column="busi_type" property="busiType" jdbcType="VARCHAR"/>
         <result column="busi_id" property="busiId" jdbcType="VARCHAR"/>
         <result column="file_id" property="fileId" jdbcType="VARCHAR"/>
@@ -71,7 +71,7 @@
         busi_type, busi_id, file_id, photo_type
     </sql>
     <select id="selectByExample" resultMap="BaseResultMap"
-            parameterType="com.trust.xfyl.entity.TrustRelationFileExample">
+            parameterType="com.trust.xfyl.model.po.TrustRelationFileExample">
         select
         <if test="distinct">
             distinct
@@ -86,19 +86,19 @@
             order by ${orderByClause}
         </if>
     </select>
-    <delete id="deleteByExample" parameterType="com.trust.xfyl.entity.TrustRelationFileExample">
+    <delete id="deleteByExample" parameterType="com.trust.xfyl.model.po.TrustRelationFileExample">
         delete from trust_relation_file
         <if test="_parameter != null">
             <include refid="Example_Where_Clause"/>
         </if>
     </delete>
-    <insert id="insert" parameterType="com.trust.xfyl.entity.TrustRelationFile">
+    <insert id="insert" parameterType="com.trust.xfyl.model.po.TrustRelationFile">
         insert into trust_relation_file (busi_type, busi_id, file_id,
                                          photo_type)
         values (#{busiType,jdbcType=VARCHAR}, #{busiId,jdbcType=VARCHAR}, #{fileId,jdbcType=VARCHAR},
                 #{photoType,jdbcType=VARCHAR})
     </insert>
-    <insert id="insertSelective" parameterType="com.trust.xfyl.entity.TrustRelationFile">
+    <insert id="insertSelective" parameterType="com.trust.xfyl.model.po.TrustRelationFile">
         insert into trust_relation_file
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="busiType != null">
@@ -129,7 +129,7 @@
             </if>
         </trim>
     </insert>
-    <select id="countByExample" parameterType="com.trust.xfyl.entity.TrustRelationFileExample"
+    <select id="countByExample" parameterType="com.trust.xfyl.model.po.TrustRelationFileExample"
             resultType="java.lang.Integer">
         select count(*) from trust_relation_file
         <if test="_parameter != null">

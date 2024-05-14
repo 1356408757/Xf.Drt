@@ -1,16 +1,18 @@
 package com.trust.xfyl.controller;
 
-import com.trust.xfyl.entity.dto.CompletionRequestDTO;
-import com.trust.xfyl.entity.dto.CompletionResponseDTO;
-import com.trust.xfyl.entity.dto.Result;
 import com.trust.xfyl.enums.ErrorCodeEnum;
 import com.trust.xfyl.exception.BizException;
 import com.trust.xfyl.handler.ChatServiceHandler;
+import com.trust.xfyl.model.Result;
+import com.trust.xfyl.model.dto.CompletionRequestDTO;
+import com.trust.xfyl.model.dto.CompletionResponseDTO;
 import com.trust.xfyl.service.ChatSessionService;
-import com.trust.xfyl.util.BailianLlmClient;
-import com.trust.xfyl.util.LogUtils;
+import com.trust.xfyl.util.alibabaCloudTools.BailianLlmClient;
+import com.trust.xfyl.util.alibabaCloudTools.LogUtils;
+import io.swagger.annotations.Api;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -21,9 +23,11 @@ import javax.servlet.http.HttpServletResponse;
 
 /**
  * 聊天对话控制器
+ *
  * @author Bay-max
  * @date 2024/4/22 14:01
  **/
+@Api(value = "AI问答控制器", description = "AI问答控制器", tags = "AI问答控制器")
 @RestController
 @RequestMapping("/v1")
 public class CompletionController {
@@ -37,10 +41,10 @@ public class CompletionController {
      * 完成对话请求处理
      *
      * @param completionRequest 完成请求的DTO，包含请求内容和ID
-     * @param response HTTP响应对象，用于设置响应头
+     * @param response          HTTP响应对象，用于设置响应头
      * @return 返回一个Flux流，包含处理结果
      */
-    @RequestMapping(value = "/completions", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+    @PostMapping(value = "/completions", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
     public Flux<Result<CompletionResponseDTO>> complete(@RequestBody CompletionRequestDTO completionRequest,
                                                         HttpServletResponse response) {
         long startTime = System.currentTimeMillis();
@@ -90,10 +94,10 @@ public class CompletionController {
      * @param request 包含请求ID的DTO
      * @return 返回一个表示成功的结果
      */
-    @RequestMapping(value = "/stopGeneration", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/stopGeneration", produces = MediaType.APPLICATION_JSON_VALUE)
     public Result<String> stopGeneration(@RequestBody CompletionRequestDTO request) {
         Long start = System.currentTimeMillis();
-        System.out.println(start+"================================");
+        System.out.println(start + "================================");
         // 目前该方法实际上不做任何操作，可能未来用于记录停止生成的操作
         LogUtils.monitor(request.getRequestId(), "CompletionController", "stopGeneration", null, start, request, null);
         return Result.success(request.getRequestId(), request.getRequestId());

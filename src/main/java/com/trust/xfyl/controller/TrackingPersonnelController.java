@@ -3,16 +3,21 @@ package com.trust.xfyl.controller;
 import com.trust.xfyl.dao.TrackingPersonnelMapper;
 import com.trust.xfyl.dao.TrustFileMapper;
 import com.trust.xfyl.dao.TrustRelationFileMapper;
-import com.trust.xfyl.entity.*;
 import com.trust.xfyl.enums.PhotoEnum;
 import com.trust.xfyl.exception.SCServiceException;
-import com.trust.xfyl.service.FileService;
-import com.trust.xfyl.service.TrackingPersonnelService;
-import com.trust.xfyl.util.ResultVOUtil;
+import com.trust.xfyl.model.ResultVO;
+import com.trust.xfyl.model.ResultVOUtil;
+import com.trust.xfyl.model.po.*;
+import com.trust.xfyl.service.impl.FileService;
+import com.trust.xfyl.service.impl.TrackingPersonnelService;
+import com.trust.xfyl.util.ScExceptionUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import net.sf.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
@@ -25,11 +30,11 @@ import java.util.*;
  * @date 2024/4/22 15:19
  **/
 
-@Api(value = "跟踪人员档案建立", description = "跟踪人员档案建立", tags = "跟踪人员档案建立")
+@Api(value = "跟踪人员档案控制器", description = "跟踪人员档案控制器", tags = "跟踪人员档案控制器")
 @RestController
 @RequestMapping("/trackingPersonnel")
 public class TrackingPersonnelController {
-
+    private final static Logger logger = LoggerFactory.getLogger(TrackingPersonnelController.class);
     private final TrackingPersonnelMapper trackingPersonnelMapper;
     private final TrackingPersonnelService trackingPersonnelService;
     private final FileService fileService;
@@ -72,7 +77,11 @@ public class TrackingPersonnelController {
             returnMap.put("data", trackingPersonnels);
             return ResultVOUtil.success(returnMap);
         } catch (SCServiceException e) {
-            return ResultVOUtil.error(e.toString());
+            logger.error("Service Exception: {}", ScExceptionUtils.sanitizeErrorMessage(e.getMessage()), e);
+            return ResultVOUtil.error(e.getStatus(), ScExceptionUtils.sanitizeErrorMessage(e.getMessage()));
+        } catch (Exception e) {
+            logger.error("Error fetching tracking personnel: {}", ScExceptionUtils.sanitizeErrorMessage(e.getMessage()), e);
+            return ResultVOUtil.error(HttpStatus.INTERNAL_SERVER_ERROR.value(), "服务器内部错误");
         }
 
     }
@@ -129,9 +138,11 @@ public class TrackingPersonnelController {
             }
 
         } catch (SCServiceException e) {
-            return ResultVOUtil.error(e.getStatus(), e.getMessage());
+            logger.error("Service Exception: {}", ScExceptionUtils.sanitizeErrorMessage(e.getMessage()), e);
+            return ResultVOUtil.error(e.getStatus(), ScExceptionUtils.sanitizeErrorMessage(e.getMessage()));
         } catch (Exception e) {
-            return ResultVOUtil.error(-1, e.getMessage());
+            logger.error("Error fetching tracking personnel: {}", ScExceptionUtils.sanitizeErrorMessage(e.getMessage()), e);
+            return ResultVOUtil.error(HttpStatus.INTERNAL_SERVER_ERROR.value(), "服务器内部错误");
         }
     }
 
@@ -161,9 +172,11 @@ public class TrackingPersonnelController {
                 return ResultVOUtil.error("失败");
             }
         } catch (SCServiceException e) {
-            return ResultVOUtil.error(e.getStatus(), e.getMessage());
+            logger.error("Service Exception: {}", ScExceptionUtils.sanitizeErrorMessage(e.getMessage()), e);
+            return ResultVOUtil.error(e.getStatus(), ScExceptionUtils.sanitizeErrorMessage(e.getMessage()));
         } catch (Exception e) {
-            return ResultVOUtil.error(-1, e.getMessage());
+            logger.error("Error fetching tracking personnel: {}", ScExceptionUtils.sanitizeErrorMessage(e.getMessage()), e);
+            return ResultVOUtil.error(HttpStatus.INTERNAL_SERVER_ERROR.value(), "服务器内部错误");
         }
     }
 
@@ -198,7 +211,11 @@ public class TrackingPersonnelController {
             returnMap.put("trackingPersonnel", trackingPersonnel1);
             return ResultVOUtil.success(returnMap);
         } catch (SCServiceException e) {
-            return ResultVOUtil.error(e.toString());
+            logger.error("Service Exception: {}", ScExceptionUtils.sanitizeErrorMessage(e.getMessage()), e);
+            return ResultVOUtil.error(e.getStatus(), ScExceptionUtils.sanitizeErrorMessage(e.getMessage()));
+        } catch (Exception e) {
+            logger.error("Error fetching tracking personnel: {}", ScExceptionUtils.sanitizeErrorMessage(e.getMessage()), e);
+            return ResultVOUtil.error(HttpStatus.INTERNAL_SERVER_ERROR.value(), "服务器内部错误");
         }
     }
 

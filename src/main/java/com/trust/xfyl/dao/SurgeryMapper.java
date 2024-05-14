@@ -1,13 +1,14 @@
 package com.trust.xfyl.dao;
 
-import com.trust.xfyl.entity.Surgery;
-import com.trust.xfyl.entity.SurgeryExample;
+import com.trust.xfyl.model.po.Surgery;
+import com.trust.xfyl.model.po.SurgeryExample;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
 /**
  * 外科信息映射接口
+ *
  * @author LENOVO
  */
 public interface SurgeryMapper {
@@ -70,7 +71,7 @@ public interface SurgeryMapper {
     /**
      * 有选择性地根据条件更新数据
      *
-     * @param record 数据记录
+     * @param record  数据记录
      * @param example 查询条件
      * @return 影响的行数
      */
@@ -79,7 +80,7 @@ public interface SurgeryMapper {
     /**
      * 根据条件更新数据
      *
-     * @param record 数据记录
+     * @param record  数据记录
      * @param example 查询条件
      * @return 影响的行数
      */

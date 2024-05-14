@@ -3,15 +3,20 @@ package com.trust.xfyl.controller;
 import com.trust.xfyl.dao.TrustFileMapper;
 import com.trust.xfyl.dao.TrustRelationFileMapper;
 import com.trust.xfyl.dao.WoundFollowMapper;
-import com.trust.xfyl.entity.*;
 import com.trust.xfyl.exception.SCServiceException;
-import com.trust.xfyl.service.FileService;
-import com.trust.xfyl.service.WoundFollowService;
-import com.trust.xfyl.util.ResultVOUtil;
+import com.trust.xfyl.model.ResultVO;
+import com.trust.xfyl.model.ResultVOUtil;
+import com.trust.xfyl.model.po.*;
+import com.trust.xfyl.service.impl.FileService;
+import com.trust.xfyl.service.impl.WoundFollowService;
+import com.trust.xfyl.util.ScExceptionUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import net.sf.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
@@ -24,10 +29,11 @@ import java.util.*;
  * @date 2024/4/22 15:17
  **/
 
-@Api(value = "患者随访", description = "患者随访", tags = "患者随访")
+@Api(value = "患者随访控制器", description = "患者随访控制器", tags = "患者随访控制器")
 @RestController
 @RequestMapping("/WoundFollow")
 public class WoundFollowController {
+    private final static Logger logger = LoggerFactory.getLogger(WoundFollowController.class);
     private final WoundFollowMapper woundFollowMapper;
     private final FileService fileService;
     private final TrustRelationFileMapper trustRelationFileMapper;
@@ -74,14 +80,17 @@ public class WoundFollowController {
             returnMap.put("data", woundFollows);
             return ResultVOUtil.success(returnMap);
         } catch (SCServiceException e) {
-            return ResultVOUtil.error(e.toString());
+            logger.error("Service Exception: {}", ScExceptionUtils.sanitizeErrorMessage(e.getMessage()), e);
+            return ResultVOUtil.error(e.getStatus(), ScExceptionUtils.sanitizeErrorMessage(e.getMessage()));
+        } catch (Exception e) {
+            logger.error("Error fetching wound follow: {}", ScExceptionUtils.sanitizeErrorMessage(e.getMessage()), e);
+            return ResultVOUtil.error(HttpStatus.INTERNAL_SERVER_ERROR.value(), "服务器内部错误");
         }
 
     }
 
-    @PostMapping
     @ApiOperation(value = "保存一条患者的信息", nickname = "saveWoundFollow", notes = "保存一条患者的信息")
-    @RequestMapping("/saveWoundFollow")
+    @PostMapping("/saveWoundFollow")
     public ResultVO saveWoundFollow(@ApiParam(value = "患者随访对象", required = true) @RequestBody WoundFollow woundFollow) {
         try {
             if (woundFollow.getId() != null) {
@@ -146,9 +155,11 @@ public class WoundFollowController {
             }
 
         } catch (SCServiceException e) {
-            return ResultVOUtil.error(e.getStatus(), e.getMessage());
+            logger.error("Service Exception: {}", ScExceptionUtils.sanitizeErrorMessage(e.getMessage()), e);
+            return ResultVOUtil.error(e.getStatus(), ScExceptionUtils.sanitizeErrorMessage(e.getMessage()));
         } catch (Exception e) {
-            return ResultVOUtil.error(-1, e.getMessage());
+            logger.error("Error fetching wound follow: {}", ScExceptionUtils.sanitizeErrorMessage(e.getMessage()), e);
+            return ResultVOUtil.error(HttpStatus.INTERNAL_SERVER_ERROR.value(), "服务器内部错误");
         }
     }
 
@@ -176,9 +187,11 @@ public class WoundFollowController {
                 return ResultVOUtil.error("失败");
             }
         } catch (SCServiceException e) {
-            return ResultVOUtil.error(e.getStatus(), e.getMessage());
+            logger.error("Service Exception: {}", ScExceptionUtils.sanitizeErrorMessage(e.getMessage()), e);
+            return ResultVOUtil.error(e.getStatus(), ScExceptionUtils.sanitizeErrorMessage(e.getMessage()));
         } catch (Exception e) {
-            return ResultVOUtil.error(-1, e.getMessage());
+            logger.error("Error fetching wound follow: {}", ScExceptionUtils.sanitizeErrorMessage(e.getMessage()), e);
+            return ResultVOUtil.error(HttpStatus.INTERNAL_SERVER_ERROR.value(), "服务器内部错误");
         }
     }
 
@@ -206,7 +219,11 @@ public class WoundFollowController {
             returnMap.put("woundFollow", woundFollow1);
             return ResultVOUtil.success(returnMap);
         } catch (SCServiceException e) {
-            return ResultVOUtil.error(e.toString());
+            logger.error("Service Exception: {}", ScExceptionUtils.sanitizeErrorMessage(e.getMessage()), e);
+            return ResultVOUtil.error(e.getStatus(), ScExceptionUtils.sanitizeErrorMessage(e.getMessage()));
+        } catch (Exception e) {
+            logger.error("Error fetching wound follow: {}", ScExceptionUtils.sanitizeErrorMessage(e.getMessage()), e);
+            return ResultVOUtil.error(HttpStatus.INTERNAL_SERVER_ERROR.value(), "服务器内部错误");
         }
     }
 }

@@ -10,6 +10,7 @@ import java.beans.PropertyVetoException;
 
 /**
  * 数据库配置类，用于配置数据源和相关属性。
+ *
  * @author Bay-max
  * @date 2024/4/22 14:01
  **/
