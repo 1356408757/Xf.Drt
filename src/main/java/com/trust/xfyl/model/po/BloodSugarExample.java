@@ -965,20 +965,13 @@ public class BloodSugarExample extends BaseBean {
 
     public static class Criterion {
         private final String condition;
-
-        private Object value;
-
-        private Object secondValue;
-
-        private boolean noValue;
-
-        private boolean singleValue;
-
-        private boolean betweenValue;
-
-        private boolean listValue;
-
         private final String typeHandler;
+        private Object value;
+        private Object secondValue;
+        private boolean noValue;
+        private boolean singleValue;
+        private boolean betweenValue;
+        private boolean listValue;
 
         protected Criterion(String condition) {
             super();
