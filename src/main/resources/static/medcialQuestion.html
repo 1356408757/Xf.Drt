@@ -253,6 +253,7 @@
 
         // 在这里使用 sessionId 和 questionType
     };
+
     async function checkSkin(file) {
         const formData = new FormData();
         formData.append('file', file);
@@ -488,7 +489,7 @@
             reportText += `正在使用的药物：${report.medications}\n`;
             /* reportText += `诊断概率（英文）：\n${JSON.stringify(report.diagProbEn, null, 2)}\n`;*/
             reportText += `诊断症状概率：${maxEntry[0]}:${(maxEntry[1] * 100).toFixed(2)}%\n`;
-           /* reportText += `整体诊断准确率：${report.iqa_score}%\n`;*/
+            /* reportText += `整体诊断准确率：${report.iqa_score}%\n`;*/
             console.log(`最高概率的疾病是：${maxEntry[0]}, 其概率为：${(maxEntry[1] * 100).toFixed(2)}%`);
 
             let reportNarrative = `您好根据Dr.T生成的诊断报告如下：\n\n`;

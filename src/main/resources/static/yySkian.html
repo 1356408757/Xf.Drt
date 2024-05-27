@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
+    <title>肤质检测</title>
+    <link href="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" rel="stylesheet"/>
+    <style>
+        body {
+            font-family: 'Microsoft YaHei', sans-serif;
+            background-color: #f5f5f5;
+            overflow-x: hidden;
+        }
+        h1 {
+            font-size: 24px;
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+
+
+        #resultArea h4 {
+            color: #333333;
+            font-weight: bold;
+        }
+
+        #resultArea p {
+            font-size: 16px;
+            line-height: 1.6;
+            color: #666666;
+        }
+
+        #resultArea strong {
+            color: #17a2b8;
+        }
+
+        .btn-action {
+            margin: 0 5px;
+            padding: 10px 20px;
+            font-size: 16px;
+        }
+
+        .btn-action i {
+            margin-right: 5px;
+        }
+
+
+        @media (max-width: 767px) {
+            body {
+                padding: 0 15px;
+            }
+
+            h1 {
+                margin-top: 2rem;
+            }
+
+            #resultArea {
+                max-height: 60vh; /* 在小屏幕上增加结果区域的高度 */
+            }
+
+            #startTest {
+                width: 100%;
+            }
+
+            .btn-action {
+                width: calc(50% - 10px);
+            }
+        }
+
+        .alert {
+            margin-bottom: 2rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        #bottomBar {
+            width: 100%;
+            display: flex;
+            justify-content: space-around;
+            margin-top: 2rem;
+        }
+        /* 新增样式 */
+        .btn-hidden {
+            display: none;
+        }
+        /* 调整后的CSS样式 */
+        #previewArea {
+            margin-bottom: 20px; /* 添加外边距 */
+            text-align: center; /* 图片居中显示 */
+        }
+
+        #previewArea img {
+            max-width: 100%; /* 图片宽度不超过容器宽度 */
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 添加阴影 */
+            margin-top: 0; /* 调整边距 */
+        }
+
+        #resultArea {
+            max-height: 50vh; /* 使用视口高度的50% */
+            overflow-y: auto;
+            padding: 20px; /* 内边距 */
+        }
+
+        /* 使用flex布局调整元素顺序 */
+        .container-fluid {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 50px;
+        }
+
+
+    </style>
+</head>
+<body>
+<div class="container-fluid p-3 vh-100 d-flex flex-column justify-content-center align-items-center">
+    <h1 class="text-center mb-4 animate__animated animate__fadeInUp">智能测肤</h1>
+    <div class="alert alert-info rounded shadow-sm p-3 mb-4">
+        <i class="fas fa-exclamation-triangle mr-2"></i>请确保遵守以下要求:
+        <ul class="mb-0 pl-3">
+            <li><i class="fas fa-eye-slash text-muted mr-2"></i>不佩戴眼镜</li>
+            <li><i class="fas fa-user-secret text-muted mr-2"></i>未使用美颜</li>
+            <li><i class="fas fa-cut text-muted mr-2"></i>无刘海遮挡</li>
+            <li><i class="fas fa-image text-muted mr-2"></i>图片清晰</li>
+            <li><i class="fas fa-id-card-alt text-muted mr-2"></i>正面大头照</li>
+        </ul>
+    </div>
+    <form>
+        <div class="form-group form-check mb-3">
+            <input class="form-check-input custom-control-input" id="agreePolicy" type="checkbox">
+            <label class="form-check-label custom-control-label" for="agreePolicy">我已阅读并接受
+                <a class="text-success" href="#">用户隐私协议</a>
+            </label>
+            <span class="text-danger d-none" id="alertBox"></span>
+        </div>
+        <button class="btn btn-primary mb-3" disabled id="startTest" type="button">开始测肤</button>
+    </form>
+
+    <div class="container-fluid">
+        <div id="previewArea"></div> <!-- 图片预览区域放置在顶部 -->
+        <!-- 其他内容 -->
+        <div class="mt-4" id="resultArea"></div> <!-- 结果区域 -->
+        <!-- 其他按钮和表单等 -->
+    </div>
+
+    <div id="bottomBar">
+        <button class="btn btn-secondary btn-action" id="takePhoto"><i class="fas fa-camera"></i> 拍照</button>
+        <button class="btn btn-secondary btn-action" id="uploadPhoto"><i class="fas fa-upload"></i> 上传照片</button>
+    </div>
+
+</div>
+<input accept="image/*" id="fileInput" style="display:none;" type="file">
+<input accept="image/*" capture="environment" id="cameraInput" style="display:none;" type="file">
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('#takePhoto, #uploadPhoto').addClass('btn-hidden');
+        // 触觉反馈效果
+        $('button').on('mousedown', function () {
+            $(this).addClass('active');
+        }).on('mouseup mouseout', function () {
+            $(this).removeClass('active');
+        });
+        // 监听隐私协议勾选状态
+        $('#agreePolicy').change(function () {
+            var checked = $(this).is(':checked');
+            $('#startTest').prop('disabled', !checked);
+            if (!checked) {
+                $('#alertBox').text('请阅读并同意用户隐私协议').show();
+                // 如果未勾选，隐藏拍摄和上传按钮
+                $('#takePhoto, #uploadPhoto').addClass('btn-hidden');
+            } else {
+                $('#alertBox').hide();
+                // 如果已勾选，显示拍摄和上传按钮
+                $('#takePhoto, #uploadPhoto').removeClass('btn-hidden');
+            }
+        });
+
+        function startSkinTest() {
+            // 检查预览区域是否有图片
+            if ($('#previewArea img').length > 0) {
+                // 构造FormData对象用于文件上传
+                var formData = new FormData();
+                formData.append('files', $('#fileInput')[0].files[0]); // 假设只上传一张图片
+                // 显示加载指示器
+                $('#previewArea').addClass('loading');
+                // 发送AJAX请求至服务器接口
+                $.ajax({
+                    url: "http://localhost:8089/uploaFile/getSkinInfo", // 注意URL的修改，去掉了末尾的"&#34;,
+                    type: "POST",
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function (response) {
+                        // 接口返回结果时隐藏拍照和上传按钮
+                        if(response.data && response.data.result && response.data.result.resultBuffer) {
+                            $('#bottomBar .btn-action').addClass('btn-hidden');
+                        }
+                        // 隐藏加载指示器
+                        $('#previewArea').removeClass('loading');
+                        // 显示结果区域
+                        $('#resultArea').show();
+                        // 解析JSON数据并展示
+                        var data = response.data;
+                        var resultBuffer = JSON.parse(data.result.resultBuffer);
+
+                        // 开始拼接HTML
+                        var summaryResultHTML = '<h4>皮肤检测报告摘要：</h4>';
+                        summaryResultHTML += '<p>亲爱的用户，感谢您使用我们的智能皮肤分析服务。以下是您的皮肤检测结果摘要：</p>';
+
+                        // 肤龄检测
+                        summaryResultHTML += '<p><strong>肤龄：</strong>您的肤龄为 ' + resultBuffer.age.result + ' 岁。</p>';
+
+                        // 肤色检测
+                        summaryResultHTML += '<p><strong>肤色：</strong>您的肤色为 ' + getSkinColorDescription(resultBuffer.color.r_result) + '，分数为 ' + resultBuffer.color.score + '%。</p>';
+
+                        // 皱纹检测
+                        if (resultBuffer.wrinkle.category) {
+                            resultBuffer.wrinkle.category.forEach(function (category) {
+                                summaryResultHTML += '<p><strong>' + getWrinkleTypeDescription(category.cls) + '：</strong>级别为 ' + getSeverityDescription(category.level) + '，分数为 ' + category.score + '%。</p>';
+                            });
+                        }
+
+                        // 黑头检测
+                        summaryResultHTML += '<p><strong>黑头：</strong>黑头检测级别为 ' + getSeverityDescription(resultBuffer.blackhead.level) + '，分数为 ' + resultBuffer.blackhead.score + '%。</p>';
+
+                        // 痘印检测
+                        if (resultBuffer.pockmark.category) {
+                            resultBuffer.pockmark.category.forEach(function (category) {
+                                summaryResultHTML += '<p><strong>' + getPimpleTypeDescription(category.cls) + '：</strong>数量为 ' + category.count + '，分数为 ' + category.score + '%。</p>';
+                            });
+                        }
+
+                        // 斑点检测
+                        if (resultBuffer.spot.category) {
+                            resultBuffer.spot.category.forEach(function (category) {
+                                summaryResultHTML += '<p><strong>斑点类型 ' + getSpotTypeDescription(category.cls) + '：</strong>级别为 ' + getSeverityDescription(category.level) + '，分数为 ' + category.score + '%。</p>';
+                            });
+                        }
+
+                        // 皮肤水分检测
+                        summaryResultHTML += '<p><strong>皮肤水分：</strong>皮肤水分检测结果为 ' + getSeverityDescription(resultBuffer.moisture.level) + '，分数为 ' + resultBuffer.moisture.score + '%。</p>';
+
+                        // 毛孔检测
+                        summaryResultHTML += '<p><strong>毛孔：</strong>毛孔检测级别为 ' + getSeverityDescription(resultBuffer.pore.level) + '，分数为 ' + resultBuffer.pore.score + '%。</p>';
+
+                        // 纹理检测
+                        summaryResultHTML += '<p><strong>纹理：</strong>纹理检测分数为 ' + resultBuffer.texture.score + '%。</p>';
+
+                        // 肤质检测
+                        summaryResultHTML += '<p><strong>肤质：</strong>您的肤质类型为 ' + getSkinTypeDescription(resultBuffer.skin_type.mapped_score) + '，分数为 ' + resultBuffer.skin_type.score + '%。</p>';
+
+                        // 疾病检测
+                        if (resultBuffer.disease.niduses.length > 0) {
+                            resultBuffer.disease.niduses.forEach(function (disease) {
+                                if (disease.class !== "NONE") {
+                                    summaryResultHTML += '<p><strong>疾病检测：</strong>检测到 ' + getDiseaseTypeDescription(disease.class) + '，建议咨询专业医生。</p>';
+                                }
+                            });
+                        } else {
+                            summaryResultHTML += '<p><strong>疾病检测：</strong>未检测到皮肤疾病，您的皮肤健康状况良好。</p>';
+                        }
+
+                        // 黑眼圈检测
+                        if (resultBuffer.dark_circle.type !== 'NONE') {
+                            summaryResultHTML += '<p><strong>黑眼圈：</strong>检测到您的黑眼圈类型为 ' + getDarkCircleTypeDescription(resultBuffer.dark_circle.type) + '，级别为 ' + getSeverityDescription(resultBuffer.dark_circle.level) + '，分数为 ' + resultBuffer.dark_circle.score + '%。建议注意睡眠质量和生活习惯。</p>';
+                        } else {
+                            summaryResultHTML += '<p><strong>黑眼圈：</strong>未检测到黑眼圈，这是一个非常理想的状态。</p>';
+                        }
+
+                        // 敏感度检测
+                        summaryResultHTML += '<p><strong>敏感度：</strong>您的皮肤敏感度类型为 ' + getSensitiveSkinTypeDescription(resultBuffer.sensitive.type) + '，分数为 ' + resultBuffer.sensitive.score + '%。</p>';
+
+                        // 皮肤粗糙度检测
+                        summaryResultHTML += '<p><strong>皮肤粗糙度：</strong>皮肤粗糙度检测分数为 ' + resultBuffer.roughness.score + '%。</p>';
+
+                        // 结束摘要
+                        summaryResultHTML += '<p>以上结果仅供参考，如果您需要更详细的分析或专业建议，请咨询相关专业人士。感谢您对我们服务的支持。</p>';
+
+                        // 将摘要HTML添加到详细结果展示区域
+                        $('#resultArea').html(summaryResultHTML);
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        // 隐藏加载指示器并显示错误信息
+                        $('#previewArea').removeClass('loading');
+                        alert("请求出错：" + textStatus + " " + errorThrown);
+                    }
+                });
+            } else {
+                alert("请先上传并预览图片");
+            }
+        }
+
+        // 辅助函数，用于获取严重程度描述
+        function getSeverityDescription(severity) {
+            const severityMap = {
+                "severe": "严重",
+                "moderately": "中度",
+                "lightly": "轻度",
+                "none": "无"
+            };
+            return severityMap[severity] || "未知程度";
+        }
+
+// 辅助函数，用于获取肤质类型描述
+        function getSkinTypeDescription(score) {
+            const skinTypeMap = {
+                "mix": "混合性",
+                "oil": "油性",
+                "dry": "干性",
+                "mid": "中性",
+                "mid_oil": "中性偏油",
+                "mid_dry": "中性偏干"
+            };
+            if (score >= 0 && score <= 40) {
+                return skinTypeMap.dry;
+            } else if (score > 40 && score <= 60) {
+                return skinTypeMap.mid;
+            } else if (score > 60 && score <= 100) {
+                return skinTypeMap.oil;
+            } else {
+                return "未知肤质";
+            }
+        }
+
+// 辅助函数，用于获取肤色描述
+        function getSkinColorDescription(color) {
+            const colorMap = {
+                "toubai": "透白(#f9e5d9)",
+                "baixi": "白皙(#f2d5c3)",
+                "ziran": "自然(#efc2a7)",
+                "xiaomai": "小麦(#c19b88)",
+                "anchen": "暗沉(#99715f)",
+                "youhei": "黝黑(#684a42)"
+            };
+            return colorMap[color] || "未知肤色";
+        }
+
+// 辅助函数，用于获取斑点类型描述
+        function getSpotTypeDescription(type) {
+            const spotTypeMap = {
+                "B_QTB": "其他斑(#18FFFF)",
+                "Z_Z": "痣(#4740A5)",
+                "B_QB": "雀斑(#FFE57F)",
+                "B_HHB": "黄褐斑(#40FF81)"
+            };
+            return spotTypeMap[type] || "未知斑点类型";
+        }
+
+// 辅助函数，用于获取皱纹类型描述
+        function getWrinkleTypeDescription(type) {
+            const wrinkleTypeMap = {
+                "glabella": "眉间纹(#FFD740)",
+                "crowfeet": "鱼尾纹(#FF6E40)",
+                "nasolabial": "法令纹(#6E84FF)",
+                "eyecorner": "眼角纹(#64FFDA)",
+                "forehead": "抬头纹(#FF5252)"
+            };
+            return wrinkleTypeMap[type] || "未知皱纹类型";
+        }
+
+// 辅助函数，用于获取痘痘类型描述
+        function getPimpleTypeDescription(type) {
+            const pimpleTypeMap = {
+                "CC_DD": "痘痘(#E040FB)",
+                "CC_DY": "痘印(#7C4DFF)"
+            };
+            return pimpleTypeMap[type] || "未知痘痘类型";
+        }
+
+// 辅助函数，用于获取黑眼圈类型描述
+        function getDarkCircleTypeDescription(type) {
+            const darkCircleTypeMap = {
+                "NONE": "非黑眼圈",
+                "HHX": "混合型",
+                "SSX": "色素型",
+                "XGX": "血管型",
+                "YYX": "阴影型"
+            };
+            return darkCircleTypeMap[type] || "未知黑眼圈类型";
+        }
+
+// 辅助函数，用于获取敏感肌肤类型描述
+        function getSensitiveSkinTypeDescription(type) {
+            const sensitiveTypeMap = {
+                "sensitive": "敏感",
+                "normal": "正常",
+                "tolerance": "耐受"
+            };
+            return sensitiveTypeMap[type] || "未知敏感肌肤类型";
+        }
+
+// 辅助函数，用于获取皮肤病类型描述
+        function getDiseaseTypeDescription(type) {
+            const diseaseTypeMap = {
+                "NONE": "健康",
+                "CC": "痤疮",
+                "PY": "皮炎",
+                "MGJF": "敏感肌肤"
+            };
+            return diseaseTypeMap[type] || "未知疾病类型";
+        }
+
+        // 绑定开始测肤按钮的点击事件
+        $('#startTest').click(function () {
+            startSkinTest();
+        });
+
+        // 图片预览功能
+        function previewImage(src) {
+            $('#previewArea').html('<img class="result-image" src="' + src + '" alt="Preview" />');
+        }
+
+        // 拍摄和上传照片的逻辑
+        $('#takePhoto').click(function () {
+            $('#fileInput').click();
+        });
+
+        $('#uploadPhoto').click(function () {
+            $('#fileInput').click();
+        });
+        // 加载指示器处理
+        // 图片加载完成后隐藏加载指示器的逻辑整合到单一的事件监听器中
+        $('#cameraInput, #fileInput').on('change', function (e) {
+            var file = e.target.files[0];
+            if (!file) {
+                alert("请选择有效的图片文件");
+                return;
+            }
+            if (file) {
+                $('#previewArea').addClass('loading'); // 显示加载指示器
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    previewImage(e.target.result);
+                    $('#previewArea').removeClass('loading'); // 图片加载成功后移除加载指示器
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+        document.getElementById('cameraInput').addEventListener('change', function (e) {
+            var file = e.target.files[0];
+            if (file) {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    previewImage(e.target.result);
+                    $('#previewArea').removeClass('loading'); // 图片加载成功后移除加载指示器
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+    });
+</script>
+</body>
+</html>

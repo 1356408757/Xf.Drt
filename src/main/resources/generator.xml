@@ -40,7 +40,7 @@
         </javaTypeResolver>
 
         <!--生成Model类存放位置-->
-        <javaModelGenerator targetPackage="com.trust.xfyl.entity"
+        <javaModelGenerator targetPackage="com.trust.xfyl.model"
                             targetProject="src/main/java">
             <!-- 是否允许子包，即targetPackage.schemaName.tableName -->
             <!-- 在targetPackage的基础上，根据数据库的schema再生成一层package，最终生成的类放在这个package下，默认为false -->
@@ -71,7 +71,7 @@
         </javaClientGenerator>
 
         <!--生成对应表及类名-->
-        <table tableName="users" domainObjectName="Users"
+        <table tableName="food_sugar" domainObjectName="FoodSugar"
                enableCountByExample="true"
                enableUpdateByExample="true" enableDeleteByExample="true" enableSelectByExample="true"
                selectByExampleQueryId="true">
