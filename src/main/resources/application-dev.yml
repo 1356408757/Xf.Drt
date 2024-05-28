@@ -15,8 +15,8 @@ spring:
     template-loader-path: classpath:/templates/,classpath:/static/ # 模板加载路径
   datasource:
     url: jdbc:mysql://localhost:3306/xfyl?serverTimezone=GMT%2b8&useSSL=false&characterEncoding=utf8&allowPublicKeyRetrieval=true&autoReconnect=true # 数据库连接URL
-    username: xxxxxxxxxxx
-    password: xxxxxxxxxxxxx
+    username: root
+    password: 616627hj
     type: com.alibaba.druid.pool.DruidDataSource
     driverClassName: com.mysql.cj.jdbc.Driver
     druid:
@@ -62,7 +62,7 @@ downloadurl:
 aliyun:
   api: # 阿里云API配置
     url: https://vision.console.aliyun.com/cn-shanghai/detail/imageprocess # API地址
-    roleArn: acs:ram::xxxxxxxxxxxxxxxxx:role/ramosstest # 角色ARN
+    roleArn: acs:ram::1306143105217098:role/ramosstest # 角色ARN
     policy: | # 策略配置
       {
         "Version": "1",
@@ -104,8 +104,8 @@ chat:
   cache: # 缓存配置
     type: caffeine # 缓存类型
 wechat:
-  appId: zzzzzzzzzzzzzzzzzzzzz
-  appSecret: xxxxxxxxxxxxxxxxx
+  appId: wx4fdf3026be1910f5
+  appSecret: 2528491e2ad1fe0712f4cf8277d98cb9
 yskin:
-  clientId: xxxxxxxxxxxxxxxxxxxxxxx
-  clientSecret: xxxxxxxxxxxxx
+  clientId: 8eb53ad1527582d5
+  clientSecret: 2bcc8908e5e163adecd11178099cb9b3
