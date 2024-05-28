@@ -1,8 +1,8 @@
 package com.trust.xfyl.dao;
 
-import com.trust.xfyl.model.WoundOrderVo;
 import com.trust.xfyl.model.po.WoundOrders;
 import com.trust.xfyl.model.po.WoundOrdersExample;
+import com.trust.xfyl.model.vo.WoundOrderVo;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
