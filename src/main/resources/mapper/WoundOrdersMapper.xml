@@ -534,7 +534,7 @@
             association_id         = #{associationId,jdbcType=BIGINT}
         where id = #{id,jdbcType=BIGINT}
     </update>
-    <select id="selectAll" resultType="com.trust.xfyl.model.vo.WoundOrderVo"
+    <select id="selectAll" resultType="com.trust.xfyl.model.WoundOrderVo"
             parameterType="com.trust.xfyl.model.po.WoundOrders">
         SELECT
         wo.id,
@@ -720,7 +720,7 @@
         )count
     </select>
 
-    <select id="selectWoundOrdersById" resultType="com.trust.xfyl.model.vo.WoundOrderVo"
+    <select id="selectWoundOrdersById" resultType="com.trust.xfyl.model.WoundOrderVo"
             parameterType="com.trust.xfyl.model.po.WoundOrders">
         SELECT wo.id,
                wo.appointment_type,

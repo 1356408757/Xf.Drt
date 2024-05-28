@@ -300,13 +300,13 @@
             // 创建一个新段落元素用于展示结果
             /*const resultItem = document.createElement('p');*/
             // 设置段落元素的内容为最大概率对应的病症名称
-           /* resultItem.textContent = `检测结果显示最有可能的病症为：${maxEntry[0]}`;*/
+            /* resultItem.textContent = `检测结果显示最有可能的病症为：${maxEntry[0]}`;*/
             // 将结果添加到页面
-          /*  document.getElementById('resultsContainer').appendChild(resultItem);*/
+            /*  document.getElementById('resultsContainer').appendChild(resultItem);*/
             // 定义repo变量，存储同样信息以便后续使用
-          /*  const repo = `皮肤检测结果为：${maxEntry[0]}`;*/
+            /*  const repo = `皮肤检测结果为：${maxEntry[0]}`;*/
             // 输出或使用repo变量
-          /*  console.log(repo);*/
+            /*  console.log(repo);*/
             window.location.href = `medQa.html?sessionId=${encodeURIComponent(sessionId)}&questionType=${encodeURIComponent(questionType)}&question=${encodeURIComponent(question)}`;
         }).catch(error => {
             const resultElement = document.getElementById('result');
