@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>血糖记录</title>
+  <!-- 引入Bootstrap CSS -->
+  <link href="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    /* 自定义样式覆盖或补充Bootstrap */
+    .form-container {
+      max-width: 490px;
+      margin: 50px auto;
+      padding: 20px;
+      background-color: #f8f9fa;
+      border-radius: 5px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .preview {
+      max-width: 100%;
+      height: auto;
+      margin-top: 1rem;
+    }
+
+    .btn-submit {
+      background-color: #ffcc00;
+      color: black;
+      border: none;
+      cursor: pointer;
+    }
+
+    .btn-submit:hover {
+      background-color: #c0b30d;
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="form-container">
+  <h1 class="text-center mb-4">新增血糖记录</h1>
+  <form id="bloodSugarForm">
+    <div class="form-group">
+      <label for="bloodSugarLevel">血糖值</label>
+      <input type="number" class="form-control" id="bloodSugarLevel" value="0" min="0" step="0.1">
+    </div>
+
+    <div class="form-group">
+      <label for="recordTime">记录时间</label>
+      <input type="datetime-local" class="form-control" id="recordTime">
+    </div>
+
+    <div class="form-group">
+      <label for="segmentLabel">时段标签</label>
+      <div class="custom-control custom-checkbox">
+        <input type="checkbox" class="custom-control-input" id="eveningBefore">
+        <label class="custom-control-label" for="eveningBefore">晚前</label>
+      </div>
+      <div class="custom-control custom-checkbox">
+        <input type="checkbox" class="custom-control-input" id="eveningAfter">
+        <label class="custom-control-label" for="eveningAfter">晚餐后</label>
+      </div>
+      <div class="custom-control custom-checkbox">
+        <input type="checkbox" class="custom-control-input" id="nighttime">
+        <label class="custom-control-label" for="nighttime">夜间</label>
+      </div>
+      <div class="custom-control custom-checkbox">
+        <input type="checkbox" class="custom-control-input" id="random">
+        <label class="custom-control-label" for="random">随机</label>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="medicineRecord">用药(选填)</label>
+      <select class="form-control" id="medicineRecord">
+        <option value="">请选择</option>
+        <option value="insulin">胰岛素</option>
+        <option value="metformin">二甲双胍</option>
+        <option value="sulfonylureas">磺脲类药物</option>
+        <option value="GLP-1">GLP-1受体激动剂</option>
+        <option value="SGLT2i">SGLT2抑制剂</option>
+        <option value="DPP-4i">DPP-4抑制剂</option>
+        <option value="TZDs">噻唑烷二酮类药物</option>
+        <option value="α-GI">α-葡萄糖苷酶抑制剂</option>
+        <option value="SUs">磺脲类药物</option>
+        <option value="OADs">其他口服降糖药</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="dietRecord">饮食(选填)</label>
+      <select class="form-control" id="dietRecord">
+        <option value="">请选择</option>
+        <option value="rice">米饭</option>
+        <option value="noodles">面条</option>
+        <option value="milk">牛奶</option>
+        <option value="fruits">水果</option>
+        <option value="snacks">零食</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="sportsRecord">运动(选填)</label>
+      <select class="form-control" id="sportsRecord">
+        <option value="">请选择</option>
+        <option value="walking">散步</option>
+        <option value="jogging">慢跑</option>
+        <option value="cycling">骑行</option>
+        <option value="high-intensity">高强度间歇训练</option>
+        <option value="low-intensity">低强度运动</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="stepCount">获取步数</label>
+      <input type="number" class="form-control" id="stepCount" placeholder="请输入步数">
+    </div>
+
+    <div class="form-group">
+      <label for="memo">备注</label>
+      <textarea class="form-control" id="memo" rows="3"></textarea>
+    </div>
+
+    <button type="submit" class="btn btn-primary btn-block btn-submit">提交保存</button>
+  </form>
+</div>
+
+<script>
+  function submitForm() {
+    var form = document.getElementById("bloodSugarForm");
+    if (!form.checkValidity()) {
+      return false;
+    }
+    alert("提交成功!");
+  }
+</script>
+
+</body>
+
+</html>
