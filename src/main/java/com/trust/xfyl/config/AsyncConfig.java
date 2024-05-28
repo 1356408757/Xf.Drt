@@ -7,7 +7,7 @@ import org.springframework.web.servlet.config.annotation.AsyncSupportConfigurer;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.Executors;
 
 /**
  * 异步配置类，用于配置异步任务的执行。
@@ -26,16 +26,14 @@ public class AsyncConfig implements WebMvcConfigurer {
     @Bean(name = "threadPoolTaskExecutor")
     public ThreadPoolTaskExecutor taskExecutor() {
         ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
-        // 配置核心线程数，根据实际情况调整
-        executor.setCorePoolSize(5);
-        // 配置最大线程数，根据实际情况调整
-        executor.setMaxPoolSize(10);
-        // 配置队列容量，根据实际情况调整
-        executor.setQueueCapacity(200);
+        // 配置核心线程数
+        executor.setCorePoolSize(2);
+        // 配置最大线程数
+        executor.setMaxPoolSize(5);
+        // 配置队列容量
+        executor.setQueueCapacity(100);
         // 配置线程名称前缀
         executor.setThreadNamePrefix("async-thread-");
-        // 设置线程池中超出可用线程和队列容量的任务的处理策略
-        executor.setRejectedExecutionHandler(new ThreadPoolExecutor.CallerRunsPolicy());
         executor.initialize();
         return executor;
     }
@@ -50,16 +48,9 @@ public class AsyncConfig implements WebMvcConfigurer {
         configurer.setTaskExecutor(taskExecutor());
     }
 
-    /**
-     * 增加了异常处理的异步执行器服务
-     * @return 配置好的ExecutorService实例
-     */
     @Bean
     public ExecutorService executorService() {
-        ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
-        // 配置线程池参数...
-        executor.initialize();
-        // 返回真正的ExecutorService实例
-        return executor.getThreadPoolExecutor();
+        // 根据需要调整线程池大小
+        return Executors.newFixedThreadPool(5);
     }
 }

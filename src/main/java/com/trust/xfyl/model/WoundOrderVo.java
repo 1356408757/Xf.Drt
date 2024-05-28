@@ -1,5 +1,6 @@
 package com.trust.xfyl.model.vo;
 
+
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import java.math.BigDecimal;
