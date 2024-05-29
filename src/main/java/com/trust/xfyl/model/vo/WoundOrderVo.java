@@ -1,4 +1,4 @@
-package com.trust.xfyl.model;
+package com.trust.xfyl.model.vo;
 
 
 import com.fasterxml.jackson.annotation.JsonFormat;
